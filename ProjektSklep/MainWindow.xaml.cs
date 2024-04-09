@@ -42,6 +42,43 @@ namespace ProjektSklep
             }
         }
 
-   
+        //Wyszukiwanie produktów po nazwie i kategorii
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SearchTest != null)
+            {
+                SearchTest.Content = "Szukanie\n";
+            }
+
+            string? chosenCategory = "brak";
+            int chosenCategoryId = 0;
+
+            if (CategoriesBox != null)
+            {
+                chosenCategory = ((ComboBoxItem)(CategoriesBox.SelectedItem)).Content.ToString();
+            }
+
+            foreach (Category category in categories)
+            {
+                if (category.name == chosenCategory)
+                {
+                    chosenCategoryId = category.categoryId;
+                    break;
+                }
+            }
+
+            foreach (Product product in products)
+            {
+                if (product.name.Contains(SearchBox.Text) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
+                {
+                    if (SearchTest is not null)
+                    {
+                        SearchTest.Content += "Twoja mama lubi: " + product.name + chosenCategoryId + "\n";
+                    }
+                }
+            }
+        }
+
+
     }
 }
