@@ -24,5 +24,7 @@ namespace ProjektSklep.Model
 
         [ForeignKey("productId")]
         public virtual Product product { get; set; }
+
+        public ProductOrder() { }
     }
 }

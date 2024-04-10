@@ -25,5 +25,7 @@ namespace ProjektSklep.Model
             this.categoryId = categoryId;
             this.name = name;
         }
+
+        public Category() { }
     }
 }

@@ -9,14 +9,26 @@
         MinHeight="600"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-    <DockPanel LastChildFill="False" Margin="0,0,0,505" MaxHeight="100">
-        <Label Content="apk" Width="100"/>
-        <TextBox Name="SearchBox" TextWrapping="Wrap" Text="TextBox" Width="437" Height="40"/>
-        <Button Name="LoginButton" Content="Zaloguj Się" DockPanel.Dock="Right" Width="100"/>
-        <ComboBox Name="CategoriesBox" DockPanel.Dock="Right" Width="104" Height="40" SelectedIndex="0">
-        </ComboBox>
-        <Label Content="Kategorie" Width="70" Height="40"/>
-    </DockPanel>
-    <Label Name="SearchTest" Content="Label" HorizontalAlignment="Left" Margin="286,166,0,0" VerticalAlignment="Top"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Content="WPF Store" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" FontSize="20" Width="100"/>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBox Name="searchTextBox" TextWrapping="Wrap" Text="TextBox" Width="437" Height="40" FontSize="16" VerticalContentAlignment="Center" Padding="5" TextChanged="TextBox_TextChanged"/>
+            <ComboBox Name="categoriesComboBox" Width="104" Height="40" SelectedIndex="0" FontSize="15" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Kategoria</ComboBox>
+        </StackPanel>
+
+        <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" Click="LoginButton_Click"/>
+
+        <Label Grid.Row="1" Name="searchTest" FontSize="20">label</Label>
+        <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" Content="&lt;" FontSize="30"></Button>
     </Grid> <!--koniec-->
 </Window>

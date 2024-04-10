@@ -20,9 +20,12 @@ namespace ProjektSklep
         List<Product> products = new List<Product>();
         List<Category> categories = new List<Category>();
 
+        private MyDbContext db = new MyDbContext();
+
         public MainWindow()
         {
             InitializeComponent();
+            /*
             products.Add(new Product("stringi",1));
             products.Add(new Product("kapelusze",1));
             products.Add(new Product("wiadra", 2));
@@ -35,31 +38,64 @@ namespace ProjektSklep
             categories.Add(new Category(2,"fun time"));
             categories.Add(new Category(3,"żarcie"));
 
+            trzeba dać dane do DB*/
+            InitializeDBData();
+
+
+            categoriesComboBox.Items.Add("Wszystko");
             //Pętla inicjulizująca kategorie w comboboxie
             foreach (Category category in categories)
             {
-                CategoriesBox.Items.Add(category.name);
+                categoriesComboBox.Items.Add(category.name);
             }
+        }
+
+        private void InitializeDBData()
+        {
+            InitializeProducts();
+            InitializeCategories();
+        }
+
+        private void InitializeProducts()
+        {
+            var query = db.Products.ToList();
+            products = query;
+        }
+
+        private void InitializeCategories()
+        {
+            var query = db.Categories.ToList();
+            categories = query;
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
         }
 
         //Wyszukiwanie produktów po nazwie i kategorii
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (SearchTest != null)
+            if (searchTest != null)
             {
-                SearchTest.Content = "Szukanie\n";
+                searchTest.Content = "Szukanie\n";
             }
 
             string? chosenCategory = "brak";
             int chosenCategoryId = 0;
 
-            if (CategoriesBox != null)
+            if (categoriesComboBox != null)
             {
-                chosenCategory = ((ComboBoxItem)(CategoriesBox.SelectedItem)).Content.ToString();
+                chosenCategory = categoriesComboBox.SelectedItem.ToString();
             }
 
             foreach (Category category in categories)
             {
+                if (chosenCategory == "Wszystko")
+                {
+                    break;
+                }
                 if (category.name == chosenCategory)
                 {
                     chosenCategoryId = category.categoryId;
@@ -69,11 +105,12 @@ namespace ProjektSklep
 
             foreach (Product product in products)
             {
-                if (product.name.Contains(SearchBox.Text) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
+                if (product.name.ToLower().Contains(searchTextBox.Text.ToLower()) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
                 {
-                    if (SearchTest is not null)
+                    //debugowe wypisywanie, do zamiany na to, co ma wyświetlać produkty
+                    if (searchTest is not null)
                     {
-                        SearchTest.Content += "Twoja mama lubi: " + product.name + chosenCategoryId + "\n";
+                        searchTest.Content += "Twoja mama lubi: " + product.name + chosenCategoryId + "\n";
                     }
                 }
             }

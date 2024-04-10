@@ -38,6 +38,8 @@ namespace ProjektSklep.Model
             this.categoryId = categoryId;
         }
 
+        public Product() { }
+
         public virtual ICollection<ProductOrder>? ProductOrder { get; set; }
     }
 }

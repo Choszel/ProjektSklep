@@ -39,5 +39,7 @@ namespace ProjektSklep.Model
         public virtual User user { get; set; }
 
         public virtual ICollection<ProductOrder>? ProductOrder { get; set; }
+
+        public Order() { }
     }
 }

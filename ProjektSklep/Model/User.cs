@@ -30,5 +30,7 @@ namespace ProjektSklep.Model
 
         [Required(ErrorMessage ="Typ użytkownika jest obowiązkowy.")]
         public int type { get; set; } = 0;
+
+        public User() { }
     }
 }
