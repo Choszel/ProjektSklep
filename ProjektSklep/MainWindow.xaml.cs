@@ -168,7 +168,6 @@ namespace ProjektSklep
         }
 
 
-        // Metoda pomocnicza do rekurencyjnego przeszukiwania elementów wizualnych w hierarchii
         private T FindVisualChild<T>(DependencyObject parent, string name) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
@@ -190,16 +189,31 @@ namespace ProjektSklep
 
         private void addToCart(object sender, RoutedEventArgs e)
         {
-            if (cart == null) cart = new Dictionary<int, int>();
+            if (cart == null)
+                cart = new Dictionary<int, int>();
 
-            if(cart.ContainsKey(0)) { cart[0]++; }
-            else cart.Add(0, 0);
+            if (sender is Button button)
+            {
+                // Pobierz identyfikator produktu z taga przycisku
+                if (button.Tag != null && int.TryParse(button.Tag.ToString(), out int productId))
+                {
+                    // Dodaj produkt do koszyka lub zwiększ jego liczbę w koszyku
+                    if (cart.ContainsKey(productId))
+                    {
+                        cart[productId]++;
+                    }
+                    else
+                    {
+                        cart.Add(productId, 1);
+                    }
 
-            Debug.WriteLine(cart.ToString());
-            Debug.WriteLine(cart.Values);
-            Debug.WriteLine(cart.Count);
-            Debug.WriteLine(cart[0]);
-
+                    foreach (var item in cart)
+                    {
+                        Debug.WriteLine($"Produkt ID: {item.Key}, Ilość: {item.Value}");
+                    }
+                }
+            }
         }
+
     }
 }

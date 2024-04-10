@@ -35,20 +35,17 @@ namespace ProjektSklep
 
             var sha = new System.Security.Cryptography.SHA256Managed();
 
-            /* hashowanie hasla na potem, do przerobienia kontrolka na passwordbox, i password na hash
+            //hashowanie hasla na potem, do przerobienia kontrolka na passwordbox, i password na hash
             byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(passwordTextBox.Text);
             byte[] hashBytes = sha.ComputeHash(textBytes);
             string hash = BitConverter
                      .ToString(hashBytes)
                      .Replace("-", String.Empty);
             passwordTextBox.Text = null;
-            */
-
-            string password = passwordTextBox.Text;
 
             if (db.Users.FirstOrDefault(
                     e => e.login == login &&
-                    e.password == password) == null)
+                    e.password == hash) == null)
             {
                 MessageBox.Show("Nie udało się zalogować");
                 DialogResult = false;
@@ -65,7 +62,8 @@ namespace ProjektSklep
             this.Height = 250;
             secondRowInLogin.Height = GridLength.Auto;
 
-            loginButton.Click += new RoutedEventHandler(registringButtonClicked); 
+            loginButton.Click += new RoutedEventHandler(registringButtonClicked);
+            loginButton.Click -= new RoutedEventHandler(OnLoginButton_Click);
             //RegisterWindow registerWindow = new RegisterWindow();
             //this.DialogResult = true;
             //registerWindow.ShowDialog();
@@ -78,21 +76,9 @@ namespace ProjektSklep
             string login = loginTextBox.Text;
             string email = emailTextBox.Text;
 
-            if (nameTextBox.Text == null)
+            if (!isRegistrationCorrect())
             {
-                MessageBox.Show("Nie podano nazwy konta.");
-            }
-            else if(loginTextBox.Text == null)
-            {
-                MessageBox.Show("Nie podano loginu.");
-            }
-            else if(emailTextBox.Text == null)
-            {
-                MessageBox.Show("Nie podano emaila.");
-            }
-            else if(passwordTextBox.Text == null)
-            {
-                MessageBox.Show("Nie podano hasła.");
+                return;
             }
 
             var sha = new System.Security.Cryptography.SHA256Managed();
@@ -103,11 +89,44 @@ namespace ProjektSklep
                      .ToString(hashBytes)
                      .Replace("-", String.Empty);
             passwordTextBox.Text = null;
-            
-            User newUser = new User(name,login,hash,email,1);
+
+            User newUser = new User(name, login, hash, email, 1);
 
             db.Users.Add(newUser);
             db.SaveChanges();
+            DialogResult = false;
+            MessageBox.Show("Pomyślnie zarejestrowano.");
+        }
+
+        private bool isRegistrationCorrect()
+        {
+            if (nameTextBox.Text == "")
+            {
+                MessageBox.Show("Nie podano nazwy konta.");
+                return false;
+            }
+            else if (loginTextBox.Text == "")
+            {
+                MessageBox.Show("Nie podano loginu.");
+                return false;
+            }
+            else if (db.Users.FirstOrDefault(e => e.login == loginTextBox.Text) != null)
+            {
+                MessageBox.Show("Podany login jest zajęty.");
+                return false;
+            }
+            else if (emailTextBox.Text == "")
+            {
+                MessageBox.Show("Nie podano emaila.");
+                return false;
+            }
+            else if (passwordTextBox.Text == "")
+            {
+                MessageBox.Show("Nie podano hasła.");
+                return false;
+            }
+            else
+                return true;
         }
     }
 }

@@ -34,37 +34,67 @@
         <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click"/>
         <GroupBox Grid.Row="1" Grid.Column="1" Header="Produkty" FontSize="16" Padding="5" Margin="5">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll">
-             
-                    <ListBox Name="productListBox" Margin="5" SelectionChanged="productListSelectionChanged">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <GroupBox>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition></ColumnDefinition>
-                                            <ColumnDefinition></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition></RowDefinition>
-                                            <RowDefinition></RowDefinition>
-                                            <RowDefinition></RowDefinition>
-                                            <RowDefinition></RowDefinition>
-                                        </Grid.RowDefinitions>
-                                        
-                                        <Label Name="productName" Grid.Row="0" FontWeight="Bold" Content="{Binding name}"></Label>
-                                        <Label Name="productPrice" Grid.Row="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
-                                        <Label Name="productCategory" Grid.Row="2" Content="{Binding category.name}"></Label>
-                                        <Label Name="productDesc" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="3" Content="{Binding description}"></Label>
-                                        <Button Name="addProductButton" Grid.Row="3" Click="addToCart">Dodaj do koszyka</Button>
-                                    </Grid>
-                                </GroupBox>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+
+                <ListBox Name="productListBox" Margin="5" SelectionChanged="productListSelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <GroupBox>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Name="productName" Grid.Row="0" FontWeight="Bold" Content="{Binding name}"></Label>
+                                    <Label Name="productPrice" Grid.Row="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
+                                    <Label Name="productCategory" Grid.Row="2" Content="{Binding category.name}"></Label>
+                                    <Label Name="productDesc" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="3" Content="{Binding description}"></Label>
+                                    <Button Name="addProductButton" Grid.Row="3" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"/>
+                                </Grid>
+                            </GroupBox>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </ScrollViewer>
         </GroupBox>
 
-        <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" Content="&lt;" FontSize="30"></Button>
+        <Button  Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30">
+            <Button.Triggers>
+                <EventTrigger RoutedEvent="Button.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation 
+            Storyboard.TargetName="theTransform"
+            Storyboard.TargetProperty="(RotateTransform.Angle)" 
+            From="0" To="360" Duration="0:0:5" AutoReverse="True"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Button.Triggers>
+        </Button>
+
+        <Popup IsOpen="{Binding ElementName=myCheckBox,Path=IsChecked}" PlacementTarget="{Binding ElementName=myCheckBox}"            
+           AllowsTransparency="True"
+           PopupAnimation="Slide"
+           HorizontalOffset="50"
+           VerticalOffset="50"
+       >
+            <Canvas Width="100" Height="100" Background="DarkBlue" Margin="150">
+                <Canvas.RenderTransform>
+                    <RotateTransform x:Name="theTransform" />
+                </Canvas.RenderTransform>
+                <TextBlock TextWrapping="Wrap" Foreground="White">
+      Rotating Popup
+                </TextBlock>
+            </Canvas>
+        </Popup>
+
     </Grid>
     <!--koniec-->
 </Window>
