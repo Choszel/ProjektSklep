@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektSklep"
         mc:Ignorable="d"
-        MinWidth="1000" 
+        MinWidth="900" 
         MinHeight="600"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -21,14 +21,50 @@
 
         <Label Content="WPF Store" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" FontSize="20" Width="100"/>
 
-        <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBox Name="searchTextBox" TextWrapping="Wrap" Text="TextBox" Width="437" Height="40" FontSize="16" VerticalContentAlignment="Center" Padding="5" TextChanged="TextBox_TextChanged"/>
-            <ComboBox Name="categoriesComboBox" Width="104" Height="40" SelectedIndex="0" FontSize="15" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Kategoria</ComboBox>
-        </StackPanel>
+        <Grid Grid.Column="1" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.5*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Name="searchTextBox" TextWrapping="Wrap" FontSize="16" VerticalContentAlignment="Center" Padding="10" HorizontalAlignment="Stretch" TextChanged="TextBox_TextChanged"/>
+            <ComboBox Grid.Column="1" Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        </Grid>
 
-        <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" Click="LoginButton_Click"/>
 
-        <Label Grid.Row="1" Name="searchTest" FontSize="20">label</Label>
+        <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click"/>
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Produkty" FontSize="16" Padding="5" Margin="5">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll">
+             
+                    <ListBox Name="productListBox" Margin="5" SelectionChanged="productListSelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <GroupBox>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <Label Name="productName" Grid.Row="0" FontWeight="Bold" Content="{Binding name}"></Label>
+                                        <Label Name="productPrice" Grid.Row="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
+                                        <Label Name="productCategory" Grid.Row="2" Content="{Binding category.name}"></Label>
+                                        <Label Name="productDesc" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="3" Content="{Binding description}"></Label>
+                                        <Button Name="addProductButton" Grid.Row="3" Click="addToCart">Dodaj do koszyka</Button>
+                                    </Grid>
+                                </GroupBox>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+            </ScrollViewer>
+        </GroupBox>
+
         <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" Content="&lt;" FontSize="30"></Button>
-    </Grid> <!--koniec-->
+    </Grid>
+    <!--koniec-->
 </Window>

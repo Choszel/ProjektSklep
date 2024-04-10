@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,7 @@ namespace ProjektSklep
     {
         List<Product> products = new List<Product>();
         List<Category> categories = new List<Category>();
+        Dictionary<int, int> cart;
 
         private MyDbContext db = new MyDbContext();
 
@@ -39,6 +41,8 @@ namespace ProjektSklep
             categories.Add(new Category(3,"żarcie"));
 
             trzeba dać dane do DB*/
+          
+            productListBox.ItemsSource = db.Products.ToList();
             InitializeDBData();
 
 
@@ -58,64 +62,144 @@ namespace ProjektSklep
 
         private void InitializeProducts()
         {
-            var query = db.Products.ToList();
-            products = query;
+            products = db.Products.ToList();
         }
 
         private void InitializeCategories()
         {
-            var query = db.Categories.ToList();
-            categories = query;
+            categories = db.Categories.ToList();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginWindow loginWindow = new LoginWindow();
-            loginWindow.ShowDialog();
+            if(loginButton.Content.ToString().CompareTo("Zaloguj się")==0)
+            {
+                LoginWindow loginWindow = new LoginWindow();
+                if (loginWindow.ShowDialog() == true)loginButton.Content = "Wyloguj się";       
+            }
+            else
+            {
+                loginButton.Content = "Zaloguj się";
+            }           
         }
 
         //Wyszukiwanie produktów po nazwie i kategorii
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (searchTest != null)
+        //    if (productName != null)
+        //    {
+        //        productName.Content = "Szukanie\n";
+        //    }
+
+        //    string? chosenCategory = "brak";
+        //    int chosenCategoryId = 0;
+
+        //    if (categoriesComboBox != null)
+        //    {
+        //        chosenCategory = categoriesComboBox.SelectedItem.ToString();
+        //    }
+
+        //    foreach (Category category in categories)
+        //    {
+        //        if (chosenCategory == "Wszystko")
+        //        {
+        //            break;
+        //        }
+        //        if (category.name == chosenCategory)
+        //        {
+        //            chosenCategoryId = category.categoryId;
+        //            break;
+        //        }
+        //    }
+
+        //    foreach (Product product in products)
+        //    {
+        //        if (product.name.ToLower().Contains(searchTextBox.Text.ToLower()) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
+        //        {
+        //            //debugowe wypisywanie, do zamiany na to, co ma wyświetlać produkty
+        //            if (productName is not null)
+        //            {
+        //                productName.Content += "Twoja mama lubi: " + product.name + chosenCategoryId + "\n";
+        //            }
+        //        }
+        //    }
+        }
+
+        private void productScroll(object sender, ScrollChangedEventArgs e)
+        {
+            // Przykładowa obsługa zdarzenia przewijania
+            // Możesz zrobić coś przydatnego z wartościami e.VerticalOffset, e.HorizontalOffset itp.
+
+            // Przykładowe użycie:
+            if (e.VerticalChange > 0)
             {
-                searchTest.Content = "Szukanie\n";
+                Console.WriteLine("Przewijanie w dół");
             }
-
-            string? chosenCategory = "brak";
-            int chosenCategoryId = 0;
-
-            if (categoriesComboBox != null)
+            else if (e.VerticalChange < 0)
             {
-                chosenCategory = categoriesComboBox.SelectedItem.ToString();
+                Console.WriteLine("Przewijanie w górę");
             }
+        }
 
-            foreach (Category category in categories)
+        private void productListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ListBox listBox)
             {
-                if (chosenCategory == "Wszystko")
+                foreach (Product product in listBox.Items)
                 {
-                    break;
-                }
-                if (category.name == chosenCategory)
-                {
-                    chosenCategoryId = category.categoryId;
-                    break;
-                }
-            }
+                    // Pobierz ListBoxItem, który odpowiada wybranemu elementowi
+                    ListBoxItem listBoxItem = (ListBoxItem)listBox.ItemContainerGenerator.ContainerFromItem(product);
 
-            foreach (Product product in products)
-            {
-                if (product.name.ToLower().Contains(searchTextBox.Text.ToLower()) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
-                {
-                    //debugowe wypisywanie, do zamiany na to, co ma wyświetlać produkty
-                    if (searchTest is not null)
+                    // Znajdź element productDesc wewnątrz ListBoxItem
+                    Label productDescLabel = FindVisualChild<Label>(listBoxItem, "productDesc");
+
+                    // Jeśli znaleziono productDesc, zmień jego widoczność
+                    if(product == listBox.SelectedItem)
                     {
-                        searchTest.Content += "Twoja mama lubi: " + product.name + chosenCategoryId + "\n";
+                        productDescLabel.Visibility = Visibility.Visible; // lub inna wartość Visibility
                     }
+                    else if (productDescLabel != null)
+                    {
+                        productDescLabel.Visibility = Visibility.Hidden; // lub inna wartość Visibility
+                    }
+                    
                 }
             }
         }
 
 
+        // Metoda pomocnicza do rekurencyjnego przeszukiwania elementów wizualnych w hierarchii
+        private T FindVisualChild<T>(DependencyObject parent, string name) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child != null && child is FrameworkElement frameworkElement && frameworkElement.Name == name)
+                {
+                    return (T)child;
+                }
+                else
+                {
+                    T childOfChild = FindVisualChild<T>(child, name);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
+        }
+
+        private void addToCart(object sender, RoutedEventArgs e)
+        {
+            if (cart == null) cart = new Dictionary<int, int>();
+
+            if(cart.ContainsKey(0)) { cart[0]++; }
+            else cart.Add(0, 0);
+
+            Debug.WriteLine(cart.ToString());
+            Debug.WriteLine(cart.Values);
+            Debug.WriteLine(cart.Count);
+            Debug.WriteLine(cart[0]);
+
+        }
     }
 }

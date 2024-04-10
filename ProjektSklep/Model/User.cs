@@ -32,5 +32,14 @@ namespace ProjektSklep.Model
         public int type { get; set; } = 0;
 
         public User() { }
+
+        public User(string name, string login, string password, string email, int type)
+        {
+            this.name = name;
+            this.login = login;
+            this.password = password;
+            this.email = email;
+            this.type = type;
+        }
     }
 }

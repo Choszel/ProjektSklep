@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:ProjektSklep"
         mc:Ignorable="d"
         Title="LoginWindow" Height="150" Width="550">
-    <Grid>
+    <Grid Name="loginGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Name="secondRowInLogin" Height="0.01*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -18,10 +19,16 @@
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label FontSize="20" VerticalAlignment="Center" Margin="10">Login:</Label>
-        <TextBox Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
+        <TextBox Name="loginTextBox" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
         <Label Grid.Column="2" FontSize="20" VerticalAlignment="Center" Margin="10">Hasło:</Label>
-        <TextBox Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
-        <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" FontSize="20">Nie masz konta? Zarejestruj się</Label>
-        <Button Grid.Row="1" Grid.Column="3"  FontSize="20" Padding="5" VerticalAlignment="Top" Margin="7">Zaloguj się</Button>
+        <TextBox Name="passwordTextBox" Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Margin="0,0,5,0"></TextBox>
+        <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" FontSize="16" BorderBrush="White" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="registerButtonClicked">Nie masz konta? Zarejestruj się</Button>
+        <Button Name="loginButton" Grid.Row="2" Grid.Column="3"  FontSize="16" Padding="5" VerticalAlignment="Top" Margin="7" Click="OnLoginButton_Click" >Zaloguj się</Button>
+        
+        <Label FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="10">Nazwa:</Label>
+        <TextBox Name="nameTextBox" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
+        <Label Grid.Column="2" Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10">E-mail:</Label>
+        <TextBox Name="emailTextBox" Grid.Row="1" Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
+
     </Grid>
 </Window>
