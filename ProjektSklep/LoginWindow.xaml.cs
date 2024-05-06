@@ -46,9 +46,11 @@ namespace ProjektSklep
                      .Replace("-", String.Empty);
             passwordTextBox.Text = null;
 
-            if (db.Users.FirstOrDefault(
+            var user = db.Users.FirstOrDefault(
                     e => e.login == login &&
-                    e.password == hash) == null)
+                    e.password == hash);
+
+            if (user == null)
             {
                 MessageBox.Show("Nie udało się zalogować");
                 DialogResult = false;
@@ -56,6 +58,7 @@ namespace ProjektSklep
             else
             {
                 MessageBox.Show("Pomyślnie zalogowano");
+                UserType.Instance.numericType = user.type;
                 this.DialogResult = true;
             }
         }

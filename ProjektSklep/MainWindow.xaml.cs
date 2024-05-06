@@ -2,6 +2,7 @@
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -38,7 +39,6 @@ namespace ProjektSklep
             {
                 categoriesComboBox.Items.Add(category.name);
             } 
-            
         }
 
         private void InitializeDBData()
@@ -65,13 +65,35 @@ namespace ProjektSklep
                 loginWindow.Owner = this;
                 loginWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-                if (loginWindow.ShowDialog() == true)loginButton.Content = "Wyloguj Się";       
+                if (loginWindow.ShowDialog() == true)
+                {
+                    loginButton.Content = "Wyloguj Się";
+                    if (UserType.Instance.numericType == 0) {
+                        productTab.Visibility = Visibility.Visible; 
+                        productTab.IsEnabled = true; 
+                        orderTab.Visibility = Visibility.Visible;
+                        orderTab.IsEnabled = true;
+                        warehouseTab.Visibility = Visibility.Visible;
+                        warehouseTab.IsEnabled = true;
+                        wheelButton.Visibility = Visibility.Hidden;
+                        wheelButton.IsEnabled = false;
+
+                        SelectionChangedEventArgs args = new SelectionChangedEventArgs(
+                            Selector.SelectionChangedEvent,
+                            removedItems: new List<Product>(),
+                            addedItems: new List<Product>()
+                        );
+
+                        productListSelectionChanged(productListBox, args);
+                    }
+                }
             }
             else
             {
                 loginButton.Content = "Zaloguj Się";
             }           
         }
+
 
         //Wyszukiwanie produktów po nazwie i kategorii
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -143,8 +165,12 @@ namespace ProjektSklep
                     // Znajdź element productDesc wewnątrz ListBoxItem
                     Label productDescLabel = FindVisualChild<Label>(listBoxItem, "productDesc");
 
+                    Button addButton = FindVisualChild<Button>(listBoxItem, "addProductButton");
+                    Button editButton = FindVisualChild<Button>(listBoxItem, "editProductButton");
+                    Button deleteButton = FindVisualChild<Button>(listBoxItem, "deleteProductButton");
+
                     // Jeśli znaleziono productDesc, zmień jego widoczność
-                    if(product == listBox.SelectedItem)
+                    if (product == listBox.SelectedItem)
                     {
                         productDescLabel.Visibility = Visibility.Visible; // lub inna wartość Visibility
                     }
@@ -152,7 +178,16 @@ namespace ProjektSklep
                     {
                         productDescLabel.Visibility = Visibility.Hidden; // lub inna wartość Visibility
                     }
-                    
+
+                    if(UserType.Instance.numericType == 0)
+                    {
+                        addButton.Visibility = Visibility.Hidden;
+                        addButton.IsEnabled = false;
+                        editButton.Visibility = Visibility.Visible;
+                        editButton.IsEnabled = true;
+                        deleteButton.Visibility = Visibility.Visible;
+                        deleteButton.IsEnabled = true;
+                    }
                 }
             }
         }
