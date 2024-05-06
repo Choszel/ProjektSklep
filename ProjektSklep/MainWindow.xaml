@@ -59,6 +59,8 @@
                                     <Label Name="productCategory" Grid.Row="2" Content="{Binding category.name}"></Label>
                                     <Label Name="productDesc" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="3" Content="{Binding description}"></Label>
                                     <Button Name="addProductButton" Grid.Row="3" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"/>
+                                    <Button Name="editProductButton" Grid.Row="3" Click="editProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Tag="{Binding productId}" Content="Edytuj"/>
+                                    <Button Name="deleteProductButton" Grid.Row="3" Grid.Column="1" Click="deleteProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Tag="{Binding productId}" Content="Usuń"/>
                                 </Grid>
                             </GroupBox>
                         </DataTemplate>
@@ -73,5 +75,5 @@
         <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click">Koło Fortuny</Button>
 
     </Grid>
-    <!--koniec-->
+    
 </Window>

@@ -16,6 +16,7 @@ namespace ProjektSklep
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+
     public partial class MainWindow : Window
     {
         List<Product> products = new List<Product>();
@@ -36,7 +37,8 @@ namespace ProjektSklep
             foreach (Category category in categories)
             {
                 categoriesComboBox.Items.Add(category.name);
-            }
+            } 
+            
         }
 
         private void InitializeDBData()
@@ -155,7 +157,6 @@ namespace ProjektSklep
             }
         }
 
-
         private T FindVisualChild<T>(DependencyObject parent, string name) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
@@ -176,7 +177,7 @@ namespace ProjektSklep
         }
 
         private void addToCart(object sender, RoutedEventArgs e)
-        {
+        {           
             if (cart == null)
                 cart = new Dictionary<int, int>();
 
@@ -201,6 +202,16 @@ namespace ProjektSklep
                     }
                 }
             }
+        }
+
+        private void editProduct(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void deleteProduct(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void wheelButton_Click(object sender, RoutedEventArgs e)
