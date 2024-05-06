@@ -54,7 +54,7 @@
                                         <RowDefinition></RowDefinition>
                                         <RowDefinition></RowDefinition>
                                     </Grid.RowDefinitions>
-                                    <Image Source="./Resources/shop_logo.png" Height="80" Width="80" Margin="10" Name="productImage" Tag="{Binding productId}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"></Image>
+                                    <Image Source="{Binding bitmapImage}" Height="80" Width="80" Margin="10" Name="productImage" Tag="{Binding productId}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"></Image>
                                     <Label Name="productName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Content="{Binding name}"></Label>
                                     <Label Name="productPrice" Grid.Row="3" Grid.Column="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
                                     <Label Name="productCategory" Grid.Row="1" Grid.Column="1" Content="{Binding category.name}"></Label>
@@ -70,8 +70,77 @@
             </ScrollViewer>
         </GroupBox>
 
-        <Button  Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30">
+        <Button  Grid.Row="1" Grid.Column="2" Name="ShowBasketButton" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30" Click="MoveBasketPanel">
+            <Button.RenderTransform>
+                <TranslateTransform x:Name="buttonTransform"/>
+            </Button.RenderTransform>
         </Button>
+
+        <!-- Slider -->
+        <Grid x:Name="slidingBasket" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Margin="180,97,-167,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <SolidColorBrush Color="LightGray"/>
+            </Grid.Background>
+            <Grid.RenderTransform>
+                <TranslateTransform x:Name="sliderTransform"/>
+            </Grid.RenderTransform>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Nagłówek -->
+                <Label Content="KOSZYK" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" Grid.Row="0"/>
+
+                <!-- Lista produktów -->
+                <ListBox Grid.Row="1" Name="basketListBox">
+                    <!-- Produkty w koszyku -->
+                    <ListBoxItem>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Wiadro" FontWeight="Bold"/>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="Ilość: "/>
+                                <TextBlock Text="2" Margin="5,0"/>
+                                <TextBlock Text="2,98 PLN" Margin="20,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Książka" FontWeight="Bold"/>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="Ilość: "/>
+                                <TextBlock Text="3" Margin="5,0"/>
+                                <TextBlock Text="45,97 PLN" Margin="20,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </ListBoxItem>
+                </ListBox>
+
+                <!-- Łączna cena -->
+                <Label Content="Łączna cena: " Grid.Row="2" FontWeight="Bold"/>
+                <Label Content="48,95 PLN" Grid.Row="2" HorizontalAlignment="Right" FontWeight="Bold"/>
+
+                <!-- Przycisk zamówienia -->
+                <Button Content="Zamów" Grid.Row="3" HorizontalAlignment="Center" Margin="0,10" Width="100"/>
+            </Grid>
+        </Grid>
 
         <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click">Koło Fortuny</Button>
 

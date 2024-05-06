@@ -46,11 +46,9 @@ namespace ProjektSklep
                      .Replace("-", String.Empty);
             passwordTextBox.Text = null;
 
-            var user = db.Users.FirstOrDefault(
+            if (db.Users.FirstOrDefault(
                     e => e.login == login &&
-                    e.password == hash);
-
-            if (user == null)
+                    e.password == hash) == null)
             {
                 MessageBox.Show("Nie udało się zalogować");
                 DialogResult = false;
@@ -58,7 +56,6 @@ namespace ProjektSklep
             else
             {
                 MessageBox.Show("Pomyślnie zalogowano");
-                UserType.Instance.numericType = user.type;
                 this.DialogResult = true;
             }
         }
@@ -66,35 +63,6 @@ namespace ProjektSklep
         private void registerButtonClicked(object sender, RoutedEventArgs e)
         {
             Button changeButton = sender as Button;
-
-            MyDbContext db = new MyDbContext();
-
-            BitmapImage bitmapImage = new BitmapImage();
-            Images imageDB = new Images();
-
-            if ((imageDB = db.Images
-                    .OrderByDescending(i => i.imageId)
-                    .FirstOrDefault()) == null)
-            {
-                MessageBox.Show("Brak obrazków");
-            }
-            else
-            {
-
-                using (var mem = new MemoryStream(imageDB.image))
-                {
-                    mem.Position = 0;
-                    bitmapImage.BeginInit();
-                    bitmapImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.UriSource = null;
-                    bitmapImage.StreamSource = mem;
-                    bitmapImage.EndInit();
-                }
-                bitmapImage.Freeze();
-            }
-
-            placeholderImage.Source = bitmapImage;
 
             if (changeButton.Name == "changeToRegisterButton")
             {

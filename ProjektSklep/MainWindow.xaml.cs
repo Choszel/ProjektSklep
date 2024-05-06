@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -30,8 +32,10 @@ namespace ProjektSklep
         {
             InitializeComponent();
 
-            productListBox.ItemsSource = db.Products.ToList();
+
             InitializeDBData();
+            productListBox.ItemsSource = db.Products.ToList();
+
 
             categoriesComboBox.Items.Add("Wszystko");
             //Pętla inicjulizująca kategorie w comboboxie
@@ -39,6 +43,7 @@ namespace ProjektSklep
             {
                 categoriesComboBox.Items.Add(category.name);
             } 
+
         }
 
         private void InitializeDBData()
@@ -50,6 +55,35 @@ namespace ProjektSklep
         private void InitializeProducts()
         {
             products = db.Products.ToList();
+
+            foreach (Product product in products)
+            {
+                BitmapImage bitmapImage = new BitmapImage();
+                Images imageDB = new Images();
+
+                if ((imageDB = db.Images
+                        .FirstOrDefault(
+                    i => i.imageId == product.imageId)) == null)
+                {
+                    MessageBox.Show("Brak obrazków");
+                }
+                else
+                {
+                    using (var mem = new MemoryStream(imageDB.image))
+                    {
+                        mem.Position = 0;
+                        bitmapImage.BeginInit();
+                        bitmapImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.UriSource = null;
+                        bitmapImage.StreamSource = mem;
+                        bitmapImage.EndInit();
+                    }
+                    bitmapImage.Freeze();
+                }
+
+                product.bitmapImage = bitmapImage;
+            }    
         }
 
         private void InitializeCategories()
@@ -246,7 +280,30 @@ namespace ProjektSklep
 
         private void deleteProduct(object sender, RoutedEventArgs e)
         {
+            Button deleteButton = sender as Button;
 
+            if(deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int productId))
+            {
+                MyDbContext dbContext = new MyDbContext();
+
+                Product product = dbContext.Products.Find(productId);
+
+                var result = MessageBox.Show("Czy jesteś pewny że chcesz usunąć " + product.name + "?", "Potwierdzenie usunięcia", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        dbContext.Products.Remove(product);
+                    }
+                    catch(Exception error)
+                    {
+                        Debug.WriteLine(error);
+                    }
+
+                    Debug.WriteLine("Usunieto produktid: " + productId);
+                }
+            }
         }
 
         private void wheelButton_Click(object sender, RoutedEventArgs e)
@@ -264,6 +321,20 @@ namespace ProjektSklep
             };
 
             if (wheelWindow.ShowDialog() == true) ;
+        }
+
+        private bool isSliderHidden = true;
+        private void MoveBasketPanel(object sender, RoutedEventArgs e)
+        {
+            double targetX = isSliderHidden ? -167 : 0;
+            DoubleAnimation animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
+            sliderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+            buttonTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+
+            // Zmiana kierunku strzałki w zależności od sliderHidden
+            ShowBasketButton.Content = isSliderHidden ? ">" : "<";
+
+            isSliderHidden = !isSliderHidden;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace ProjektSklep.Model
 {
@@ -30,6 +31,14 @@ namespace ProjektSklep.Model
             Display(Name = "Kategoria")]
         public virtual Category category { get; set; }
 
+        public int imageId {  get; set; }
+
+        [ForeignKey("imageId"),
+        Display(Name = "Obrazek")]
+        public virtual Images image { get; set; }
+
+        [NotMapped]
+        public virtual BitmapImage? bitmapImage { get; set; }
 
         //placeholder constructor
         public Product(string name, int categoryId)
