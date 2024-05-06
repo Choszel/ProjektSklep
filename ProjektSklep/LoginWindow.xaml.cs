@@ -1,8 +1,11 @@
-﻿using ProjektSklep.Model;
+﻿using Microsoft.Win32;
+using ProjektSklep.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -59,11 +62,64 @@ namespace ProjektSklep
 
         private void registerButtonClicked(object sender, RoutedEventArgs e)
         {
-            this.Height = 250;
-            secondRowInLogin.Height = GridLength.Auto;
+            Button changeButton = sender as Button;
 
-            loginButton.Click += new RoutedEventHandler(registringButtonClicked);
-            loginButton.Click -= new RoutedEventHandler(OnLoginButton_Click);
+            MyDbContext db = new MyDbContext();
+
+            BitmapImage bitmapImage = new BitmapImage();
+            Images imageDB = new Images();
+
+            if ((imageDB = db.Images
+                    .OrderByDescending(i => i.imageId)
+                    .FirstOrDefault()) == null)
+            {
+                MessageBox.Show("Brak obrazków");
+            }
+            else
+            {
+
+                using (var mem = new MemoryStream(imageDB.image))
+                {
+                    mem.Position = 0;
+                    bitmapImage.BeginInit();
+                    bitmapImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.UriSource = null;
+                    bitmapImage.StreamSource = mem;
+                    bitmapImage.EndInit();
+                }
+                bitmapImage.Freeze();
+            }
+
+            placeholderImage.Source = bitmapImage;
+
+            if (changeButton.Name == "changeToRegisterButton")
+            {
+                this.Height = 250;
+                secondRowInLogin.Height = GridLength.Auto;
+
+                loginButton.Click += new RoutedEventHandler(registringButtonClicked);
+                loginButton.Click -= new RoutedEventHandler(OnLoginButton_Click);
+
+                changeButton.Name = "changeToLoginButton";
+                changeButton.Content = "Masz już konto? Zaloguj się";
+                loginButton.Content = "Zarejestruj Się";
+            }
+            else
+            {
+                this.Height = 150;
+                secondRowInLogin.Height = new GridLength(0.01, GridUnitType.Star);
+
+                changeButton.Name = "changeToRegisterButton";
+                changeButton.Content = "Nie masz konta? Zarejestruj się";
+                loginButton.Content = "Zaloguj Się";
+
+                loginButton.Click -= new RoutedEventHandler(registringButtonClicked);
+                loginButton.Click += new RoutedEventHandler(OnLoginButton_Click);
+            }
+
+
+
             //RegisterWindow registerWindow = new RegisterWindow();
             //this.DialogResult = true;
             //registerWindow.ShowDialog();
@@ -127,6 +183,59 @@ namespace ProjektSklep
             }
             else
                 return true;
+        }
+
+        //do usuniecia placeholder
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Create source
+                BitmapImage myBitmapImage = new BitmapImage();
+
+                // BitmapImage.UriSource must be in a BeginInit/EndInit block
+                myBitmapImage.BeginInit();
+                myBitmapImage.UriSource = new Uri(openFileDialog.FileName);
+
+                // To save significant application memory, set the DecodePixelWidth or
+                // DecodePixelHeight of the BitmapImage value of the image source to the desired
+                // height or width of the rendered image. If you don't do this, the application will
+                // cache the image as though it were rendered as its normal size rather than just
+                // the size that is displayed.
+                // Note: In order to preserve aspect ratio, set DecodePixelWidth
+                // or DecodePixelHeight but not both.
+                myBitmapImage.DecodePixelWidth = 200;
+                myBitmapImage.EndInit();
+
+                //konwersja do db
+                byte[] data;
+                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+
+                encoder.Frames.Add(BitmapFrame.Create(myBitmapImage));
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    encoder.Save(ms);
+                    data = ms.ToArray();
+                }
+
+                MyDbContext db = new MyDbContext();
+
+                Images placeImages= new Images();
+
+                placeImages.image = data;
+
+                db.Images.Add(placeImages);
+
+                db.SaveChanges();
+
+                //koniec z db
+
+                //set image source
+                placeholderImage.Source = myBitmapImage;
+            }
         }
     }
 }

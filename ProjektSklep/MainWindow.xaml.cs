@@ -57,14 +57,17 @@ namespace ProjektSklep
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if(loginButton.Content.ToString().CompareTo("Zaloguj się")==0)
+            if(loginButton.Content.ToString().CompareTo("Zaloguj Się")==0)
             {
                 LoginWindow loginWindow = new LoginWindow();
-                if (loginWindow.ShowDialog() == true)loginButton.Content = "Wyloguj się";       
+                loginWindow.Owner = this;
+                loginWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                if (loginWindow.ShowDialog() == true)loginButton.Content = "Wyloguj Się";       
             }
             else
             {
-                loginButton.Content = "Zaloguj się";
+                loginButton.Content = "Zaloguj Się";
             }           
         }
 

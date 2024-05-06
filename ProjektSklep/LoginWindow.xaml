@@ -22,13 +22,15 @@
         <TextBox Name="loginTextBox" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
         <Label Grid.Column="2" FontSize="20" VerticalAlignment="Center" Margin="10">Hasło:</Label>
         <TextBox Name="passwordTextBox" Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Margin="0,0,5,0"></TextBox>
-        <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" FontSize="16" BorderBrush="White" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="registerButtonClicked">Nie masz konta? Zarejestruj się</Button>
+        <Button Name="changeToRegisterButton" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" FontSize="16" BorderBrush="White" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="registerButtonClicked">Nie masz konta? Zarejestruj się</Button>
         <Button Name="loginButton" Grid.Row="2" Grid.Column="3"  FontSize="16" Padding="5" VerticalAlignment="Top" Margin="7" Click="OnLoginButton_Click" >Zaloguj się</Button>
-        
+
         <Label FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="10">Nazwa:</Label>
         <TextBox Name="nameTextBox" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
         <Label Grid.Column="2" Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10">E-mail:</Label>
         <TextBox Name="emailTextBox" Grid.Row="1" Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
+        <Button Content="browseButton" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,183,1" Grid.RowSpan="2" Grid.Row="1" Click="Button_Click"/>
+        <Image Name="placeholderImage" Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="80,33,0,0" Grid.RowSpan="3" VerticalAlignment="Top" Width="100"/>
 
     </Grid>
 </Window>
