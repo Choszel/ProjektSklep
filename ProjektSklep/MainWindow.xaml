@@ -19,7 +19,10 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Label Content="WPF Store" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" FontSize="20" Width="100"/>
+        <StackPanel Orientation="Horizontal">
+            <Image Name="shopLogo" Height="40" Width="40" Source="./Resources/shop_logo.png" Margin="10"></Image>
+            <Label Content="WPF Store" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" FontSize="20" Width="100"/>
+        </StackPanel>
 
         <Grid Grid.Column="1" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
@@ -65,35 +68,9 @@
         </GroupBox>
 
         <Button  Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30">
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation 
-            Storyboard.TargetName="theTransform"
-            Storyboard.TargetProperty="(RotateTransform.Angle)" 
-            From="0" To="360" Duration="0:0:5" AutoReverse="True"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Button.Triggers>
         </Button>
 
-        <Popup IsOpen="{Binding ElementName=myCheckBox,Path=IsChecked}" PlacementTarget="{Binding ElementName=myCheckBox}"            
-           AllowsTransparency="True"
-           PopupAnimation="Slide"
-           HorizontalOffset="50"
-           VerticalOffset="50"
-       >
-            <Canvas Width="100" Height="100" Background="DarkBlue" Margin="150">
-                <Canvas.RenderTransform>
-                    <RotateTransform x:Name="theTransform" />
-                </Canvas.RenderTransform>
-                <TextBlock TextWrapping="Wrap" Foreground="White">
-      Rotating Popup
-                </TextBlock>
-            </Canvas>
-        </Popup>
+        <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click">Koło Fortuny</Button>
 
     </Grid>
     <!--koniec-->

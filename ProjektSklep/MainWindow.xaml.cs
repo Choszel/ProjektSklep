@@ -27,24 +27,9 @@ namespace ProjektSklep
         public MainWindow()
         {
             InitializeComponent();
-            /*
-            products.Add(new Product("stringi",1));
-            products.Add(new Product("kapelusze",1));
-            products.Add(new Product("wiadra", 2));
-            products.Add(new Product("marichuanen",2)); //XD
-            products.Add(new Product("parówy",3));
-            products.Add(new Product("pierogi",3));
 
-            categories.Add(new Category(0, "All"));
-            categories.Add(new Category(1,"ubrania"));
-            categories.Add(new Category(2,"fun time"));
-            categories.Add(new Category(3,"żarcie"));
-
-            trzeba dać dane do DB*/
-          
             productListBox.ItemsSource = db.Products.ToList();
             InitializeDBData();
-
 
             categoriesComboBox.Items.Add("Wszystko");
             //Pętla inicjulizująca kategorie w comboboxie
@@ -215,5 +200,21 @@ namespace ProjektSklep
             }
         }
 
+        private void wheelButton_Click(object sender, RoutedEventArgs e)
+        {
+            WheelWindow wheelWindow = new WheelWindow();
+
+            wheelWindow.Owner = this;
+            wheelWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            this.Opacity = 0.4;
+
+            wheelWindow.Closed += (s, args) =>
+            {
+                this.Opacity = 1;
+            };
+
+            if (wheelWindow.ShowDialog() == true) ;
+        }
     }
 }
