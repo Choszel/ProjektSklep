@@ -27,8 +27,10 @@ namespace ProjektSklep.Model
         [Required(ErrorMessage = "Ulica, numer domu i mieszkania są wymagane")]
         public string street { get; set; }
 
-        [Required(ErrorMessage = "Kod pocztowy jest wymagany")]
-        public int zipCode {  get; set; }
+        [Required(ErrorMessage = "Kod pocztowy jest wymagany"),
+            MaxLength(6, ErrorMessage = "Kod pocztowy jest za długi"),
+            RegularExpression(@"^\d{2}-\d{3}$", ErrorMessage = "Kod pocztowy powinien mieć format XX-XXX")]
+        public string zipCode {  get; set; }
         
         [Required(ErrorMessage = "Cena detaliczna jest wymagana")]
         public float totalPrice { get; set; }
