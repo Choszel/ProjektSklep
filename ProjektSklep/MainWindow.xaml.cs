@@ -81,9 +81,9 @@ namespace ProjektSklep
                     }
                     bitmapImage.Freeze();
                 }
-
+            
                 product.bitmapImage = bitmapImage;
-            }    
+            }
         }
 
         private void InitializeCategories()
@@ -356,6 +356,21 @@ namespace ProjektSklep
             };
 
             shippingDetailsWindow.ShowDialog();
+        }
+
+        private void OpenAddProductWindow_Click(object sender, RoutedEventArgs e)
+        {
+            AddProductWindow productWindow = new AddProductWindow();
+            productWindow.Owner = this;
+            productWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            this.Opacity = 0.4;
+
+            productWindow.Closed += (s, args) =>
+            {
+                this.Opacity = 1;
+            };
+            productWindow.Show();
         }
     }
 }
