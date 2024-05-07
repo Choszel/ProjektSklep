@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -111,6 +112,8 @@ namespace ProjektSklep
                         warehouseTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
                         wheelButton.IsEnabled = false;
+
+                        mainTabs.BorderBrush = new SolidColorBrush(Colors.Black); 
 
                         SelectionChangedEventArgs args = new SelectionChangedEventArgs(
                             Selector.SelectionChangedEvent,

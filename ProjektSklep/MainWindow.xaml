@@ -35,7 +35,7 @@
 
         <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click"/>
 
-        <TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Left" HorizontalContentAlignment="Left" BorderBrush="White">
+        <TabControl Name="mainTabs" Margin="0 0 0 10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Left" HorizontalContentAlignment="Left" BorderBrush="White">
             <TabItem Name="productsTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Produkty" Width="170" Padding="20 10 0 10">
                 <GroupBox Grid.Row="1" Grid.Column="1" Header="Produkty" FontSize="16" Padding="5" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
@@ -73,7 +73,7 @@
                 </GroupBox>
             </TabItem>
 
-            <TabItem Name="ordersTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Zamówienia"   Padding="20 10 0 10">
+            <TabItem Name="ordersTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Zamówienia" Padding="20 10 0 10">
                 <GroupBox Grid.Row="1" Grid.Column="1" Header="Zamówienia" FontSize="16" Padding="5" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
                         <ListBox Name="orderListBox" Margin="5" SelectionChanged="productListSelectionChanged" Width="Auto" BorderBrush="White">
@@ -93,7 +93,7 @@
                                                 <RowDefinition></RowDefinition>
                                                 <RowDefinition></RowDefinition>
                                             </Grid.RowDefinitions>
-                                            <Label Name="orderUser" Grid.Row="0" FontWeight="Bold" Content="{Binding userId}"></Label>
+                                            <Label Name="orderUser" Grid.Row="0" FontWeight="Bold" Content="{Binding user.login}"></Label>
                                             <Label Name="orderPlace" Grid.Row="1" Content="{Binding Path=., StringFormat=\{0.city\}\, \ul. \{0.street\} \{0.postalCode\} \{0.country\}}"/>
                                             <Label Name="orderProducts" Grid.Row="2" Content="{Binding ProductOrder}"></Label>
                                             <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
@@ -129,14 +129,11 @@
                                                 <RowDefinition></RowDefinition>
                                                 <RowDefinition></RowDefinition>
                                             </Grid.RowDefinitions>
-                                            <Image Source="{Binding bitmapImage}" Height="80" Width="80" Margin="10" Name="productImage" Tag="{Binding productId}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"></Image>
-                                            <Label Name="productName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Content="{Binding name}"></Label>
-                                            <Label Name="productPrice" Grid.Row="3" Grid.Column="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
-                                            <Label Name="productCategory" Grid.Row="1" Grid.Column="1" Content="{Binding category.name}"></Label>
-                                            <Label Name="productDesc" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2" Content="{Binding description}"></Label>
-                                            <Button Name="addProductButton" Grid.Row="3" Grid.Column="2" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"/>
-                                            <Button Name="editProductButton" Grid.Row="2" Grid.Column="2" Click="editProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Edytuj"/>
-                                            <Button Name="deleteProductButton" Grid.Row="3" Grid.Column="2" Click="deleteProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Usuń"/>
+                                            <Label Name="warehouseProductName" Grid.Row="0" FontWeight="Bold" Content="{Binding product.name}"></Label>
+                                            <Label Name="warehouseActualState" Grid.Row="1" Content="{Binding actualState, StringFormat=Stan \faktyczny: \{0\}}"></Label>
+                                            <Label Name="warehouseStockLevel" Grid.Row="2" Content="{Binding stockLevel, StringFormat=Stan \magazynowy: \{0\}}"></Label>
+                                            <Button Name="editInWarehouse" Grid.Row="3" Grid.Column="1" Click="editInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Edytuj"/>
+                                            <Button Name="deleteInWarehouse" Grid.Row="3" Grid.Column="2" Click="deleteInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Usuń"/>
                                         </Grid>
                                     </GroupBox>
                                 </DataTemplate>
