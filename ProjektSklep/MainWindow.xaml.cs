@@ -125,16 +125,10 @@ namespace ProjektSklep
                         warehouseTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
                         wheelButton.IsEnabled = false;
+                        if (!isSliderHidden) MoveBasketPanel(this, e);
                         ShowBasketButton.Content = "+";
 
-                        if (!isSliderHidden)
-                        {
-                            double targetX = isSliderHidden ? -167 : 0;
-                            DoubleAnimation animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
-                            sliderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
-                            buttonTransform.BeginAnimation(TranslateTransform.XProperty, animation);
-                        }
-
+                       
                         mainTabs.BorderBrush = new SolidColorBrush(Colors.Black); 
 
                         SelectionChangedEventArgs args = new SelectionChangedEventArgs(
