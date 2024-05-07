@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -25,6 +26,8 @@ namespace ProjektSklep
     {
         List<Product> products = new List<Product>();
         List<Category> categories = new List<Category>();
+        List<Order> orders = new List<Order>();
+        List<Warehouse> warehouse_list = new List<Warehouse>();
         Dictionary<int, int> cart;
 
         private MyDbContext db = new MyDbContext();
@@ -33,10 +36,8 @@ namespace ProjektSklep
         {
             InitializeComponent();
 
-
             InitializeDBData();
             productListBox.ItemsSource = db.Products.ToList();
-
 
             categoriesComboBox.Items.Add("Wszystko");
             //Pętla inicjulizująca kategorie w comboboxie
@@ -130,7 +131,6 @@ namespace ProjektSklep
                 loginButton.Content = "Zaloguj Się";
             }           
         }
-
 
         //Wyszukiwanie produktów po nazwie i kategorii
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -286,6 +286,16 @@ namespace ProjektSklep
 
         }
 
+        private void editInWarehouse_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
+        private void deleteInWarehouse_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void deleteProduct(object sender, RoutedEventArgs e)
         {
             Button deleteButton = sender as Button;
@@ -359,6 +369,41 @@ namespace ProjektSklep
             };
 
             shippingDetailsWindow.ShowDialog();
+        }
+
+        private void mainTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabItem tabItem = mainTabs.SelectedItem as TabItem;          
+
+            if(tabItem != null && tabItem.Name == "productsTab") 
+            {
+                orders = new List<Order>();
+                warehouse_list = new List<Warehouse>();
+                InitializeProducts();
+            }
+            else if(tabItem != null && tabItem.Name == "ordersTab")
+            {
+                products = new List<Product>();
+                warehouse_list = new List<Warehouse>();
+                orderListBox.ItemsSource = db.Orders.ToList();
+            }
+            else if(tabItem != null && tabItem.Name == "warehouseTab")
+            {
+                products = new List<Product>();
+                orders = new List<Order>();
+                warehouseListBox.ItemsSource = db.Warehouse.ToList();
+            }
+
+        }
+
+        private void orderListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void warehouseListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
