@@ -11,6 +11,6 @@ namespace ProjektSklep.Model
         private static UserType _instance;
         public static UserType Instance => _instance ??= new UserType();
 
-        public int numericType { get; set; } = 1;
+        public int numericType { get; set; } = -1;
     }
 }

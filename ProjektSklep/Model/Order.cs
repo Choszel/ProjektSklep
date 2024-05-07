@@ -44,6 +44,9 @@ namespace ProjektSklep.Model
 
         public virtual ICollection<ProductOrder>? ProductOrder { get; set; }
 
+        [NotMapped]
+        public string products {  get; set; } 
+
         public Order() { }
     }
 }
