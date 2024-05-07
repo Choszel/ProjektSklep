@@ -341,5 +341,21 @@ namespace ProjektSklep
 
             isSliderHidden = !isSliderHidden;
         }
+
+        private void PlaceOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShippingDetailsWindow shippingDetailsWindow = new ShippingDetailsWindow();
+            shippingDetailsWindow.Owner = this;
+            shippingDetailsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            this.Opacity = 0.4;
+
+            shippingDetailsWindow.Closed += (s, args) =>
+            {
+                this.Opacity = 1;
+            };
+
+            shippingDetailsWindow.ShowDialog();
+        }
     }
 }
