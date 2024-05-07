@@ -30,7 +30,7 @@
         <Label Content="Numer kodu pocztowego:" Grid.Row="6" VerticalAlignment="Center"/>
         <TextBox Name="postalCodeTextBox" Grid.Row="7" Margin="5"/>
 
-        <Button Content="Zamów" Grid.Row="8" Click="PlaceOrderButton_Click" Margin="5"/>
+        <Button Content="Zamów" Grid.Row="7" Click="PlaceOrderButton_Click" Margin="5,30,5,-20"/>
 
         <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="352,0,0,0" Click="CloseShippingWindow_Click" Width="22"/>
     </Grid>
