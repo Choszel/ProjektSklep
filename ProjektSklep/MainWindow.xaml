@@ -93,16 +93,16 @@
                                                 <RowDefinition></RowDefinition>
                                                 <RowDefinition></RowDefinition>
                                             </Grid.RowDefinitions>
-                                            <Label Name="orderUser" Grid.Row="0" FontWeight="Bold" Content="{Binding user.login}"></Label>
-                                            <!--<Label Name="orderPlace" Grid.Row="1" Content="{Binding Path=., StringFormat=\{0.city\}\, \ul. \{0.street\} \{0.postalCode\} \{0.country\}}"/>-->
+                                            <Label Name="orderUser" Grid.Row="0" FontWeight="Bold" Content="{Binding user.name}"></Label>
                                             <TextBlock Grid.Row="1">
-                                              <Run Text="Name = "/>
-                                              <Run Text="{Binding city}"/>
-                                              <Run Text=", Id ="/>
-                                              <Run Text="{Binding street}"/>            
+                                                <Run Text="{Binding city}"/>
+                                                <Run Text="ul."/>
+                                                <Run Text="{Binding street}"/>
+                                                <Run Text="{Binding zipCode}"/>
+                                                <Run Text="{Binding country}"/>
                                             </TextBlock>
-                                            <Label Name="orderProducts" Grid.Row="2" Content="{Binding ProductOrder}"></Label>
-                                            <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
+                                                <Label Name="orderProducts" Grid.Row="2" Content="{Binding products}"></Label>
+                                                <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
                                             <Label Name="orderDiscount" Grid.Row="3" Grid.Column="1" Content="{Binding discount}"/>
                                             <Label Name="orderState" Grid.Row="3" Grid.Column="2" Content="{Binding state}"/>
                                             <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Edytuj stan"/>

@@ -39,7 +39,19 @@ namespace ProjektSklep
             InitializeDBData();
             productListBox.ItemsSource = db.Products.ToList();
 
+            List<Order> orders = db.Orders.ToList();
+
+            foreach (Order order in orders)
+            {
+                foreach(ProductOrder productOrder in order.ProductOrder)
+                {
+                    order.products += productOrder.product.name + " ";
+                }
+            }
+
+            orderListBox.ItemsSource = db.Orders.ToList();
             categoriesComboBox.Items.Add("Wszystko");
+
             //Pętla inicjulizująca kategorie w comboboxie
             foreach (Category category in categories)
             {
@@ -128,6 +140,19 @@ namespace ProjektSklep
             }
             else
             {
+                UserType.Instance.numericType = -1;
+
+                productsTab.Visibility = Visibility.Hidden;
+                productsTab.IsEnabled = false;
+                ordersTab.Visibility = Visibility.Hidden;
+                ordersTab.IsEnabled = false;
+                warehouseTab.Visibility = Visibility.Hidden;
+                warehouseTab.IsEnabled = false;
+                wheelButton.Visibility = Visibility.Visible;
+                wheelButton.IsEnabled = true;
+
+                mainTabs.SelectedIndex = 0;
+
                 loginButton.Content = "Zaloguj Się";
             }           
         }
