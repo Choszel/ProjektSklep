@@ -18,20 +18,20 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Kraj:" Grid.Row="0"/>
-        <TextBox Name="countryTextBox" Grid.Row="0" Margin="5" Text="Wpisz kraj"/>
+        <Label Content="Kraj:" Grid.Row="0" VerticalAlignment="Center"/>
+        <TextBox Name="countryTextBox" Grid.Row="1" Margin="5"/>
 
-        <Label Content="Miasto:" Grid.Row="1"/>
-        <TextBox Name="cityTextBox" Grid.Row="1" Margin="5" Text="Wpisz miasto"/>
+        <Label Content="Miasto:" Grid.Row="2" VerticalAlignment="Center"/>
+        <TextBox Name="cityTextBox" Grid.Row="3" Margin="5"/>
 
-        <Label Content="Ulica:" Grid.Row="2"/>
-        <TextBox Name="streetTextBox" Grid.Row="2" Margin="5" Text="Wpisz ulicę"/>
+        <Label Content="Ulica:" Grid.Row="4" VerticalAlignment="Center"/>
+        <TextBox Name="streetTextBox" Grid.Row="5" Margin="5"/>
 
-        <Label Content="Numer kodu pocztowego:" Grid.Row="3"/>
-        <TextBox Name="postalCodeTextBox" Grid.Row="3" Margin="5" Text="Wpisz kod pocztowy"/>
+        <Label Content="Numer kodu pocztowego:" Grid.Row="6" VerticalAlignment="Center"/>
+        <TextBox Name="postalCodeTextBox" Grid.Row="7" Margin="5"/>
 
-        <Button Content="Zamów" Grid.Row="4" Click="PlaceOrderButton_Click" Margin="5"/>
-        <Button Content="Zamknij" Grid.Row="5" Click="CloseShippingWindow_Click" Margin="5"/>
+        <Button Content="Zamów" Grid.Row="8" Click="PlaceOrderButton_Click" Margin="5"/>
 
+        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="352,0,0,0" Click="CloseShippingWindow_Click" Width="22"/>
     </Grid>
 </Window>
