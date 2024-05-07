@@ -33,43 +33,121 @@
             <ComboBox Grid.Column="1" Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         </Grid>
 
-
         <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click"/>
-        <GroupBox Grid.Row="1" Grid.Column="1" Header="Produkty" FontSize="16" Padding="5" Margin="5">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
 
-                <ListBox Name="productListBox" Margin="5" SelectionChanged="productListSelectionChanged" Width="Auto">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <GroupBox>
-                                <Grid Width="440">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.7*"></ColumnDefinition>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition></RowDefinition>
-                                        <RowDefinition></RowDefinition>
-                                        <RowDefinition></RowDefinition>
-                                        <RowDefinition></RowDefinition>
-                                    </Grid.RowDefinitions>
-                                    <Image Source="{Binding bitmapImage}" Height="80" Width="80" Margin="10" Name="productImage" Tag="{Binding productId}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"></Image>
-                                    <Label Name="productName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Content="{Binding name}"></Label>
-                                    <Label Name="productPrice" Grid.Row="3" Grid.Column="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
-                                    <Label Name="productCategory" Grid.Row="1" Grid.Column="1" Content="{Binding category.name}"></Label>
-                                    <Label Name="productDesc" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2" Content="{Binding description}"></Label>
-                                    <Button Name="addProductButton" Grid.Row="3" Grid.Column="2" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"/>
-                                    <Button Name="editProductButton" Grid.Row="2" Grid.Column="2" Click="editProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Edytuj"/>
-                                    <Button Name="deleteProductButton" Grid.Row="3" Grid.Column="2" Click="deleteProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Usuń"/>
-                                </Grid>
-                            </GroupBox>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </ScrollViewer>
-        </GroupBox>
+        <TabControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Left" HorizontalContentAlignment="Left" BorderBrush="White">
+            <TabItem Name="productsTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Produkty" Width="170" Padding="20 10 0 10">
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Produkty" FontSize="16" Padding="5" >
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
 
+                        <ListBox Name="productListBox" Margin="5" SelectionChanged="productListSelectionChanged" Width="Auto" BorderBrush="White">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox>
+                                        <Grid Width="440">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.7*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Image Source="{Binding bitmapImage}" Height="80" Width="80" Margin="10" Name="productImage" Tag="{Binding productId}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"></Image>
+                                            <Label Name="productName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Content="{Binding name}"></Label>
+                                            <Label Name="productPrice" Grid.Row="3" Grid.Column="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
+                                            <Label Name="productCategory" Grid.Row="1" Grid.Column="1" Content="{Binding category.name}"></Label>
+                                            <Label Name="productDesc" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2" Content="{Binding description}"></Label>
+                                            <Button Name="addProductButton" Grid.Row="3" Grid.Column="2" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"/>
+                                            <Button Name="editProductButton" Grid.Row="2" Grid.Column="2" Click="editProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Edytuj"/>
+                                            <Button Name="deleteProductButton" Grid.Row="3" Grid.Column="2" Click="deleteProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Usuń"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+
+            <TabItem Name="ordersTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Zamówienia"   Padding="20 10 0 10">
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Zamówienia" FontSize="16" Padding="5" >
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
+                        <ListBox Name="orderListBox" Margin="5" SelectionChanged="productListSelectionChanged" Width="Auto" BorderBrush="White">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox>
+                                        <Grid Width="440">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Label Name="orderUser" Grid.Row="0" FontWeight="Bold" Content="{Binding userId}"></Label>
+                                            <Label Name="orderPlace" Grid.Row="1" Content="{Binding Path=., StringFormat=\{0.city\}\, \ul. \{0.street\} \{0.postalCode\} \{0.country\}}"/>
+                                            <Label Name="orderProducts" Grid.Row="2" Content="{Binding ProductOrder}"></Label>
+                                            <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
+                                            <Label Name="orderDiscount" Grid.Row="3" Grid.Column="1" Content="{Binding discount}"/>
+                                            <Label Name="orderState" Grid.Row="3" Grid.Column="2" Content="{Binding state}"/>
+                                            <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Edytuj stan"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+
+            <TabItem Name="warehouseTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Inwentaryzacja"  Padding="20 10 0 10">
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Inwentaryzacja" FontSize="16" Padding="5" >
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
+
+                        <ListBox Name="warehouseListBox" Margin="5" SelectionChanged="productListSelectionChanged" Width="Auto" BorderBrush="White">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox>
+                                        <Grid Width="440">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.7*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Image Source="{Binding bitmapImage}" Height="80" Width="80" Margin="10" Name="productImage" Tag="{Binding productId}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"></Image>
+                                            <Label Name="productName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Content="{Binding name}"></Label>
+                                            <Label Name="productPrice" Grid.Row="3" Grid.Column="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
+                                            <Label Name="productCategory" Grid.Row="1" Grid.Column="1" Content="{Binding category.name}"></Label>
+                                            <Label Name="productDesc" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2" Content="{Binding description}"></Label>
+                                            <Button Name="addProductButton" Grid.Row="3" Grid.Column="2" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"/>
+                                            <Button Name="editProductButton" Grid.Row="2" Grid.Column="2" Click="editProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Edytuj"/>
+                                            <Button Name="deleteProductButton" Grid.Row="3" Grid.Column="2" Click="deleteProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Usuń"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
+
+       
         <Button  Grid.Row="1" Grid.Column="2" Name="ShowBasketButton" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30" Click="MoveBasketPanel">
             <Button.RenderTransform>
                 <TranslateTransform x:Name="buttonTransform"/>
@@ -144,12 +222,6 @@
 
         <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click">Koło Fortuny</Button>
 
-        <StackPanel Orientation="Vertical" Grid.Row="1">
-            <Button Name="productTab" Margin="10 20 10 10" Padding="5" Visibility="Hidden" IsEnabled="False">Produkty</Button>
-            <Button Name="orderTab" Margin="10" Padding="5" Visibility="Hidden" IsEnabled="False">Zamówienia</Button>
-            <Button Name="warehouseTab" Margin="10" Padding="5" Visibility="Hidden" IsEnabled="False">Inwentaryzacja</Button>
-        </StackPanel>
-        
     </Grid>
     
 </Window>

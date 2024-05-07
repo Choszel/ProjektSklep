@@ -35,6 +35,8 @@ namespace ProjektSklep.Model
 
         public int? discount { get; set; }
 
+        public string state {  get; set; } = "W trakcie realizacji";
+
         [ForeignKey("userId")]
         public virtual User user { get; set; }
 

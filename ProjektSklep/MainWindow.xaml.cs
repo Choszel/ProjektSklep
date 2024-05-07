@@ -103,10 +103,10 @@ namespace ProjektSklep
                 {
                     loginButton.Content = "Wyloguj Się";
                     if (UserType.Instance.numericType == 0) {
-                        productTab.Visibility = Visibility.Visible; 
-                        productTab.IsEnabled = true; 
-                        orderTab.Visibility = Visibility.Visible;
-                        orderTab.IsEnabled = true;
+                        productsTab.Visibility = Visibility.Visible; 
+                        productsTab.IsEnabled = true; 
+                        ordersTab.Visibility = Visibility.Visible;
+                        ordersTab.IsEnabled = true;
                         warehouseTab.Visibility = Visibility.Visible;
                         warehouseTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
@@ -274,6 +274,11 @@ namespace ProjektSklep
         }
 
         private void editProduct(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void editOrderButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
