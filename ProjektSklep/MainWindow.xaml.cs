@@ -125,6 +125,7 @@ namespace ProjektSklep
                         warehouseTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
                         wheelButton.IsEnabled = false;
+                        ShowBasketButton.Content = "+";
 
                         mainTabs.BorderBrush = new SolidColorBrush(Colors.Black); 
 
@@ -150,6 +151,7 @@ namespace ProjektSklep
                 warehouseTab.IsEnabled = false;
                 wheelButton.Visibility = Visibility.Visible;
                 wheelButton.IsEnabled = true;
+                ShowBasketButton.Content = "<";
 
                 mainTabs.SelectedIndex = 0;
 
@@ -369,15 +371,32 @@ namespace ProjektSklep
         private bool isSliderHidden = true;
         private void MoveBasketPanel(object sender, RoutedEventArgs e)
         {
-            double targetX = isSliderHidden ? -167 : 0;
-            DoubleAnimation animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
-            sliderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
-            buttonTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+            if(ShowBasketButton.Content.Equals(">") || ShowBasketButton.Content.Equals("<"))
+            {
+                double targetX = isSliderHidden ? -167 : 0;
+                DoubleAnimation animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
+                sliderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+                buttonTransform.BeginAnimation(TranslateTransform.XProperty, animation);
 
-            // Zmiana kierunku strzałki w zależności od sliderHidden
-            ShowBasketButton.Content = isSliderHidden ? ">" : "<";
+                // Zmiana kierunku strzałki w zależności od sliderHidden
+                ShowBasketButton.Content = isSliderHidden ? ">" : "<";
 
-            isSliderHidden = !isSliderHidden;
+                isSliderHidden = !isSliderHidden;
+            }
+            else
+            {
+                AddProductWindow productWindow = new AddProductWindow();
+                productWindow.Owner = this;
+                productWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                this.Opacity = 0.4;
+
+                productWindow.Closed += (s, args) =>
+                {
+                    this.Opacity = 1;
+                };
+                productWindow.Show();
+            }          
         }
 
         private void PlaceOrderButton_Click(object sender, RoutedEventArgs e)
@@ -396,21 +415,6 @@ namespace ProjektSklep
             shippingDetailsWindow.ShowDialog();
         }
 
-        private void OpenAddProductWindow_Click(object sender, RoutedEventArgs e)
-        {
-            AddProductWindow productWindow = new AddProductWindow();
-            productWindow.Owner = this;
-            productWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-            this.Opacity = 0.4;
-
-            productWindow.Closed += (s, args) =>
-            {
-                this.Opacity = 1;
-            };
-            productWindow.Show();
-        }
-
         private void mainTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TabItem tabItem = mainTabs.SelectedItem as TabItem;          
@@ -420,18 +424,21 @@ namespace ProjektSklep
                 orders = new List<Order>();
                 warehouse_list = new List<Warehouse>();
                 InitializeProducts();
+                ShowBasketButton.IsEnabled = true;
             }
             else if(tabItem != null && tabItem.Name == "ordersTab")
             {
                 products = new List<Product>();
                 warehouse_list = new List<Warehouse>();
                 orderListBox.ItemsSource = db.Orders.ToList();
+                ShowBasketButton.IsEnabled = false;
             }
             else if(tabItem != null && tabItem.Name == "warehouseTab")
             {
                 products = new List<Product>();
                 orders = new List<Order>();
                 warehouseListBox.ItemsSource = db.Warehouse.ToList();
+                ShowBasketButton.IsEnabled = false;
             }
 
         }

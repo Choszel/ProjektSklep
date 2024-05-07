@@ -157,59 +157,6 @@ namespace ProjektSklep
             }
             else
                 return true;
-        }
-
-        //do usuniecia placeholder
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                // Create source
-                BitmapImage myBitmapImage = new BitmapImage();
-
-                // BitmapImage.UriSource must be in a BeginInit/EndInit block
-                myBitmapImage.BeginInit();
-                myBitmapImage.UriSource = new Uri(openFileDialog.FileName);
-
-                // To save significant application memory, set the DecodePixelWidth or
-                // DecodePixelHeight of the BitmapImage value of the image source to the desired
-                // height or width of the rendered image. If you don't do this, the application will
-                // cache the image as though it were rendered as its normal size rather than just
-                // the size that is displayed.
-                // Note: In order to preserve aspect ratio, set DecodePixelWidth
-                // or DecodePixelHeight but not both.
-                myBitmapImage.DecodePixelWidth = 200;
-                myBitmapImage.EndInit();
-
-                //konwersja do db
-                byte[] data;
-                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-
-                encoder.Frames.Add(BitmapFrame.Create(myBitmapImage));
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    encoder.Save(ms);
-                    data = ms.ToArray();
-                }
-
-                MyDbContext db = new MyDbContext();
-
-                Images placeImages= new Images();
-
-                placeImages.image = data;
-
-                db.Images.Add(placeImages);
-
-                db.SaveChanges();
-
-                //koniec z db
-
-                //set image source
-                placeholderImage.Source = myBitmapImage;
-            }
-        }
+        }        
     }
 }
