@@ -30,57 +30,49 @@
             </Canvas.RenderTransform>
             <Ellipse Width="300" Height="300" Stroke="Black" StrokeThickness="1" Fill="Transparent"/>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Yellow" Data="M 150,150 L 150,1 A 150,150 0 0 1 255, 45 Z"/>
-            <TextBlock Text="Fragment 1" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="95" Canvas.Top="80">
+            <TextBlock Name="spinText1" Text="Fragment 1" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="95" Canvas.Top="80">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="22.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Red" Data="M 150,150 L 255, 45 A 150,150 0 0 1 300,150 Z"/>
-            <TextBlock Text="Fragment 2" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="10" Canvas.Top="125">
+            <TextBlock Name="spinText2" Text="Fragment 2" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="10" Canvas.Top="125">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="67.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Yellow" Data="M 150,150 L 300,150 A 150,150 0 0 1 255,255 Z"/>
-            <TextBlock Text="Fragment 3" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-80" Canvas.Top="95">
+            <TextBlock Name="spinText3" Text="Fragment 3" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-80" Canvas.Top="95">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="112.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Red" Data="M 150,150 L 255,255 A 150,150 0 0 1 150,300 Z"/>
-            <TextBlock Text="Fragment 4" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-125" Canvas.Top="10">
+            <TextBlock Name="spinText4" Text="Fragment 4" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-125" Canvas.Top="10">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="157.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Yellow" Data="M 150,150 L 150,300 A 150,150 0 0 1 45,255 Z"/>
-            <TextBlock Text="Fragment 5" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-95" Canvas.Top="-80">
+            <TextBlock Name="spinText5" Text="Fragment 5" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-95" Canvas.Top="-80">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="202.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Red" Data="M 150,150 L 45,255 A 150,150 0 0 1 1,150 Z"/>
-            <TextBlock Text="Fragment 6" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-10" Canvas.Top="-125">
+            <TextBlock Name="spinText6" Text="Fragment 6" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-10" Canvas.Top="-125">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="247.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Yellow" Data="M 150,150 L 1,150 A 150,150 0 0 1 45,45 Z"/>
-            <TextBlock Text="Fragment 7" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="80" Canvas.Top="-95">
+            <TextBlock Name="spinText7" Text="Fragment 7" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="80" Canvas.Top="-95">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="292.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
 
-            <Path Stroke="Black" StrokeThickness="2" Fill="Red" Data="M 150,150 L 45,45 A 150,150 0 0 1 150,1 Z"/>
-            <TextBlock Text="Fragment 8" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="125" Canvas.Top="-10">
+            <TextBlock Name="spinText8" Text="Fragment 8" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="125" Canvas.Top="-10">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="337.5" CenterX="150" CenterY="150"/>
                 </TextBlock.RenderTransform>
