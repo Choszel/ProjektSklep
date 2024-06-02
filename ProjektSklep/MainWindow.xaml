@@ -8,7 +8,14 @@
         MinWidth="900" 
         MinHeight="600"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Colors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
@@ -19,9 +26,9 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Background="{StaticResource PrimaryBrush}">
             <Image Name="shopLogo" Height="40" Width="40" Source="./Resources/shop_logo.png" Margin="10"></Image>
-            <Label Content="WPF Store" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" FontSize="20" Width="100"/>
+            <Label Content="WPF Store" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" FontSize="20" Width="100" Foreground="{StaticResource PrimaryContentBrush}"/>
         </StackPanel>
 
         <Grid Grid.Column="1" VerticalAlignment="Center">
@@ -33,13 +40,12 @@
             <ComboBox Grid.Column="1" Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         </Grid>
 
-        <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click"/>
+        <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click" Background="{StaticResource PrimaryDarkBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <TabControl Name="mainTabs" Margin="0 0 0 10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Left" HorizontalContentAlignment="Left" BorderBrush="White" SelectionChanged="mainTabs_SelectionChanged">
             <TabItem Name="productsTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Produkty" Width="170" Padding="20 10 0 10">
-                <GroupBox Grid.Row="1" Grid.Column="1" Header="Produkty" FontSize="16" Padding="5" >
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Produkty" FontSize="16" Padding="5">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
-
                         <ListBox Name="productListBox" Margin="5" SelectionChanged="productListSelectionChanged" Width="Auto" BorderBrush="White">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -61,8 +67,7 @@
                                             <Label Name="productPrice" Grid.Row="3" Grid.Column="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
                                             <Label Name="productCategory" Grid.Row="1" Grid.Column="1" Content="{Binding category.name}"></Label>
                                             <Label Name="productDesc" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2" Content="{Binding description}"></Label>
-                                            <Button Name="addProductButton" Grid.Row="3" Grid.Column="2" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"/>
-                                            <Button Name="editProductButton" Grid.Row="2" Grid.Column="2" Click="editProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Edytuj"/>
+                                            <Button Name="addProductButton" Grid.Row="3" Grid.Column="2" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka"></Button>
                                             <Button Name="deleteProductButton" Grid.Row="3" Grid.Column="2" Click="deleteProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Usuń"/>
                                         </Grid>
                                     </GroupBox>
@@ -74,7 +79,7 @@
             </TabItem>
 
             <TabItem Name="ordersTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Zamówienia" Padding="20 10 0 10">
-                <GroupBox Grid.Row="1" Grid.Column="1" Header="Zamówienia" FontSize="16" Padding="5" >
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Zamówienia" FontSize="16" Padding="5">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
                         <ListBox Name="orderListBox" Margin="5" SelectionChanged="orderListSelectionChanged" Width="Auto" BorderBrush="White">
                             <ListBox.ItemTemplate>
@@ -101,11 +106,11 @@
                                                 <Run Text="{Binding zipCode}"/>
                                                 <Run Text="{Binding country}"/>
                                             </TextBlock>
-                                                <Label Name="orderProducts" Grid.Row="2" Content="{Binding products}"></Label>
-                                                <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
+                                            <Label Name="orderProducts" Grid.Row="2" Content="{Binding products}"></Label>
+                                            <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
                                             <Label Name="orderDiscount" Grid.Row="3" Grid.Column="1" Content="{Binding discount}"/>
                                             <Label Name="orderState" Grid.Row="3" Grid.Column="2" Content="{Binding state}"/>
-                                            <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Edytuj stan"/>
+                                            <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Edytuj stan" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
                                         </Grid>
                                     </GroupBox>
                                 </DataTemplate>
@@ -115,10 +120,9 @@
                 </GroupBox>
             </TabItem>
 
-            <TabItem Name="warehouseTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Inwentaryzacja"  Padding="20 10 0 10">
-                <GroupBox Grid.Row="1" Grid.Column="1" Header="Inwentaryzacja" FontSize="16" Padding="5" >
+            <TabItem Name="warehouseTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Inwentaryzacja" Padding="20 10 0 10">
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Inwentaryzacja" FontSize="16" Padding="5">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
-
                         <ListBox Name="warehouseListBox" Margin="5" SelectionChanged="warehouseListSelectionChanged" Width="Auto" BorderBrush="White">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -137,9 +141,9 @@
                                             </Grid.RowDefinitions>
                                             <Label Name="warehouseProductName" Grid.Row="0" FontWeight="Bold" Content="{Binding product.name}"></Label>
                                             <TextBlock Name="warehouseActualState" Grid.Row="1" Text="{Binding actualState, StringFormat='Stan faktyczny: \{0\}'}"></TextBlock>
-                                            <TextBlock Name="warehouseStockLevel" Grid.Row="2" Text="{Binding stockLevel, StringFormat=Stan \magazynowy: \{0\}}"></TextBlock>
-                                            <Button Name="editInWarehouse" Grid.Row="3" Grid.Column="1" Click="editInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Edytuj"/>
-                                            <Button Name="deleteInWarehouse" Grid.Row="3" Grid.Column="2" Click="deleteInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Usuń"/>
+                                            <TextBlock Name="warehouseStockLevel" Grid.Row="2" Text="{Binding stockLevel, StringFormat='Stan magazynowy: \{0\}'}"></TextBlock>
+                                            <Button Name="editInWarehouse" Grid.Row="3" Grid.Column="1" Click="editInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Edytuj" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
+                                            <Button Name="deleteInWarehouse" Grid.Row="3" Grid.Column="2" Click="deleteInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Usuń" Background="{StaticResource SecondaryDarkBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
                                         </Grid>
                                     </GroupBox>
                                 </DataTemplate>
@@ -150,8 +154,7 @@
             </TabItem>
         </TabControl>
 
-       
-        <Button  Grid.Row="1" Grid.Column="2" Name="ShowBasketButton" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30" Click="MoveBasketPanel">
+        <Button Grid.Row="1" Grid.Column="2" Name="ShowBasketButton" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30" Click="MoveBasketPanel" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}">
             <Button.RenderTransform>
                 <TranslateTransform x:Name="buttonTransform"/>
             </Button.RenderTransform>
@@ -219,12 +222,10 @@
                 <Label Content="48,95 PLN" Grid.Row="2" HorizontalAlignment="Right" FontWeight="Bold"/>
 
                 <!-- Przycisk zamówienia -->
-                <Button Content="Zamów" Grid.Row="3" HorizontalAlignment="Center" Click="PlaceOrderButton_Click" Margin="0,10" Width="100"/>
+                <Button Content="Zamów" Grid.Row="3" HorizontalAlignment="Center" Click="PlaceOrderButton_Click" Margin="0,10" Width="100" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
             </Grid>
         </Grid>
 
-        <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click">Koło Fortuny</Button>
+        <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}">Koło Fortuny</Button>
     </Grid>
-    
-    
 </Window>
