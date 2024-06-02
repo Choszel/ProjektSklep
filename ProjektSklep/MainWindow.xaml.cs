@@ -130,14 +130,6 @@ namespace ProjektSklep
 
                        
                         mainTabs.BorderBrush = new SolidColorBrush(Colors.Black); 
-
-                        SelectionChangedEventArgs args = new SelectionChangedEventArgs(
-                            Selector.SelectionChangedEvent,
-                            removedItems: new List<Product>(),
-                            addedItems: new List<Product>()
-                        );
-
-                        productListSelectionChanged(productListBox, args);
                     }
                 }
             }
@@ -158,7 +150,17 @@ namespace ProjektSklep
                 mainTabs.SelectedIndex = 0;
 
                 loginButton.Content = "Zaloguj Się";
-            }           
+                UserType.Instance.numericType = -1;
+
+            }
+
+            SelectionChangedEventArgs args = new SelectionChangedEventArgs(
+                Selector.SelectionChangedEvent,
+                removedItems: new List<Product>(),
+                addedItems: new List<Product>()
+            );
+            productListSelectionChanged(productListBox, args);
+
         }
 
         //Wyszukiwanie produktów po nazwie i kategorii
@@ -253,6 +255,16 @@ namespace ProjektSklep
                         editButton.IsEnabled = true;
                         deleteButton.Visibility = Visibility.Visible;
                         deleteButton.IsEnabled = true;
+                    }
+                    else
+                    {
+                        addButton.Visibility = Visibility.Visible;
+                        addButton.IsEnabled = true;
+                        editButton.Visibility = Visibility.Hidden;
+                        editButton.IsEnabled = false;
+                        deleteButton.Visibility = Visibility.Hidden;
+                        deleteButton.IsEnabled = false;
+
                     }
                 }
             }
