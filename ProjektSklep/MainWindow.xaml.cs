@@ -28,7 +28,7 @@ namespace ProjektSklep
         List<Category> categories = new List<Category>();
         List<Order> orders = new List<Order>();
         List<Warehouse> warehouse_list = new List<Warehouse>();
-        Dictionary<int, int> cart;
+        List<CartProduct> cart = new List<CartProduct>();
 
         private MyDbContext db = new MyDbContext();
 
@@ -164,45 +164,49 @@ namespace ProjektSklep
         }
 
         //Wyszukiwanie produktów po nazwie i kategorii
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void searchBoxChanged(object sender, TextChangedEventArgs e)
         {
-        //    if (productName != null)
-        //    {
-        //        productName.Content = "Szukanie\n";
-        //    }
+            productFilters();
+        }
 
-        //    string? chosenCategory = "brak";
-        //    int chosenCategoryId = 0;
+        private void productFilters()
+        {
+            string? chosenCategory = "brak";
+            int chosenCategoryId = 0;
 
-        //    if (categoriesComboBox != null)
-        //    {
-        //        chosenCategory = categoriesComboBox.SelectedItem.ToString();
-        //    }
+            if (categoriesComboBox != null)
+            {
+                chosenCategory = categoriesComboBox.SelectedItem.ToString();
+            }
 
-        //    foreach (Category category in categories)
-        //    {
-        //        if (chosenCategory == "Wszystko")
-        //        {
-        //            break;
-        //        }
-        //        if (category.name == chosenCategory)
-        //        {
-        //            chosenCategoryId = category.categoryId;
-        //            break;
-        //        }
-        //    }
+            foreach (Category category in categories)
+            {
+                if (chosenCategory == "Wszystko")
+                {
+                    break;
+                }
+                if (category.name == chosenCategory)
+                {
+                    chosenCategoryId = category.categoryId;
+                    break;
+                }
+            }
 
-        //    foreach (Product product in products)
-        //    {
-        //        if (product.name.ToLower().Contains(searchTextBox.Text.ToLower()) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
-        //        {
-        //            //debugowe wypisywanie, do zamiany na to, co ma wyświetlać produkty
-        //            if (productName is not null)
-        //            {
-        //                productName.Content += "Twoja mama lubi: " + product.name + chosenCategoryId + "\n";
-        //            }
-        //        }
-        //    }
+            foreach (Product product in products)
+            {
+                ListBoxItem listBoxItem = (ListBoxItem)productListBox.ItemContainerGenerator.ContainerFromItem(product);
+                if(listBoxItem != null)
+                {
+                    if (product.name.ToLower().Contains(searchTextBox.Text.ToLower()) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
+                    {
+                        listBoxItem.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        listBoxItem.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
         }
 
         private void productScroll(object sender, ScrollChangedEventArgs e)
@@ -291,8 +295,14 @@ namespace ProjektSklep
 
         private void addToCart(object sender, RoutedEventArgs e)
         {           
+            if(UserType.Instance.numericType == -1)
+            {
+                loginButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                return;
+            }
+
             if (cart == null)
-                cart = new Dictionary<int, int>();
+                cart = new List<CartProduct>();
 
             if (sender is Button button)
             {
@@ -300,18 +310,38 @@ namespace ProjektSklep
                 if (button.Tag != null && int.TryParse(button.Tag.ToString(), out int productId))
                 {
                     // Dodaj produkt do koszyka lub zwiększ jego liczbę w koszyku
-                    if (cart.ContainsKey(productId))
+                    if (cart.Find(item => item.id == productId) != null)
                     {
-                        cart[productId]++;
+                        CartProduct cartProduct = cart.Find(item => item.id == productId);
+                        ListBoxItem item = (ListBoxItem)(basketListBox.ItemContainerGenerator.ContainerFromIndex(cart.IndexOf(cartProduct)));
+
+                        Debug.WriteLine(item);
+                        cartProduct.count++;
+
+                        CartProduct cp = (CartProduct)item.DataContext;
+                        Debug.WriteLine(cp.count);
+                        cp.count = cartProduct.count;
                     }
                     else
                     {
-                        cart.Add(productId, 1);
+                        Product product = products.FindLast(item => item.productId == productId);
+
+                        CartProduct cartProduct = new CartProduct(productId,product.name, 1, product.price);
+                        cart.Add(cartProduct);
+                        basketListBox.Items.Add(cartProduct);
                     }
+
+                    float wholePriceSum = 0;
+                    foreach (var item in cart)
+                    {
+                        wholePriceSum += item.singlePrice*item.count;
+                    }
+
+                    wholePrice.Content = wholePriceSum + " PLN";
 
                     foreach (var item in cart)
                     {
-                        Debug.WriteLine($"Produkt ID: {item.Key}, Ilość: {item.Value}");
+                        Debug.WriteLine($"Produkt ID: {item.id}, Ilość: {item.count}");
                     }
                 }
             }
@@ -465,6 +495,11 @@ namespace ProjektSklep
         private void warehouseListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void categoriesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            productFilters();
         }
     }
 }
