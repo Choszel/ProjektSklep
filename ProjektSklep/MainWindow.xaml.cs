@@ -313,14 +313,7 @@ namespace ProjektSklep
                     if (cart.Find(item => item.id == productId) != null)
                     {
                         CartProduct cartProduct = cart.Find(item => item.id == productId);
-                        ListBoxItem item = (ListBoxItem)(basketListBox.ItemContainerGenerator.ContainerFromIndex(cart.IndexOf(cartProduct)));
-
-                        Debug.WriteLine(item);
                         cartProduct.count++;
-
-                        CartProduct cp = (CartProduct)item.DataContext;
-                        Debug.WriteLine(cp.count);
-                        cp.count = cartProduct.count;
                     }
                     else
                     {
@@ -362,7 +355,7 @@ namespace ProjektSklep
 
                 if(productEditWindow.ShowDialog() == true)
                 {
-
+                    MessageBox.Show("Edytowano produkt: " + product.name);
                 };
             }
         }

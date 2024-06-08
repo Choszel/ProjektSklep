@@ -98,6 +98,7 @@ namespace ProjektSklep
             openFileDialog.Filter = "Pliki obrazów|*.jpg;*.jpeg;*.png;*.gif;*.jfif|Wszystkie pliki|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
+                bitmapImage = new BitmapImage();
                     // You can assign the selected file path to the Image object, for example:
                     bitmapImage.BeginInit();
                     bitmapImage.UriSource = new Uri(openFileDialog.FileName);
@@ -112,7 +113,7 @@ namespace ProjektSklep
                     bitmapImage.DecodePixelWidth = 200;
                     bitmapImage.EndInit();
 
-
+                    product.bitmapImage = bitmapImage;
                     ImagePreview.Source = bitmapImage;
             }
         }
