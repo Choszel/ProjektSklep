@@ -349,7 +349,22 @@ namespace ProjektSklep
 
         private void editProduct(object sender, RoutedEventArgs e)
         {
+            Button editButton = sender as Button;
 
+            if (editButton.Tag != null && int.TryParse(editButton.Tag.ToString(), out int productId))
+            {
+
+                MyDbContext dbContext = new MyDbContext();
+
+                Product product = products.First(item => item.productId == productId);
+
+                EditProductWindow productEditWindow = new EditProductWindow(product,categories);
+
+                if(productEditWindow.ShowDialog() == true)
+                {
+
+                };
+            }
         }
 
         private void editOrderButton_Click(object sender, RoutedEventArgs e)
