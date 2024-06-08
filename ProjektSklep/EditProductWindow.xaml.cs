@@ -99,17 +99,9 @@ namespace ProjektSklep
             if (openFileDialog.ShowDialog() == true)
             {
                 bitmapImage = new BitmapImage();
-                    // You can assign the selected file path to the Image object, for example:
+
                     bitmapImage.BeginInit();
                     bitmapImage.UriSource = new Uri(openFileDialog.FileName);
-
-                    // To save significant application memory, set the DecodePixelWidth or
-                    // DecodePixelHeight of the BitmapImage value of the image source to the desired
-                    // height or width of the rendered image. If you don't do this, the application will
-                    // cache the image as though it were rendered as its normal size rather than just
-                    // the size that is displayed.
-                    // Note: In order to preserve aspect ratio, set DecodePixelWidth
-                    // or DecodePixelHeight but not both.
                     bitmapImage.DecodePixelWidth = 200;
                     bitmapImage.EndInit();
 
