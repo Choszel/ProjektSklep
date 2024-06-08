@@ -43,12 +43,7 @@
         <TextBox x:Name="DescriptionTextBox" Grid.Row="3" Margin="355,10,245,10"/>
 
         <Label Content="Kategoria:" Grid.Row="4" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <ComboBox x:Name="CategoryComboBox" Grid.Row="4" Margin="355,10,245,10">
-            <!-- Add ComboBox items here -->
-            <ComboBoxItem Content="Kategoria 1"/>
-            <ComboBoxItem Content="Kategoria 2"/>
-            <ComboBoxItem Content="Kategoria 3"/>
-        </ComboBox>
+        <ComboBox x:Name="CategoryComboBox" Grid.Row="4" Margin="355,10,245,10"/>
 
         <!-- Dodatkowy rząd dla stanu magazynowego i faktycznego -->
         <Label Content="Stan magazynowy:" Grid.Row="5" Margin="10,10,668,10" Foreground="{StaticResource PrimaryContentBrush}"/>
