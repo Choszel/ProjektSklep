@@ -18,6 +18,7 @@ namespace ProjektSklep.Model
 
         public int orderId { get; set; }
         public int productId { get; set; }
+        public int count { get; set; }
 
         [ForeignKey("orderId")]
         public virtual Order order { get; set; }

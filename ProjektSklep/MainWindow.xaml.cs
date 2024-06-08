@@ -29,6 +29,7 @@ namespace ProjektSklep
         List<Order> orders = new List<Order>();
         List<Warehouse> warehouse_list = new List<Warehouse>();
         List<CartProduct> cart = new List<CartProduct>();
+        Chart chart = new Chart("Data zakupu", "Ilość");
 
         private MyDbContext db = new MyDbContext();
 
@@ -123,6 +124,8 @@ namespace ProjektSklep
                         ordersTab.IsEnabled = true;
                         warehouseTab.Visibility = Visibility.Visible;
                         warehouseTab.IsEnabled = true;
+                        chartTab.Visibility = Visibility.Visible;
+                        chartTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
                         wheelButton.IsEnabled = false;
                         if (!isSliderHidden) MoveBasketPanel(this, e);
@@ -143,6 +146,8 @@ namespace ProjektSklep
                 ordersTab.IsEnabled = false;
                 warehouseTab.Visibility = Visibility.Hidden;
                 warehouseTab.IsEnabled = false;
+                chartTab.Visibility = Visibility.Hidden;
+                chartTab.IsEnabled = false;
                 wheelButton.Visibility = Visibility.Visible;
                 wheelButton.IsEnabled = true;
                 ShowBasketButton.Content = "<";
@@ -438,6 +443,7 @@ namespace ProjektSklep
                 productWindow.Closed += (s, args) =>
                 {
                     this.Opacity = 1;
+                    InitializeProducts();
                 };
                 productWindow.Show();
             }          
@@ -459,33 +465,70 @@ namespace ProjektSklep
             shippingDetailsWindow.ShowDialog();
         }
 
+        private bool _isHandlingSelectionChanged = false;
+
         private void mainTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TabItem tabItem = mainTabs.SelectedItem as TabItem;          
+            if (_isHandlingSelectionChanged) return;
+            _isHandlingSelectionChanged = true;
 
-            if(tabItem != null && tabItem.Name == "productsTab") 
+            try
             {
-                orders = new List<Order>();
-                warehouse_list = new List<Warehouse>();
-                InitializeProducts();
-                ShowBasketButton.IsEnabled = true;
-            }
-            else if(tabItem != null && tabItem.Name == "ordersTab")
-            {
-                products = new List<Product>();
-                warehouse_list = new List<Warehouse>();
-                orderListBox.ItemsSource = db.Orders.ToList();
-                ShowBasketButton.IsEnabled = false;
-            }
-            else if(tabItem != null && tabItem.Name == "warehouseTab")
-            {
-                products = new List<Product>();
-                orders = new List<Order>();
-                warehouseListBox.ItemsSource = db.Warehouse.ToList();
-                ShowBasketButton.IsEnabled = false;
-            }
+                TabItem tabItem = mainTabs.SelectedItem as TabItem;
 
+                if (tabItem != null && tabItem.Name == "productsTab")
+                {
+                    orders = new List<Order>();
+                    warehouse_list = new List<Warehouse>();
+                    InitializeProducts();
+                    ShowBasketButton.IsEnabled = true;
+                    Debug.WriteLine("productsTab");
+                }
+                else if (tabItem != null && tabItem.Name == "ordersTab")
+                {
+                    products = new List<Product>();
+                    warehouse_list = new List<Warehouse>();
+                    orderListBox.ItemsSource = db.Orders.ToList();
+                    ShowBasketButton.IsEnabled = false;
+                    Debug.WriteLine("ordersTab");
+                }
+                else if (tabItem != null && tabItem.Name == "warehouseTab")
+                {
+                    products = new List<Product>();
+                    orders = new List<Order>();
+                    warehouseListBox.ItemsSource = db.Warehouse.ToList();
+                    ShowBasketButton.IsEnabled = false;
+                    Debug.WriteLine("warehouseTab");
+                }
+                else if (tabItem != null && tabItem.Name == "chartTab")
+                {
+                    InitializeProducts();
+                    orders = new List<Order>();
+                    warehouse_list = new List<Warehouse>();
+                    ShowBasketButton.IsEnabled = false;
+                    chart.Margin = new System.Windows.Thickness(0, 10, 0, 0);                                  
+
+                    if ((chartFirstValue.Items.Count-1 != products.Count && chartFirstValue.Items.Count - 2 != products.Count))
+                    {
+                        chartGrid.Children.Add(chart);
+                        Grid.SetRow(chart, 1);
+                        Grid.SetColumnSpan(chart, 2);
+                        chartFirstValue.Items.Clear();
+                        chartFirstValue.Items.Add("Wszystko");
+                        foreach (Product product in products)chartFirstValue.Items.Add(product.name);
+                       
+                        Debug.WriteLine("chartTab if");
+
+                    }
+                    Debug.WriteLine("chartTab");                
+                }
+            }
+            finally
+            {
+                _isHandlingSelectionChanged = false;
+            }
         }
+
 
         private void orderListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -500,6 +543,12 @@ namespace ProjektSklep
         private void categoriesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             productFilters();
+        }
+
+        private void selectFirstChartValue(object sender, SelectionChangedEventArgs e)
+        {
+            List<ProductOrder> productOrder = db.ProductOrders.Include(d => d.order).Include(e => e.product).ToList();
+            chart.generateFirstChart(productOrder);
         }
     }
 }
