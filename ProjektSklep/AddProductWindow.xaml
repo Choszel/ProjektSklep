@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="New Product Window"
         Height="450" Width="800"
-        WindowStyle="None">
+        WindowStyle="None"
+        ResizeMode="NoResize">
+    <!--zablokowanie możliwości zmiany wielkości okna-->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -57,6 +59,6 @@
         <Label Content="Zdjęcie:" Grid.Row="6" Margin="20,43,719,58" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <!-- Podgląd wybranego zdjęcia -->
-        <Image Name="ImagePreview" Grid.Row="6" Margin="415,10,235,10" Stretch="Uniform"/>
+        <Image Name="ImagePreview" Grid.Row="6" Margin="415,10,235,10" Stretch="Uniform" MaxHeight="113"/>
     </Grid>
 </Window>
