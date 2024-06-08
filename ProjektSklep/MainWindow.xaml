@@ -161,6 +161,39 @@
                     </ScrollViewer>
                 </GroupBox>
             </TabItem>
+
+            <!--<TabItem Name="chartTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Inwentaryzacja" Padding="20 10 0 10">
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Inwentaryzacja" FontSize="16" Padding="5">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
+                        <ListBox Name="warehouseListBox" Margin="5" SelectionChanged="warehouseListSelectionChanged" Width="Auto" BorderBrush="White">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Label Name="warehouseProductName" Grid.Row="0" FontWeight="Bold" Content="{Binding product.name}"></Label>
+                                            <TextBlock Name="warehouseActualState" Grid.Row="1" Text="{Binding actualState, StringFormat='Stan faktyczny: \{0\}'}"></TextBlock>
+                                            <TextBlock Name="warehouseStockLevel" Grid.Row="2" Text="{Binding stockLevel, StringFormat='Stan magazynowy: \{0\}'}"></TextBlock>
+                                            <Button Name="editInWarehouse" Grid.Row="3" Grid.Column="1" Click="editInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Edytuj" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
+                                            <Button Name="deleteInWarehouse" Grid.Row="3" Grid.Column="2" Click="deleteInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Usuń" Background="{StaticResource SecondaryDarkBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>-->
         </TabControl>
 
         <Button Grid.Row="1" Grid.Column="2" Name="ShowBasketButton" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30" Click="MoveBasketPanel" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}">

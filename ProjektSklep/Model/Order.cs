@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 namespace ProjektSklep.Model
 {
@@ -38,6 +39,8 @@ namespace ProjektSklep.Model
         public int? discount { get; set; }
 
         public string state {  get; set; } = "W trakcie realizacji";
+
+        public DateTime orderDate { get; set; }
 
         [ForeignKey("userId")]
         public virtual User user { get; set; }

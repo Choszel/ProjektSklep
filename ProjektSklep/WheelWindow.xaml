@@ -29,55 +29,6 @@
                 <RotateTransform x:Name="canvasRotateTransform" CenterX="150" CenterY="150" />
             </Canvas.RenderTransform>
             <Ellipse Width="300" Height="300" Stroke="Black" StrokeThickness="1" Fill="Transparent"/>
-
-            <TextBlock Name="spinText1" Text="Fragment 1" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="95" Canvas.Top="80">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="22.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-
-            <TextBlock Name="spinText2" Text="Fragment 2" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="10" Canvas.Top="125">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="67.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-
-            <TextBlock Name="spinText3" Text="Fragment 3" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-80" Canvas.Top="95">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="112.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-
-            <TextBlock Name="spinText4" Text="Fragment 4" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-125" Canvas.Top="10">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="157.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-
-            <TextBlock Name="spinText5" Text="Fragment 5" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-95" Canvas.Top="-80">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="202.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-
-            <TextBlock Name="spinText6" Text="Fragment 6" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="-10" Canvas.Top="-125">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="247.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-
-            <TextBlock Name="spinText7" Text="Fragment 7" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="80" Canvas.Top="-95">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="292.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-
-            <TextBlock Name="spinText8" Text="Fragment 8" Foreground="Black" FontWeight="Bold" FontSize="12" Canvas.Left="125" Canvas.Top="-10">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="337.5" CenterX="150" CenterY="150"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-         
             <Ellipse Width="10" Height="10" Fill="Black" Canvas.Left="145" Canvas.Top="145"/>
         </Canvas>
 

@@ -33,6 +33,7 @@ namespace ProjektSklep
                 string selectedFileName = openFileDialog.FileName;
                 // You can assign the selected file path to the Image object, for example:
                 ImagePreview.Source = new BitmapImage(new Uri(selectedFileName));
+                ImagePreview.RenderSize = new Size(200,200);
             }
         }
 
