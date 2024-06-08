@@ -149,7 +149,7 @@ namespace ProjektSklep
                 }
                 else
                 {
-                    MessageBox.Show($"Wystąpił nieoczekiwany błąd, przykro w chuj.");
+                    MessageBox.Show("Wystąpił nieoczekiwany błąd, spróbuj ponownie później."); //TO NIE MA PRAWA SIĘ NIGDY POJAWIĆ
                 }
             };
 
