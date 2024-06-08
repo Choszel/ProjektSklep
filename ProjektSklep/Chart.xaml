@@ -6,10 +6,5 @@
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="700">
     <Canvas Name="chartCanvas" Background="White">
-        <TextBlock Name="textOY" Canvas.Left="15" Canvas.Bottom="190" FontSize="12">OX
-            <TextBlock.RenderTransform>
-                <RotateTransform Angle="-90" />
-            </TextBlock.RenderTransform></TextBlock>
-        <TextBlock Name="textOX" Canvas.Left="350" Canvas.Bottom="15" FontSize="12">OY</TextBlock>
     </Canvas>
 </UserControl>

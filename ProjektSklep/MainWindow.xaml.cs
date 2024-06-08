@@ -29,7 +29,7 @@ namespace ProjektSklep
         List<Order> orders = new List<Order>();
         List<Warehouse> warehouse_list = new List<Warehouse>();
         List<CartProduct> cart = new List<CartProduct>();
-        Chart chart = new Chart("Data zakupu", "Ilość");
+        Chart chart = new Chart();
 
         private MyDbContext db = new MyDbContext();
 
@@ -570,9 +570,9 @@ namespace ProjektSklep
         }
 
         private void selectFirstChartValue(object sender, SelectionChangedEventArgs e)
-        {
+        {            
             List<ProductOrder> productOrder = db.ProductOrders.Include(d => d.order).Include(e => e.product).ToList();
-            chart.generateFirstChart(productOrder);
+            chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
         }
     }
 }

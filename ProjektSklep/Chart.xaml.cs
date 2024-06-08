@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,9 +25,32 @@ namespace ProjektSklep
     public partial class Chart
     {
         int startX = 70, endX= 620, startY = 20, endY = 290;
-        public Chart(string labelOX, string labelOY)
+        public Chart()
         {
             InitializeComponent();
+        }
+
+        public void voidSpawn(string labelOX, string labelOY)
+        {
+            TextBlock textOY = new TextBlock
+            {
+                Name = "textOY",
+                FontSize = 12,
+                Text = labelOX
+            };
+            Canvas.SetLeft(textOY, 10);
+            Canvas.SetBottom(textOY, 190);
+            RotateTransform rotateTransform = new RotateTransform(-90);
+            textOY.RenderTransform = rotateTransform;
+
+            TextBlock textOX = new TextBlock
+            {
+                Name = "textOX",
+                FontSize = 12,
+                Text = labelOY
+            };
+            Canvas.SetLeft(textOX, 350);
+            Canvas.SetBottom(textOX, 10);
             textOX.Text = labelOX;
             textOY.Text = labelOY;
 
@@ -74,17 +98,19 @@ namespace ProjektSklep
 
             chartCanvas.Children.Add(polyline1);
             chartCanvas.Children.Add(polyline2);
-
-
+            chartCanvas.Children.Add(textOX);
+            chartCanvas.Children.Add(textOY);
             chartCanvas.Children.Add(lineX);
             chartCanvas.Children.Add(lineY);
 
-            Canvas.SetLeft(textOX, startX + (endX - startX)/2 - 40);
-            Canvas.SetTop(textOY, startY + (endY - startY) / 2  + 20);
+            Canvas.SetLeft(textOX, startX + (endX - startX) / 2 - 40);
+            Canvas.SetTop(textOY, startY + (endY - startY) / 2 + 20);
         }
 
-        public void generateFirstChart(List<ProductOrder> productOrders) //dostaje listę zamówień produktów, np. psów
+        public void generateFirstChart(List<ProductOrder> productOrders, string labelOX, string labelOY) //dostaje listę zamówień produktów, np. psów
         {
+            chartCanvas.Children.Clear();
+            voidSpawn(labelOX, labelOY);
             Polyline polyOfProduct = new Polyline();
             polyOfProduct.Stroke = new SolidColorBrush(Colors.Red);
             polyOfProduct.StrokeThickness = 1;
