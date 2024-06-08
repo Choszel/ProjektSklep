@@ -318,14 +318,7 @@ namespace ProjektSklep
                     if (cart.Find(item => item.id == productId) != null)
                     {
                         CartProduct cartProduct = cart.Find(item => item.id == productId);
-                        ListBoxItem item = (ListBoxItem)(basketListBox.ItemContainerGenerator.ContainerFromIndex(cart.IndexOf(cartProduct)));
-
-                        Debug.WriteLine(item);
                         cartProduct.count++;
-
-                        CartProduct cp = (CartProduct)item.DataContext;
-                        Debug.WriteLine(cp.count);
-                        cp.count = cartProduct.count;
                     }
                     else
                     {
@@ -354,22 +347,53 @@ namespace ProjektSklep
 
         private void editProduct(object sender, RoutedEventArgs e)
         {
+            Button editButton = sender as Button;
 
+            if (editButton.Tag != null && int.TryParse(editButton.Tag.ToString(), out int productId))
+            {
+
+                MyDbContext dbContext = new MyDbContext();
+
+                Product product = products.First(item => item.productId == productId);
+
+                EditProductWindow productEditWindow = new EditProductWindow(product,categories);
+
+                if(productEditWindow.ShowDialog() == true)
+                {
+                    MessageBox.Show("Edytowano produkt: " + product.name);
+                };
+            }
         }
 
         private void editOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            Button deleteButton = sender as Button;
 
+            if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int orderID))
+            {
+                Order order = db.Orders.Find(orderID);
+                foreach (var ord in orders)
+                {
+
+                }
+                //order.state = cb.SelectedItem.ToString();
+            }
         }
 
         private void editInWarehouse_Click(object sender, RoutedEventArgs e)
         {
+            Button deleteButton = sender as Button;
 
+            if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int warehouseProductId))
+            {
+                Warehouse wh = db.Warehouse.Find(warehouseProductId);
+                EditProductsInWarehouse editProductsInWarehouse = new EditProductsInWarehouse(wh);
+                editProductsInWarehouse.ShowDialog();
+            }
         }
-        
         private void deleteInWarehouse_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void deleteProduct(object sender, RoutedEventArgs e)

@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         MinWidth="900" 
         MinHeight="600"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        ResizeMode="NoResize">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -118,7 +119,11 @@
                                             <Label Name="orderProducts" Grid.Row="2" Content="{Binding products}"></Label>
                                             <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
                                             <Label Name="orderDiscount" Grid.Row="3" Grid.Column="1" Content="{Binding discount}"/>
-                                            <Label Name="orderState" Grid.Row="3" Grid.Column="2" Content="{Binding state}"/>
+                                            <Label Name="orderState" Grid.Row="2" Grid.Column="2" Content="{Binding state}"/>
+                                            <ComboBox Name="orderStateComboBox" Grid.Row="3" Grid.Column="2">
+                                                <ComboBoxItem>W trakcie realizacji</ComboBoxItem>
+                                                <ComboBoxItem>Zrobione</ComboBoxItem>
+                                            </ComboBox>
                                             <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Edytuj stan" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
                                         </Grid>
                                     </GroupBox>

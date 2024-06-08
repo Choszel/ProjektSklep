@@ -24,7 +24,7 @@ namespace ProjektSklep
     {
         List<Category> categories = new List<Category>();
         private MyDbContext db = new MyDbContext();
-        int[] promotions = [5, 5, 5,  5, 10, 10, 10, 15, 15, 20, 20, 30, 50]; 
+        int[] promotions = [5, 5, 5, 5, 10, 10, 10, 15, 15, 20, 20, 30, 50];
 
         public WheelWindow()
         {
@@ -32,7 +32,7 @@ namespace ProjektSklep
             categories = db.Categories.ToList();
             Random rndCategory = new Random();
             Random rndPromotion = new Random();
-            double x=150, y=1;
+            double x = 150, y = 1;
             int segCount = 8;
             double arcAngle = 360 / segCount;
             double firstAngle = -90;
@@ -56,7 +56,7 @@ namespace ProjektSklep
                 pathFigure.Segments.Add(new LineSegment(new Point(x, y), true));
 
                 firstAngle = firstAngle + arcAngle;
-                double radians = firstAngle * (Math.PI / 180); 
+                double radians = firstAngle * (Math.PI / 180);
 
                 x = 150 + (150 * Math.Cos(radians));
                 y = 150 + (150 * Math.Sin(radians));
@@ -78,26 +78,28 @@ namespace ProjektSklep
 
                 double middleAngle = firstAngle - (arcAngle / 1.4);
                 double middleRadians = middleAngle * (Math.PI / 180);
-                double textX = 150 + (120 * Math.Cos(middleRadians)); 
+                double textX = 150 + (120 * Math.Cos(middleRadians));
                 double textY = 150 + (120 * Math.Sin(middleRadians));
 
-                int choosenCategory = rndCategory.Next(categories.Count());
-
+                int chosenCategory = rndCategory.Next(categories.Count());
+                int chosenDiscount = rndPromotion.Next(promotions.Length);
                 TextBlock spinText = new TextBlock
                 {
                     Foreground = Brushes.Black,
                     FontWeight = FontWeights.Bold,
                     FontSize = 12,
-                    TextAlignment = TextAlignment.Center, 
-                    Text = promotions[rndPromotion.Next(promotions.Length)].ToString() + "% na\n" + categories[choosenCategory].name.Substring(0, categories[choosenCategory].name.Length < 7 ? categories[choosenCategory].name.Length : 7)
+                    TextAlignment = TextAlignment.Center,
+                    Text = promotions[chosenDiscount].ToString() + "% na\n" + categories[chosenCategory].name.Substring(0, categories[chosenCategory].name.Length < 7 ? categories[chosenCategory].name.Length : 7)
                 };
 
+                spinText.Tag = $"{i}|{promotions[chosenDiscount]}|{chosenCategory}";
+
                 RotateTransform rotateText = new RotateTransform();
-                rotateText.Angle = arcAngle * i + arcAngle / 2; 
+                rotateText.Angle = arcAngle * i + arcAngle / 2;
                 spinText.RenderTransform = rotateText;
 
-                Canvas.SetLeft(spinText, textX ); 
-                Canvas.SetTop(spinText, textY - spinText.ActualHeight / 2); 
+                Canvas.SetLeft(spinText, textX);
+                Canvas.SetTop(spinText, textY - spinText.ActualHeight / 2);
 
                 wheelCanvas.Children.Add(spinText);
             }
@@ -111,18 +113,44 @@ namespace ProjektSklep
         private void spinWheel_Click(object sender, RoutedEventArgs e)
         {
             Random rnd = new Random();
+            double target = rnd.Next(375, 1_000);
             DoubleAnimation rotateAnimation = new DoubleAnimation
-            {                
-                From = 0, 
-                To = rnd.Next(375, 1_000), 
-                Duration = TimeSpan.FromSeconds(3), 
-                AutoReverse = false, 
-                RepeatBehavior = new RepeatBehavior(1) 
+            {
+                From = 0,
+                To = target,
+                Duration = TimeSpan.FromSeconds(3),
+                AutoReverse = false,
+                RepeatBehavior = new RepeatBehavior(1)
             };
 
             rotateAnimation.EasingFunction = new SineEase
             {
                 EasingMode = EasingMode.EaseOut // Spowalnia animację w miarę czasu
+            };
+
+            rotateAnimation.Completed += (s, _) =>
+            {
+                double currentAngle = -target % 360;
+                int segment = (int)Math.Floor(currentAngle / (360 / 8)) + 8;
+                int promo = -1;
+                int catID = -1;
+                foreach (var tb in wheelCanvas.Children.OfType<TextBlock>())
+                {
+                    string[] values = tb.Tag.ToString().Split('|');
+                    if (values[0] == segment.ToString())
+                    {
+                        promo = Convert.ToInt32(values[1]);
+                        catID = Convert.ToInt32(values[2]);
+                    }
+                }
+                if (promo != -1 & catID != -1)
+                {
+                    MessageBox.Show($"Uzyskano {promo}% zniżki na\nprodukty z kategorii {categories[catID].name}.", "Gratulacje!");
+                }
+                else
+                {
+                    MessageBox.Show("Wystąpił nieoczekiwany błąd, spróbuj ponownie później."); //TO NIE MA PRAWA SIĘ NIGDY POJAWIĆ
+                }
             };
 
             canvasRotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);

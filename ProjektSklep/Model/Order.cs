@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ProjektSklep.Model
 {
-    public class Order
+    public class Order : INotifyPropertyChanged
     {
         [Key,
           DatabaseGenerated(DatabaseGeneratedOption.Identity),
@@ -38,8 +40,12 @@ namespace ProjektSklep.Model
 
         public int? discount { get; set; }
 
-        public string state {  get; set; } = "W trakcie realizacji";
-
+        private string State = "W trakcie realizacji";
+        public string state
+        {
+            get { return State; }
+            set { Set(ref State, value); }
+        }
         public DateTime orderDate { get; set; }
 
         [ForeignKey("userId")]
@@ -51,5 +57,15 @@ namespace ProjektSklep.Model
         public string products {  get; set; } 
 
         public Order() { }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void Set<TValue>(ref TValue field, TValue newValue, [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<TValue>.Default.Equals(field, default(TValue)) || !field.Equals(newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }
