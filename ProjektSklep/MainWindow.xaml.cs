@@ -571,8 +571,20 @@ namespace ProjektSklep
 
         private void selectFirstChartValue(object sender, SelectionChangedEventArgs e)
         {            
-            List<ProductOrder> productOrder = db.ProductOrders.Include(d => d.order).Include(e => e.product).ToList();
-            chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+            if(sender is ComboBox comboBox)
+            {
+                DateTime monthAgo = DateTime.Now.AddDays(-30);
+                if(comboBox.SelectedValue.ToString() == "Wszystko") {
+                    List<ProductOrder> productOrder = db.ProductOrders.Where(p => p.order.orderDate >= monthAgo).Include(d => d.order).Include(e => e.product).ToList();
+                    chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                }
+                else
+                {
+                    List<ProductOrder> productOrder = db.ProductOrders.Where(p => p.order.orderDate >= monthAgo).Where(p => p.product.name == comboBox.SelectedValue.ToString()).Include(d => d.order).Include(e => e.product).ToList();
+                    chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                }
+            }
+            
         }
     }
 }
