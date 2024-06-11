@@ -123,41 +123,53 @@ namespace ProjektSklep
                 if (!productsBoughtTime.ContainsKey(productOrder.order.orderDate)) { productsBoughtTime[productOrder.order.orderDate] = productOrder.count; }
                 else productsBoughtTime[productOrder.order.orderDate] += productOrder.count;
             }
-            double lengthOfOneScaleX = (endX - startX) / ((productsBoughtTime.Count() > 14 ?  14 : productsBoughtTime.Count()) + 1);
             int iterator = 1;
 
             productsBoughtTime = productsBoughtTime
             .OrderBy(entry => entry.Key)
             .ToDictionary(entry => entry.Key, entry => entry.Value);
 
-            foreach (KeyValuePair<DateTime, int> entry in productsBoughtTime)
+            int dayDiff = (productsBoughtTime.Keys.Max() - productsBoughtTime.Keys.Min()).Days;
+            int divider = dayDiff > 20 ? 3 : dayDiff > 10 ? 2 : 1;
+            int scaleCount = (dayDiff / divider) + 1;
+            double lengthOfOneScaleX = (endX - startX - 30) / scaleCount; // maksymalna ilość dni to zawsze 30
+
+            for (int i = 1; i <= scaleCount; i++)
             {
-                if(!boughtInOneDay.Contains(entry.Value))boughtInOneDay.Add(entry.Value);      
                 Polyline polyline = new Polyline();
-                polyline.Points.Add(new Point(startX + lengthOfOneScaleX * iterator, endY-10));
-                polyline.Points.Add(new Point(startX + lengthOfOneScaleX * iterator, endY+10));
+                polyline.Points.Add(new Point(startX + lengthOfOneScaleX * i, endY - 10));
+                polyline.Points.Add(new Point(startX + lengthOfOneScaleX * i, endY + 10));
                 polyline.Stroke = new SolidColorBrush(Colors.Black);
                 polyline.StrokeThickness = 1;
                 TextBlock textBlock = new TextBlock();
                 textBlock.FontSize = 12;
-                textBlock.Text = entry.Key.ToString().Substring(0, 10);
-                Canvas.SetTop(textBlock, endY + 30);
-                Canvas.SetLeft(textBlock, -20 + startX + lengthOfOneScaleX * iterator);
+                textBlock.Text = (productsBoughtTime.Keys.Min().AddDays(divider * (i - 1))).ToString().Substring(0, 10);
+                Canvas.SetTop(textBlock, endY + 35);
+                Canvas.SetLeft(textBlock, -20 + startX + lengthOfOneScaleX * i);
 
                 RotateTransform rotateText = new RotateTransform();
                 rotateText.Angle = -30;
                 textBlock.RenderTransform = rotateText;
                 chartCanvas.Children.Add(polyline);
                 chartCanvas.Children.Add(textBlock);
-                iterator++;
+            }
+
+            double actualOneItemScaleWidth = lengthOfOneScaleX / divider; 
+
+            foreach (KeyValuePair<DateTime, int> entry in productsBoughtTime)
+            {
+                if (!boughtInOneDay.Contains(entry.Value)) boughtInOneDay.Add(entry.Value);
                 Debug.WriteLine(entry.Key + " " + entry.Value);
             }
 
-            if (boughtInOneDay.Count() < 9) scalePerPointY(boughtInOneDay);
-            else scalePerScaleY(boughtInOneDay, 10);          
+            boughtInOneDay.Sort();
+            if (boughtInOneDay.Count() < 10) scalePerPointY(boughtInOneDay);
+            else scalePerScaleY(boughtInOneDay, 10);
 
-            double actualOneItemScaleWidth = (endX - startX) / (productsBoughtTime.Count()+1);
-            double actualOneItemScaleHeight = (endY - startY) / (boughtInOneDay.Count() + 1);
+            DateTime maxDate = productsBoughtTime.Keys.Max();
+            Debug.WriteLine("maxDate: " + maxDate);
+            int datePeriod = (maxDate - productsBoughtTime.Keys.Min()).Days;
+            double actualOnePointScaleHeight = (endY - startY - 30) / (double)boughtInOneDay.Max(); //wielkość jednego punktu na wykresie
             iterator = 1;
 
             if (productsBoughtTime.Count < 2)
@@ -165,18 +177,30 @@ namespace ProjektSklep
                 Line line = new Line();
                 line.Stroke = new SolidColorBrush(Colors.Black); line.StrokeThickness = 2;
                 line.X1 = startX + iterator * actualOneItemScaleWidth;
-                line.Y1 = startY + boughtInOneDay[0] * actualOneItemScaleHeight;
+                line.Y1 = startY + boughtInOneDay[0] * actualOnePointScaleHeight;
                 line.X2 = 1 + startX + iterator * actualOneItemScaleWidth;
-                line.Y2 = 1 + startY + boughtInOneDay[0] * actualOneItemScaleHeight;
+                line.Y2 = 1 + startY + boughtInOneDay[0] * actualOnePointScaleHeight;
                 chartCanvas.Children.Add(line);
             }
             else
             {
                 foreach (KeyValuePair<DateTime, int> entry in productsBoughtTime)
                 {
-                    polyOfProduct.Points.Add(new Point(startX + iterator* actualOneItemScaleWidth, endY - actualOneItemScaleHeight * (boughtInOneDay.IndexOf(entry.Value)+1)));
+                    int diffDays = (maxDate - entry.Key).Days != 0 ? (maxDate - entry.Key).Days : (maxDate - entry.Key).Hours > 0 ? 0 : -1;
+                    polyOfProduct.Points.Add(new Point(startX + lengthOfOneScaleX + (datePeriod - diffDays) * actualOneItemScaleWidth, endY - actualOnePointScaleHeight * entry.Value));
+                    Rectangle rectangle = new Rectangle();
+                    rectangle.RadiusX = 10;
+                    rectangle.RadiusY = 10;
+                    rectangle.Stroke = new SolidColorBrush(Colors.Black);
+                    rectangle.StrokeThickness = 4;
+                    rectangle.Stretch = Stretch.Fill;
+                    chartCanvas.Children.Add(rectangle);
+                    Canvas.SetLeft(rectangle, -2 + startX + lengthOfOneScaleX + (datePeriod - diffDays) * actualOneItemScaleWidth);
+                    Canvas.SetTop(rectangle, -2 + endY - actualOnePointScaleHeight * entry.Value);
                     iterator++;
-                    Debug.WriteLine(entry.Key + " " + entry.Value);
+                    Debug.WriteLine(entry.Key + " " + entry.Value + "x: " + (startX + lengthOfOneScaleX + (datePeriod - diffDays) * actualOneItemScaleWidth) + " y: " + (endY - actualOnePointScaleHeight * entry.Value));
+                    Debug.WriteLine("(maxDate - entry.Key).Days: " + diffDays);
+
                 }
                 chartCanvas.Children.Add(polyOfProduct);
             }
@@ -190,10 +214,15 @@ namespace ProjektSklep
             int maxValue = boughtInOneDay.Max();
             double lengthOfOnePointY = (endY - startY - 30) / (double)maxValue; //wielkość jednego punktu na wykresie
             
-            boughtInOneDay.Sort();
             foreach (int entry in boughtInOneDay)
             {
                 Polyline polyline = new Polyline();
+                Polyline grid = new Polyline();
+                grid.Points.Add(new Point(startX, endY - lengthOfOnePointY * entry));
+                grid.Points.Add(new Point(endX, endY - lengthOfOnePointY * entry));
+                grid.Stroke = new SolidColorBrush(Colors.LightGray);
+                grid.StrokeThickness = 1;
+                chartCanvas.Children.Add(grid);
                 polyline.Points.Add(new Point(startX - 10, endY - lengthOfOnePointY * entry));
                 polyline.Points.Add(new Point(startX + 10, endY - lengthOfOnePointY * entry));
                 polyline.Stroke = new SolidColorBrush(Colors.Black);
@@ -217,6 +246,12 @@ namespace ProjektSklep
             for (int i=1; i< numberOfScales+1; i++)
             {
                 Polyline polyline = new Polyline();
+                Polyline grid = new Polyline();
+                grid.Points.Add(new Point(startX, endY - lengthOfOneScaleY * i));
+                grid.Points.Add(new Point(endX, endY - lengthOfOneScaleY * i));
+                grid.Stroke = new SolidColorBrush(Colors.LightGray);
+                grid.StrokeThickness = 1;
+                chartCanvas.Children.Add(grid);
                 polyline.Points.Add(new Point(startX - 10, endY - lengthOfOneScaleY * i));
                 polyline.Points.Add(new Point(startX + 10, endY - lengthOfOneScaleY * i));
                 polyline.Stroke = new SolidColorBrush(Colors.Black);
@@ -233,19 +268,6 @@ namespace ProjektSklep
                 Canvas.SetLeft(textBlock, startX - 35);
                 chartCanvas.Children.Add(textBlock);
             }         
-        }
-          
-        public void scalePerPointX() 
-        { 
-            //analogicznie co do Y 
-            //zerem jest dzień przed 30 dniami temu
-            //najłatwiej jest obliczać różnicę dni pomiędzy maxi a aktualnym i z tego liczyć rzeczywistą pozycję
-
-        }
-
-        public void scalePerScaleX()
-        {
-
         }
     }
 }
