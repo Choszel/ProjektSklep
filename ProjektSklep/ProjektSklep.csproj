@@ -6,12 +6,18 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>shop_logo_1.ico</ApplicationIcon>
+    <AssemblyName>WPF Store</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="NewFile1.txt" />
     <None Remove="Resources\close_icon.png" />
     <None Remove="Resources\shop_logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="shop_logo_1.ico" />
   </ItemGroup>
 
   <ItemGroup>
