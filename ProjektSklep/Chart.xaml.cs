@@ -171,6 +171,7 @@ namespace ProjektSklep
             int datePeriod = (maxDate - productsBoughtTime.Keys.Min()).Days;
             double actualOnePointScaleHeight = (endY - startY - 30) / (double)boughtInOneDay.Max(); //wielkość jednego punktu na wykresie
             iterator = 1;
+            double lastX = 0;
 
             if (productsBoughtTime.Count < 2)
             {               
@@ -186,8 +187,10 @@ namespace ProjektSklep
             {
                 foreach (KeyValuePair<DateTime, int> entry in productsBoughtTime)
                 {
-                    int diffDays = (maxDate - entry.Key).Days != 0 ? (maxDate - entry.Key).Days : (maxDate - entry.Key).Hours > 0 ? 0 : -1;
-                    polyOfProduct.Points.Add(new Point(startX + lengthOfOneScaleX + (datePeriod - diffDays) * actualOneItemScaleWidth, endY - actualOnePointScaleHeight * entry.Value));
+                    int diffDays = (maxDate - entry.Key).Days;
+                    double realXPlacement = startX + lengthOfOneScaleX + (datePeriod - diffDays) * actualOneItemScaleWidth;
+                    if (realXPlacement == lastX) realXPlacement += actualOneItemScaleWidth;
+                    polyOfProduct.Points.Add(new Point(realXPlacement, endY - actualOnePointScaleHeight * entry.Value));
                     Rectangle rectangle = new Rectangle();
                     rectangle.RadiusX = 10;
                     rectangle.RadiusY = 10;
@@ -195,11 +198,12 @@ namespace ProjektSklep
                     rectangle.StrokeThickness = 4;
                     rectangle.Stretch = Stretch.Fill;
                     chartCanvas.Children.Add(rectangle);
-                    Canvas.SetLeft(rectangle, -2 + startX + lengthOfOneScaleX + (datePeriod - diffDays) * actualOneItemScaleWidth);
+                    Canvas.SetLeft(rectangle, -2 + realXPlacement);
                     Canvas.SetTop(rectangle, -2 + endY - actualOnePointScaleHeight * entry.Value);
                     iterator++;
-                    Debug.WriteLine(entry.Key + " " + entry.Value + "x: " + (startX + lengthOfOneScaleX + (datePeriod - diffDays) * actualOneItemScaleWidth) + " y: " + (endY - actualOnePointScaleHeight * entry.Value));
+                    Debug.WriteLine(entry.Key + " " + entry.Value + "x: " + (realXPlacement + " y: " + (endY - actualOnePointScaleHeight * entry.Value)));
                     Debug.WriteLine("(maxDate - entry.Key).Days: " + diffDays);
+                    lastX = realXPlacement;
 
                 }
                 chartCanvas.Children.Add(polyOfProduct);
