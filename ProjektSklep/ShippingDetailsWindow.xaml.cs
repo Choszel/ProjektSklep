@@ -25,7 +25,7 @@ namespace ProjektSklep
         MyDbContext db = new MyDbContext();
         public string InputCountry
         {
-            get 
+            get
             {
                 return order.country;
             }
@@ -92,13 +92,16 @@ namespace ProjektSklep
                 price += product.singlePrice * product.count;
             }
 
+            int loggedUserID = UserType.Instance.loggedId;
+            var currentUser = db.Users.FirstOrDefault(u => u.userId == loggedUserID);
+
             order.totalPrice = price;
             order.orderDate = DateTime.Now;
 
             order.userId = UserType.Instance.loggedId;
             User user = db.Users.Find(UserType.Instance.loggedId);
             order.user = user;
-
+            order.discount = currentUser.currDiscount;
             db.Orders.Add(order);
 
             db.SaveChanges();
@@ -110,6 +113,11 @@ namespace ProjektSklep
                 productOrder.orderId = order.orderId;
                 productOrder.count = product.count;
                 db.ProductOrders.Add(productOrder);
+            }
+
+            if (currentUser != null)
+            {
+                currentUser.currDiscount = null;
             }
 
             db.SaveChanges();
@@ -136,7 +144,7 @@ namespace ProjektSklep
                 errorMessage += "Nie podano miasta.\n";
             }
 
-            if(streetTextBox.Text == "")
+            if (streetTextBox.Text == "")
             {
                 errorMessage += "Nie podano ulicy.\n";
             }
