@@ -86,8 +86,8 @@ namespace ProjektSklep
                    e => e.login == userInput.login &&
                    e.password == hash);
 
-            if (user == null) 
-            { 
+            if (user == null)
+            {
                 MessageBox.Show("Wprowadzono nieprawidłowy login lub hasło","Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 passwordTextBox.Password = null;
                 return;
@@ -97,6 +97,7 @@ namespace ProjektSklep
                 MessageBox.Show("Pomyślnie zalogowano");
                 passwordTextBox.Password = null;
                 UserType.Instance.numericType = user.type;
+                UserType.Instance.loggedId = user.userId;
                 this.DialogResult = true;
             }
         }

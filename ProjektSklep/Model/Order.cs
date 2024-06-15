@@ -33,12 +33,12 @@ namespace ProjektSklep.Model
         [Required(ErrorMessage = "Kod pocztowy jest wymagany"),
             MaxLength(6, ErrorMessage = "Kod pocztowy jest za długi"),
             RegularExpression(@"^\d{2}-\d{3}$", ErrorMessage = "Kod pocztowy powinien mieć format XX-XXX")]
-        public string zipCode {  get; set; }
-        
+        public string zipCode { get; set; }
+
         [Required(ErrorMessage = "Cena detaliczna jest wymagana")]
         public float totalPrice { get; set; }
 
-        public int? discount { get; set; }
+        public string? discount { get; set; }
 
         private string State = "W trakcie realizacji";
         public string state
@@ -54,7 +54,7 @@ namespace ProjektSklep.Model
         public virtual ICollection<ProductOrder>? ProductOrder { get; set; }
 
         [NotMapped]
-        public string products {  get; set; } 
+        public string products { get; set; }
 
         public Order() { }
 

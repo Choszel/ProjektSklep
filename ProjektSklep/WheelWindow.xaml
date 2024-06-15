@@ -17,6 +17,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Button Name="closeWheelButton" HorizontalAlignment="Right" Background="Transparent" Padding="1" Click="closeWheelButton_Click">
@@ -24,7 +25,7 @@
         </Button>
 
         <Label Grid.Row="1" Foreground="WhiteSmoke" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center">Zakręć kołem i zdobądź nagrody!</Label>
-        
+
         <Canvas Name="wheelCanvas" Width="300" Height="300" Grid.Row="2">
             <Canvas.RenderTransform>
                 <RotateTransform x:Name="canvasRotateTransform" CenterX="150" CenterY="150" />
@@ -66,6 +67,8 @@
             </Button.Style>
             Zakręć
         </Button>
+
+        <Label Name="cooldownLabel" Grid.Row="4" Foreground="Red" FontSize="12" HorizontalAlignment="Center" Visibility="Collapsed" Content="Zakręć kołem i wygraj zniżkę!"/>
 
     </Grid>
 </Window>

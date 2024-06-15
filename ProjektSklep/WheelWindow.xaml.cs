@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ProjektSklep
 {
@@ -24,7 +25,7 @@ namespace ProjektSklep
     {
         List<Category> categories = new List<Category>();
         private MyDbContext db = new MyDbContext();
-        int[] promotions = [5, 5, 5, 5, 10, 10, 10, 15, 15, 20, 20, 30, 50];
+        int[] promotions = new int[] { 5, 5, 5, 5, 10, 10, 10, 15, 15, 20, 20, 30, 50 };
 
         public WheelWindow()
         {
@@ -103,6 +104,37 @@ namespace ProjektSklep
 
                 wheelCanvas.Children.Add(spinText);
             }
+
+            CheckCooldownAndInitializeButton();
+        }
+
+        private void CheckCooldownAndInitializeButton()
+        {
+            User currentUser = GetCurrentLoggedInUser();
+
+            if (currentUser != null)
+            {
+                DateTime? lastSpinTime = currentUser.lastSpin;
+                TimeSpan cooldown = TimeSpan.FromMinutes(1); // Adjust cooldown duration as needed
+                DateTime nextSpinTime = lastSpinTime.HasValue ? lastSpinTime.Value + cooldown : DateTime.MinValue;
+
+                if (lastSpinTime.HasValue && DateTime.Now < nextSpinTime)
+                {
+                    spinWheel.IsEnabled = false;
+                    cooldownLabel.Content = $"Koło niedostępne. Następne zakręcenie możliwe: {nextSpinTime.ToString("d MMMM, yyyy HH:mm")}";
+                    cooldownLabel.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    spinWheel.IsEnabled = true;
+                    cooldownLabel.Content = "Zakręć kołem i wygraj zniżkę!";
+                    cooldownLabel.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się pobrać danych użytkownika.", "Błąd");
+            }
         }
 
         private void closeWheelButton_Click(object sender, RoutedEventArgs e)
@@ -112,6 +144,9 @@ namespace ProjektSklep
 
         private void spinWheel_Click(object sender, RoutedEventArgs e)
         {
+            spinWheel.Visibility = Visibility.Hidden;
+            cooldownLabel.Visibility = Visibility.Hidden;
+
             Random rnd = new Random();
             double target = rnd.Next(375, 1_000);
             DoubleAnimation rotateAnimation = new DoubleAnimation
@@ -145,16 +180,63 @@ namespace ProjektSklep
                 }
                 if (promo != -1 & catID != -1)
                 {
+                    // Update the currently logged user data
+                    UpdateUserDiscount(promo, categories[catID].name, catID);
+
                     MessageBox.Show($"Uzyskano {promo}% zniżki na\nprodukty z kategorii {categories[catID].name}.", "Gratulacje!");
                 }
                 else
                 {
                     MessageBox.Show("Wystąpił nieoczekiwany błąd, spróbuj ponownie później."); //TO NIE MA PRAWA SIĘ NIGDY POJAWIĆ
                 }
+                spinWheel.IsEnabled = false;
+
+                // Set the timer for 10 minutes
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromMinutes(1); // Adjust cooldown duration as needed
+
+                DateTime nextSpinTime = DateTime.Now.AddMinutes(1);
+
+                timer.Tick += (s, _) =>
+                {
+                    // Enable the button after cooldown
+                    spinWheel.IsEnabled = true;
+                    cooldownLabel.Content = "Zakręć kołem i wygraj zniżkę!";
+                    timer.Stop();
+                };
+                timer.Start();
+
+                // Update the label to show when the next spin will be available
+                cooldownLabel.Content = $"Koło niedostępne. Następne zakręcenie możliwe: {nextSpinTime.ToString("d MMMM, yyyy HH:mm")}";
+                cooldownLabel.Visibility = Visibility.Visible;
+                spinWheel.Visibility = Visibility.Visible;
             };
 
             canvasRotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
         }
 
+        private void UpdateUserDiscount(int promo, string categoryName, int catID)
+        {
+            User currentUser = GetCurrentLoggedInUser();
+
+            if (currentUser != null)
+            {
+                currentUser.lastSpin = DateTime.Now;
+                currentUser.currDiscount = $"{promo}|{categoryName}|{catID}";
+
+                db.SaveChanges();
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się zaktualizować danych użytkownika.", "Błąd");
+            }
+        }
+
+        private User GetCurrentLoggedInUser()
+        {
+            // This method should return the currently logged-in user.
+            int loggedUserID = UserType.Instance.loggedId;
+            return db.Users.FirstOrDefault(u => u.userId == loggedUserID);
+        }
     }
 }

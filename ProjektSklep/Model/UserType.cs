@@ -12,5 +12,6 @@ namespace ProjektSklep.Model
         public static UserType Instance => _instance ??= new UserType();
 
         public int numericType { get; set; } = -1;
+        public int loggedId { get; set; } = -1;
     }
 }

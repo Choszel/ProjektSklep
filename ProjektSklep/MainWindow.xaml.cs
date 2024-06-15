@@ -147,6 +147,7 @@ namespace ProjektSklep
             else
             {
                 UserType.Instance.numericType = -1;
+                UserType.Instance.loggedId = -1;
 
                 productsTab.Visibility = Visibility.Hidden;
                 productsTab.IsEnabled = false;
@@ -165,7 +166,7 @@ namespace ProjektSklep
                 mainTabs.SelectedIndex = 0;
 
                 loginButton.Content = "Zaloguj Się";
-                UserType.Instance.numericType = -1;
+                // UserType.Instance.numericType = -1;
 
             }
 
@@ -436,6 +437,12 @@ namespace ProjektSklep
 
         private void wheelButton_Click(object sender, RoutedEventArgs e)
         {
+            if (UserType.Instance.numericType == -1)
+            {
+                loginButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                return;
+            }
+
             WheelWindow wheelWindow = new WheelWindow();
 
             wheelWindow.Owner = this;
@@ -543,7 +550,7 @@ namespace ProjektSklep
                     ShowBasketButton.IsEnabled = false;
                     chart.Margin = new System.Windows.Thickness(0, 10, 0, 0);
 
-                    if (chartFirstValue.Items.Count - 1 != products.Count)
+                    if ((chartFirstValue.Items.Count - 1 != products.Count && chartFirstValue.Items.Count - 2 != products.Count))
                     {
                         chartGrid.Children.Add(chart);
                         Grid.SetRow(chart, 1);
@@ -567,7 +574,7 @@ namespace ProjektSklep
 
                     List<System.Reflection.PropertyInfo> tables = db.PrintAllTables();
                     if (selectTablePrint.Items.Count != tables.Count()) foreach (var table in tables) selectTablePrint.Items.Add(table.Name);
-                }
+            }
             }
             finally
             {
@@ -757,7 +764,7 @@ namespace ProjektSklep
                     .Include(d => d.order)
                     .Include(e => e.product)
                     .ToList();
-                chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+            chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
                 printedItems.Children.Add(chart);
             }
             printedItems.Height = ActualHeight + 100;
