@@ -49,7 +49,7 @@ namespace ProjektSklep
 
             foreach (Order order in orders)
             {
-                foreach(ProductOrder productOrder in order.ProductOrder)
+                foreach (ProductOrder productOrder in order.ProductOrder)
                 {
                     order.products += productOrder.product.name + " ";
                 }
@@ -62,7 +62,7 @@ namespace ProjektSklep
             foreach (Category category in categories)
             {
                 categoriesComboBox.Items.Add(category.name);
-            } 
+            }
 
         }
 
@@ -101,7 +101,7 @@ namespace ProjektSklep
                     }
                     bitmapImage.Freeze();
                 }
-            
+
                 product.bitmapImage = bitmapImage;
             }
         }
@@ -113,7 +113,7 @@ namespace ProjektSklep
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if(loginButton.Content.ToString().CompareTo("Zaloguj Się")==0)
+            if (loginButton.Content.ToString().CompareTo("Zaloguj Się") == 0)
             {
                 LoginWindow loginWindow = new LoginWindow();
                 loginWindow.Owner = this;
@@ -122,9 +122,10 @@ namespace ProjektSklep
                 if (loginWindow.ShowDialog() == true)
                 {
                     loginButton.Content = "Wyloguj Się";
-                    if (UserType.Instance.numericType == 0) {
-                        productsTab.Visibility = Visibility.Visible; 
-                        productsTab.IsEnabled = true; 
+                    if (UserType.Instance.numericType == 0)
+                    {
+                        productsTab.Visibility = Visibility.Visible;
+                        productsTab.IsEnabled = true;
                         ordersTab.Visibility = Visibility.Visible;
                         ordersTab.IsEnabled = true;
                         warehouseTab.Visibility = Visibility.Visible;
@@ -138,8 +139,8 @@ namespace ProjektSklep
                         if (!isSliderHidden) MoveBasketPanel(this, e);
                         ShowBasketButton.Content = "+";
 
-                       
-                        mainTabs.BorderBrush = new SolidColorBrush(Colors.Black); 
+
+                        mainTabs.BorderBrush = new SolidColorBrush(Colors.Black);
                     }
                 }
             }
@@ -209,7 +210,7 @@ namespace ProjektSklep
             foreach (Product product in products)
             {
                 ListBoxItem listBoxItem = (ListBoxItem)productListBox.ItemContainerGenerator.ContainerFromItem(product);
-                if(listBoxItem != null)
+                if (listBoxItem != null)
                 {
                     if (product.name.ToLower().Contains(searchTextBox.Text.ToLower()) && (chosenCategoryId == 0 || product.categoryId == chosenCategoryId))
                     {
@@ -265,7 +266,7 @@ namespace ProjektSklep
                         productDescLabel.Visibility = Visibility.Hidden; // lub inna wartość Visibility
                     }
 
-                    if(UserType.Instance.numericType == 0)
+                    if (UserType.Instance.numericType == 0)
                     {
                         addButton.Visibility = Visibility.Hidden;
                         addButton.IsEnabled = false;
@@ -308,8 +309,8 @@ namespace ProjektSklep
         }
 
         private void addToCart(object sender, RoutedEventArgs e)
-        {           
-            if(UserType.Instance.numericType == -1)
+        {
+            if (UserType.Instance.numericType == -1)
             {
                 loginButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
                 return;
@@ -333,7 +334,7 @@ namespace ProjektSklep
                     {
                         Product product = products.FindLast(item => item.productId == productId);
 
-                        CartProduct cartProduct = new CartProduct(productId,product.name, 1, product.price);
+                        CartProduct cartProduct = new CartProduct(productId, product.name, 1, product.price);
                         cart.Add(cartProduct);
                         basketListBox.Items.Add(cartProduct);
                     }
@@ -341,7 +342,7 @@ namespace ProjektSklep
                     float wholePriceSum = 0;
                     foreach (var item in cart)
                     {
-                        wholePriceSum += item.singlePrice*item.count;
+                        wholePriceSum += item.singlePrice * item.count;
                     }
 
                     wholePrice.Content = wholePriceSum + " PLN";
@@ -365,9 +366,9 @@ namespace ProjektSklep
 
                 Product product = products.First(item => item.productId == productId);
 
-                EditProductWindow productEditWindow = new EditProductWindow(product,categories);
+                EditProductWindow productEditWindow = new EditProductWindow(product, categories);
 
-                if(productEditWindow.ShowDialog() == true)
+                if (productEditWindow.ShowDialog() == true)
                 {
                     MessageBox.Show("Edytowano produkt: " + product.name);
                 };
@@ -402,14 +403,14 @@ namespace ProjektSklep
         }
         private void deleteInWarehouse_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void deleteProduct(object sender, RoutedEventArgs e)
         {
             Button deleteButton = sender as Button;
 
-            if(deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int productId))
+            if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int productId))
             {
                 MyDbContext dbContext = new MyDbContext();
 
@@ -423,7 +424,7 @@ namespace ProjektSklep
                     {
                         dbContext.Products.Remove(product);
                     }
-                    catch(Exception error)
+                    catch (Exception error)
                     {
                         Debug.WriteLine(error);
                     }
@@ -453,7 +454,7 @@ namespace ProjektSklep
         private bool isSliderHidden = true;
         private void MoveBasketPanel(object sender, RoutedEventArgs e)
         {
-            if(ShowBasketButton.Content.Equals(">") || ShowBasketButton.Content.Equals("<"))
+            if (ShowBasketButton.Content.Equals(">") || ShowBasketButton.Content.Equals("<"))
             {
                 double targetX = isSliderHidden ? -167 : 0;
                 DoubleAnimation animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
@@ -479,7 +480,7 @@ namespace ProjektSklep
                     InitializeProducts();
                 };
                 productWindow.Show();
-            }          
+            }
         }
 
         private void PlaceOrderButton_Click(object sender, RoutedEventArgs e)
@@ -540,31 +541,32 @@ namespace ProjektSklep
                     orders = new List<Order>();
                     warehouse_list = new List<Warehouse>();
                     ShowBasketButton.IsEnabled = false;
-                    chart.Margin = new System.Windows.Thickness(0, 10, 0, 0);                                  
+                    chart.Margin = new System.Windows.Thickness(0, 10, 0, 0);
 
-                    if (chartFirstValue.Items.Count-1 != products.Count)
+                    if (chartFirstValue.Items.Count - 1 != products.Count)
                     {
                         chartGrid.Children.Add(chart);
                         Grid.SetRow(chart, 1);
                         Grid.SetColumnSpan(chart, 2);
                         chartFirstValue.Items.Clear();
                         chartFirstValue.Items.Add("Wszystko");
-                        foreach (Product product in products)chartFirstValue.Items.Add(product.name);
-                       
+                        foreach (Product product in products) chartFirstValue.Items.Add(product.name);
+
                         Debug.WriteLine("chartTab if");
 
                     }
-                    Debug.WriteLine("chartTab");                
+                    Debug.WriteLine("chartTab");
                 }
-                else if(tabItem != null && tabItem.Name == "printTab")
+                else if (tabItem != null && tabItem.Name == "printTab")
                 {
                     chartGrid.Children.Remove(chart);
+                    chartFirstValue.Items.Clear();
                     products = new List<Product>();
                     orders = new List<Order>();
                     warehouse_list = new List<Warehouse>();
 
                     List<System.Reflection.PropertyInfo> tables = db.PrintAllTables();
-                    if(selectTablePrint.Items.Count != tables.Count())foreach(var table in tables)selectTablePrint.Items.Add(table.Name);                  
+                    if (selectTablePrint.Items.Count != tables.Count()) foreach (var table in tables) selectTablePrint.Items.Add(table.Name);
                 }
             }
             finally
@@ -590,21 +592,25 @@ namespace ProjektSklep
         }
 
         private void selectFirstChartValue(object sender, SelectionChangedEventArgs e)
-        {            
-            if(sender is ComboBox comboBox)
+        {
+            if (sender is ComboBox comboBox)
             {
                 DateTime monthAgo = DateTime.Now.AddDays(-30);
-                if(comboBox.SelectedValue.ToString() == "Wszystko") {
-                    List<ProductOrder> productOrder = db.ProductOrders.Where(p => p.order.orderDate >= monthAgo).Include(d => d.order).Include(e => e.product).ToList();
-                    chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
-                }
-                else
+                if (comboBox.SelectedValue != null)
                 {
-                    List<ProductOrder> productOrder = db.ProductOrders.Where(p => p.order.orderDate >= monthAgo).Where(p => p.product.name == comboBox.SelectedValue.ToString()).Include(d => d.order).Include(e => e.product).ToList();
-                    chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                    if (comboBox.SelectedValue.ToString() == "Wszystko")
+                    {
+                        List<ProductOrder> productOrder = db.ProductOrders.Where(p => p.order.orderDate >= monthAgo).Include(d => d.order).Include(e => e.product).ToList();
+                        chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                    }
+                    else
+                    {
+                        List<ProductOrder> productOrder = db.ProductOrders.Where(p => p.order.orderDate >= monthAgo).Where(p => p.product.name == comboBox.SelectedValue.ToString()).Include(d => d.order).Include(e => e.product).ToList();
+                        chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                    }
                 }
             }
-            
+
         }
 
         private void createPrintFile(object sender, RoutedEventArgs e)
@@ -623,22 +629,27 @@ namespace ProjektSklep
             // Prepare the document for printing
             try
             {
-                FlowDocument printFlowDocument = new FlowDocument();
-                foreach (var item in printedItems.Children)
-                {
-                    if (item is DataGrid dataGrid)
-                    {
-                        // Convert DataGrid to Table and add to FlowDocument
-                        Table table = ConvertDataGridToTable(dataGrid);
-                        printFlowDocument.Blocks.Add(table);
-                    }
-                    else if (item is UIElement uiElement)
-                    {
-                        // Wrap UIElement in BlockUIContainer and add to FlowDocument
-                        BlockUIContainer blockUIContainer = new BlockUIContainer(uiElement);
-                        printFlowDocument.Blocks.Add(blockUIContainer);
-                    }
-                }
+                //FlowDocument printFlowDocument = new FlowDocument();
+                //foreach (var item in printedItems.Children)
+                //{
+                //    if (item is DataGrid dataGrid)
+                //    {
+                //        // Convert DataGrid to Table and add to FlowDocument
+                //        Table table = ConvertDataGridToTable(dataGrid);
+                //        printFlowDocument.Blocks.Add(table);
+                //    }
+                //    else if (item is UIElement uiElement)
+                //    {
+                //        // Wrap UIElement in BlockUIContainer and add to FlowDocument
+
+                //        BlockUIContainer blockUIContainer = new BlockUIContainer(uiElement);
+                //        printFlowDocument.Blocks.Add(blockUIContainer);
+                //    }
+                //}
+                printFlowDocument.PageWidth = 1000;
+                printFlowDocument.PageHeight = 1000;
+                //printFlowDocumentScrollViewer.Width = 2000;
+                //printDataGrid.Width = 13000;
 
                 IDocumentPaginatorSource idpSource = printFlowDocument;
                 printDialog.PrintDocument(idpSource.DocumentPaginator, "Printing " + (printFileName.Text ?? "WPF_Store_print"));
@@ -789,7 +800,7 @@ namespace ProjektSklep
                     printDataGrid.Columns.Add(column);
                     removedColumns.Remove(column);
                 }
-            }                
+            }
         }
 
         private void printCheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -797,7 +808,7 @@ namespace ProjektSklep
             CheckBox checkBox = sender as CheckBox;
             string columnName = checkBox.Name;
             Debug.WriteLine($"{columnName} unchecked.");
-            if(columnName == "chart")
+            if (columnName == "chart")
             {
                 printedItems.Children.Remove(chart);
             }
@@ -810,7 +821,7 @@ namespace ProjektSklep
                     removedColumns.Add(column);
                 }
             }
-            
+
         }
     }
 }
