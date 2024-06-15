@@ -85,18 +85,18 @@ namespace ProjektSklep
 
             float price = 0;
 
+            //order.discount = discount ?;--dododania
+
             foreach (CartProduct product in cart)
             {
                 price += product.singlePrice * product.count;
             }
 
             order.totalPrice = price;
-            //order.discount = discount ?;--dododania
             order.orderDate = DateTime.Now;
 
-            // user stuff
-            order.userId = 1004;
-            User user = db.Users.Find(1004);
+            order.userId = UserType.Instance.loggedId;
+            User user = db.Users.Find(UserType.Instance.loggedId);
             order.user = user;
 
             db.Orders.Add(order);
