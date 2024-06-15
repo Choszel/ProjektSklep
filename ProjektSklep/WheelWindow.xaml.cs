@@ -93,7 +93,7 @@ namespace ProjektSklep
                     Text = promotions[chosenDiscount].ToString() + "% na\n" + categories[chosenCategory].name.Substring(0, categories[chosenCategory].name.Length < 7 ? categories[chosenCategory].name.Length : 7)
                 };
 
-                spinText.Tag = $"{i}|{promotions[chosenDiscount]}|{chosenCategory}";
+                spinText.Tag = $"{i}|{promotions[chosenDiscount]}|{chosenCategory+1}";
 
                 RotateTransform rotateText = new RotateTransform();
                 rotateText.Angle = arcAngle * i + arcAngle / 2;
@@ -181,9 +181,9 @@ namespace ProjektSklep
                 if (promo != -1 & catID != -1)
                 {
                     // Update the currently logged user data
-                    UpdateUserDiscount(promo, categories[catID].name, catID);
+                    UpdateUserDiscount(promo, categories[catID-1].name, catID);
 
-                    MessageBox.Show($"Uzyskano {promo}% zniżki na\nprodukty z kategorii {categories[catID].name}.", "Gratulacje!");
+                    MessageBox.Show($"Uzyskano {promo}% zniżki na\nprodukty z kategorii {categories[catID-1].name}.", "Gratulacje!");
                 }
                 else
                 {

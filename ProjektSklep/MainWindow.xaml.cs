@@ -334,8 +334,17 @@ namespace ProjektSklep
                     else
                     {
                         Product product = products.FindLast(item => item.productId == productId);
-
-                        CartProduct cartProduct = new CartProduct(productId, product.name, 1, product.price);
+                        float productPrice = product.price;
+                        User currentUser = db.Users.FirstOrDefault(u => u.userId == UserType.Instance.loggedId);
+                        if(currentUser != null)
+                        {
+                            if (((DateTime.Now - (currentUser.lastSpin ?? DateTime.Now))).Hours < 24)
+                            {
+                                var discount = currentUser.currDiscount.Split("|");
+                                if (product.categoryId == int.Parse(discount[2])) productPrice -= (productPrice * int.Parse(discount[0]))/100;
+                            }
+                        }
+                        CartProduct cartProduct = new CartProduct(productId, product.name, 1, productPrice);
                         cart.Add(cartProduct);
                         basketListBox.Items.Add(cartProduct);
                     }
