@@ -21,7 +21,8 @@ namespace ProjektSklep
     public partial class ShippingDetailsWindow : Window
     {
         Order order = new Order();
-
+        List<CartProduct> cart;
+        MyDbContext db = new MyDbContext();
         public string InputCountry
         {
             get 
@@ -69,9 +70,10 @@ namespace ProjektSklep
                 order.zipCode = value;
             }
         }
-        public ShippingDetailsWindow()
+        public ShippingDetailsWindow(List<CartProduct> cart)
         {
             InitializeComponent();
+            this.cart = cart;
         }
 
         private void PlaceOrderButton_Click(object sender, RoutedEventArgs e)
@@ -80,7 +82,38 @@ namespace ProjektSklep
             {
                 return;
             }
-            // dodawanie zamówienia do bazy danych
+
+            float price = 0;
+
+            foreach (CartProduct product in cart)
+            {
+                price += product.singlePrice * product.count;
+            }
+
+            order.totalPrice = price;
+            //order.discount = discount ?;--dododania
+            order.orderDate = DateTime.Now;
+
+            // user stuff
+            order.userId = 1004;
+            User user = db.Users.Find(1004);
+            order.user = user;
+
+            db.Orders.Add(order);
+
+            db.SaveChanges();
+
+            foreach (CartProduct product in cart)
+            {
+                ProductOrder productOrder = new ProductOrder();
+                productOrder.productId = product.id;
+                productOrder.orderId = order.orderId;
+                productOrder.count = product.count;
+                db.ProductOrders.Add(productOrder);
+            }
+
+            db.SaveChanges();
+
             this.Close();
         }
 

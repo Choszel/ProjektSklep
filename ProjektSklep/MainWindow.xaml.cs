@@ -485,7 +485,7 @@ namespace ProjektSklep
 
         private void PlaceOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            ShippingDetailsWindow shippingDetailsWindow = new ShippingDetailsWindow();
+            ShippingDetailsWindow shippingDetailsWindow = new ShippingDetailsWindow(cart);
             shippingDetailsWindow.Owner = this;
             shippingDetailsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
