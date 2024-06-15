@@ -74,7 +74,7 @@
             <TextBox.Text>
                 <Binding Path="InputZipCode" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                     <Binding.ValidationRules>
-                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                        <local:ZipCodeValidator></local:ZipCodeValidator>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
