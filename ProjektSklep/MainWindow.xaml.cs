@@ -535,6 +535,7 @@ namespace ProjektSklep
                 }
                 else if (tabItem != null && tabItem.Name == "chartTab")
                 {
+                    printedItems.Children.Remove(chart);
                     InitializeProducts();
                     orders = new List<Order>();
                     warehouse_list = new List<Warehouse>();
@@ -737,7 +738,7 @@ namespace ProjektSklep
 
                 checkBox.Checked += printCheckBox_Checked;
                 checkBox.Unchecked += printCheckBox_Unchecked;
-
+                printDataGrid.Margin = new System.Windows.Thickness(0, 0, 0, 40);
                 printOptions.Children.Add(checkBox);
                 DateTime monthAgo = DateTime.Now.AddDays(-30);
                 List<ProductOrder> productOrder = db.ProductOrders
@@ -748,9 +749,9 @@ namespace ProjektSklep
                 chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
                 printedItems.Children.Add(chart);
             }
-            printedItems.Width = ActualWidth; printedItems.Height = ActualHeight;
+            printedItems.Height = ActualHeight + 100;
             printFlowDocument.PageWidth = printedItems.ActualWidth;
-            printFlowDocument.PageHeight = printedItems.ActualHeight;
+            printFlowDocument.PageHeight = printedItems.ActualHeight + 100;
         }
 
         private IEnumerable GetTableData(string tableName)
@@ -776,13 +777,19 @@ namespace ProjektSklep
             CheckBox checkBox = sender as CheckBox;
             string columnName = checkBox.Name;
             Debug.WriteLine($"{columnName} checked.");
-
-            var column = removedColumns.FirstOrDefault(c => c.Header.ToString() == columnName);
-            if (column != null)
+            if (columnName == "chart")
             {
-                printDataGrid.Columns.Add(column);
-                removedColumns.Remove(column);
-            }          
+                printedItems.Children.Add(chart);
+            }
+            else
+            {
+                var column = removedColumns.FirstOrDefault(c => c.Header.ToString() == columnName);
+                if (column != null)
+                {
+                    printDataGrid.Columns.Add(column);
+                    removedColumns.Remove(column);
+                }
+            }                
         }
 
         private void printCheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -790,13 +797,20 @@ namespace ProjektSklep
             CheckBox checkBox = sender as CheckBox;
             string columnName = checkBox.Name;
             Debug.WriteLine($"{columnName} unchecked.");
-
-            var column = printDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == columnName);
-            if (column != null)
+            if(columnName == "chart")
             {
-                printDataGrid.Columns.Remove(column);
-                removedColumns.Add(column);
+                printedItems.Children.Remove(chart);
             }
+            else
+            {
+                var column = printDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == columnName);
+                if (column != null)
+                {
+                    printDataGrid.Columns.Remove(column);
+                    removedColumns.Add(column);
+                }
+            }
+            
         }
     }
 }
