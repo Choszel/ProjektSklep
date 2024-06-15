@@ -27,12 +27,48 @@ namespace ProjektSklep
         Product product;
         List<Category> categories;
         BitmapImage bitmapImage = null;
+
+        public string InputName
+        {
+            get
+            {
+                return product.name;
+            }
+            set
+            {
+                product.name = value;
+            }
+        }    
+
+        public float InputPrice
+        {
+            get
+            {
+                return product.price;
+            }
+            set
+            {
+                product.price = value;
+            }
+        }
+
+        public string InputDescription
+        {
+            get
+            {
+                return product.description;
+            }
+            set
+            {
+                product.description = value;
+            }
+        }
+
         public EditProductWindow(Product product, List<Category> categories)
         {
             this.categories = categories;
             this.product = product;
             InitializeComponent();
-            NameTextBox.Text = product.name;
             PriceTextBox.Text = product.price.ToString();
             DescriptionTextBox.Text = product.description.ToString();
 
@@ -48,6 +84,11 @@ namespace ProjektSklep
 
         private void EditProduct_Click(object sender, RoutedEventArgs e)
         {
+            if (!isDataValid())
+            {
+                return;
+            }
+
             product.name = NameTextBox.Text;
             product.price = float.Parse(PriceTextBox.Text);
             product.description = DescriptionTextBox.Text;
@@ -108,6 +149,45 @@ namespace ProjektSklep
                     product.bitmapImage = bitmapImage;
                     ImagePreview.Source = bitmapImage;
             }
+        }
+
+        private bool isDataValid()
+        {
+            string errorMessage = "";
+
+            if(NameTextBox.Text == "")
+            {
+                errorMessage += "Nie podano nazwy.\n";
+            }
+
+            if(PriceTextBox.Text == "")
+            {
+                errorMessage += "Nie podano ceny.\n";
+            }
+            else
+            if(!float.TryParse(PriceTextBox.Text, out float price))
+            {
+                errorMessage += "Cena musi być liczbą.\n";
+            }
+            else
+            {
+                if(price < 0)
+                {
+                    errorMessage += "Podano ujemną cenę.\n";
+                }
+            }
+            if(DescriptionTextBox.Text == "")
+            {
+                errorMessage += "Nie podano opisu.\n";
+            }
+
+            if (errorMessage != "")
+            {
+                MessageBox.Show(errorMessage, "Błąd podczas edycji", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else
+                return true;
         }
     }
 }

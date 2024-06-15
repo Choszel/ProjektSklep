@@ -1,17 +1,26 @@
 ﻿<Window x:Class="ProjektSklep.ShippingDetailsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ProjektSklep"
         Title="Dane do przesyłki"
         Height="300"
         Width="400"
         WindowStyle="None"
         ShowInTaskbar="False"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <ControlTemplate x:Key="validationTemplate">
+                <DockPanel>
+                    <TextBlock Foreground="{StaticResource ErrorBrush}" FontSize="10" DockPanel.Dock="Top" Text="{Binding ElementName=ErrorAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"></TextBlock>
+                    <AdornedElementPlaceholder x:Name="ErrorAdorner"/>
+                </DockPanel>
+            </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundBrush}">
@@ -24,21 +33,54 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Kraj:" Grid.Row="0" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox Name="countryTextBox" Grid.Row="1" Margin="5"/>
+        <Label Content="Kraj:" Grid.Row="1" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <TextBox Name="countryTextBox" Grid.Row="2" Margin="5" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputCountry" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
-        <Label Content="Miasto:" Grid.Row="2" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox Name="cityTextBox" Grid.Row="3" Margin="5"/>
+        <Label Content="Miasto:" Grid.Row="3" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <TextBox Name="cityTextBox" Grid.Row="4" Margin="5" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputCity" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
-        <Label Content="Ulica:" Grid.Row="4" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox Name="streetTextBox" Grid.Row="5" Margin="5"/>
+        <Label Content="Ulica:" Grid.Row="5" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <TextBox Name="streetTextBox" Grid.Row="6" Margin="5" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputStreet" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
-        <Label Content="Numer kodu pocztowego:" Grid.Row="6" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox Name="postalCodeTextBox" Grid.Row="7" Margin="5"/>
+        <Label Content="Numer kodu pocztowego:" Grid.Row="7" VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <TextBox Name="postalCodeTextBox" Grid.Row="8" Margin="5" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputZipCode" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
-        <Button Content="Zamów" Grid.Row="7" Click="PlaceOrderButton_Click" Margin="5,30,5,-20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Zamów" Grid.Row="8" Click="PlaceOrderButton_Click" Margin="5,30,5,-20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="352,0,0,0" Click="CloseShippingWindow_Click" Width="22" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
     </Grid>

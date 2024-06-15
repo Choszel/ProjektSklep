@@ -26,6 +26,45 @@ namespace ProjektSklep
     public partial class LoginWindow : Window
     {
         MyDbContext db;
+
+        private User userInput = new User();
+
+        public string LoginInput
+        {
+            get
+            {
+                return userInput.login;
+            }
+            set
+            {
+                userInput.login = value;
+            }
+        }
+
+        public string NameInput
+        {
+            get
+            {
+                return userInput.name;
+            }
+            set
+            {
+                userInput.name = value;
+            }
+        }
+
+        public string EmailInput
+        {
+            get
+            {
+                return userInput.email;
+            }
+            set
+            {
+                userInput.email = value;
+            }
+        }
+
         public LoginWindow()
         {
             InitializeComponent();
@@ -34,30 +73,29 @@ namespace ProjektSklep
 
         private void OnLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string login = loginTextBox.Text;
-
             var sha = new System.Security.Cryptography.SHA256Managed();
 
             //hashowanie hasla na potem, do przerobienia kontrolka na passwordbox, i password na hash
-            byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(passwordTextBox.Text);
+            byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(passwordTextBox.Password);
             byte[] hashBytes = sha.ComputeHash(textBytes);
             string hash = BitConverter
                      .ToString(hashBytes)
                      .Replace("-", String.Empty);
-            passwordTextBox.Text = null;
 
             var user = db.Users.FirstOrDefault(
-                   e => e.login == login &&
+                   e => e.login == userInput.login &&
                    e.password == hash);
 
             if (user == null) 
             { 
-                MessageBox.Show("Nie udało się zalogować");
-                DialogResult = false;
+                MessageBox.Show("Wprowadzono nieprawidłowy login lub hasło","Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                passwordTextBox.Password = null;
+                return;
             }
             else
             {
                 MessageBox.Show("Pomyślnie zalogowano");
+                passwordTextBox.Password = null;
                 UserType.Instance.numericType = user.type;
                 this.DialogResult = true;
             }
@@ -69,7 +107,7 @@ namespace ProjektSklep
 
             if (changeButton.Name == "changeToRegisterButton")
             {
-                this.Height = 250;
+                this.Height = 400;
                 secondRowInLogin.Height = GridLength.Auto;
 
                 loginButton.Click += new RoutedEventHandler(registringButtonClicked);
@@ -81,7 +119,7 @@ namespace ProjektSklep
             }
             else
             {
-                this.Height = 150;
+                this.Height = 250;
                 secondRowInLogin.Height = new GridLength(0.01, GridUnitType.Star);
 
                 changeButton.Name = "changeToRegisterButton";
@@ -102,27 +140,24 @@ namespace ProjektSklep
         private void registringButtonClicked(object sender, RoutedEventArgs e)
         {
 
-            string name = nameTextBox.Text;
-            string login = loginTextBox.Text;
-            string email = emailTextBox.Text;
-
-            if (!isRegistrationCorrect())
+             if(!isRegistrationCorrect())
             {
                 return;
             }
 
             var sha = new System.Security.Cryptography.SHA256Managed();
 
-            byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(passwordTextBox.Text);
+            byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(passwordTextBox.Password);
             byte[] hashBytes = sha.ComputeHash(textBytes);
             string hash = BitConverter
                      .ToString(hashBytes)
                      .Replace("-", String.Empty);
-            passwordTextBox.Text = null;
+            passwordTextBox.Password = null;
 
-            User newUser = new User(name, login, hash, email, 1);
+            userInput.password = hash;
+            userInput.type = 1;
 
-            db.Users.Add(newUser);
+            db.Users.Add(userInput);
             db.SaveChanges();
             DialogResult = false;
             MessageBox.Show("Pomyślnie zarejestrowano.");
@@ -130,33 +165,59 @@ namespace ProjektSklep
 
         private bool isRegistrationCorrect()
         {
+            string errorMessage = "";
             if (nameTextBox.Text == "")
             {
-                MessageBox.Show("Nie podano nazwy konta.");
-                return false;
+                errorMessage += "Nie podano nazwy konta.\n";
             }
-            else if (loginTextBox.Text == "")
+            if (loginTextBox.Text == "")
             {
-                MessageBox.Show("Nie podano loginu.");
-                return false;
+                errorMessage += "Nie podano loginu.\n";
             }
-            else if (db.Users.FirstOrDefault(e => e.login == loginTextBox.Text) != null)
+            if (db.Users.FirstOrDefault(e => e.login == loginTextBox.Text) != null)
             {
-                MessageBox.Show("Podany login jest zajęty.");
-                return false;
+                errorMessage += "Podany login jest zajęty.\n";
             }
-            else if (emailTextBox.Text == "")
+            if (emailTextBox.Text == "")
             {
-                MessageBox.Show("Nie podano emaila.");
-                return false;
+                errorMessage += "Nie podano emaila.\n";
             }
-            else if (passwordTextBox.Text == "")
+            if (passwordTextBox.Password == "")
             {
-                MessageBox.Show("Nie podano hasła.");
+                errorMessage += "Nie podano hasła.\n";
+            }
+            if (passwordTextBox.Password.Length < 6)
+            {
+                errorMessage += "Hasło musi mieć conajmniej 6 znaków.\n";
+            }
+
+            if(errorMessage != "")
+            {
+                MessageBox.Show(errorMessage, "Błąd Rejestracji", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
             else
                 return true;
-        }        
+        }
+
+        private void passwordValidation(object sender, RoutedEventArgs e)
+        {
+            PasswordBox passwordBox = (PasswordBox)sender;
+
+            if(passwordBox.Password  == "") 
+            {
+                passwordErrorLabel.Visibility = Visibility.Visible;
+                passwordErrorTextBlock.Text = "Hasło jest wymagane";
+            }
+            else
+            if(passwordBox.Password.Length < 6 && loginButton.Content == "Zarejestruj Się")
+            {
+                passwordErrorTextBlock.Text = "Hasło musi mieć conajmniej 6 znaków";
+            }
+            else
+            {
+                passwordErrorLabel.Visibility= Visibility.Hidden;
+            }
+        }
     }
 }

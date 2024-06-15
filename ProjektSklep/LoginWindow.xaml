@@ -5,17 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektSklep"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="150" Width="550"
-        ResizeMode="NoResize">
+        Title="LoginWindow" Height="250" Width="550"
+        ResizeMode="NoResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <ControlTemplate x:Key="validationTemplate">
+                <DockPanel>
+                    <TextBlock Foreground="{StaticResource ErrorBrush}" FontSize="20" DockPanel.Dock="Top" Text="{Binding ElementName=ErrorAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"></TextBlock>
+                    <AdornedElementPlaceholder x:Name="ErrorAdorner"/>
+                </DockPanel>
+            </ControlTemplate>
+            
         </ResourceDictionary>
     </Window.Resources>
     <Grid Name="loginGrid" Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Name="secondRowInLogin" Height="0.01*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -26,16 +37,49 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Login:</Label>
-        <TextBox Name="loginTextBox" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
-        <Label Grid.Column="2" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Hasło:</Label>
-        <TextBox Name="passwordTextBox" Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Margin="0,0,5,0"></TextBox>
-        <Button Name="changeToRegisterButton" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" FontSize="16" BorderBrush="White" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="registerButtonClicked">Nie masz konta? Zarejestruj się</Button>
-        <Button Name="loginButton" Grid.Row="2" Grid.Column="3" FontSize="16" Padding="5" VerticalAlignment="Top" Margin="7" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}" Click="OnLoginButton_Click">Zaloguj się</Button>
+        <Label Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Login:</Label>
+        <TextBox Name="loginTextBox" Grid.Column="1" Grid.Row="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="LoginInput" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
-        <Label FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Nazwa:</Label>
-        <TextBox Name="nameTextBox" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
-        <Label Grid.Column="2" Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">E-mail:</Label>
-        <TextBox Name="emailTextBox" Grid.Row="1" Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10"></TextBox>
+
+        <Label Name="passwordErrorLabel" Grid.Column="3" Grid.Row="0" FontSize="15" VerticalAlignment="Bottom" Margin="10" Foreground="{StaticResource ErrorBrush}" Visibility="Hidden">
+            <TextBlock Name="passwordErrorTextBlock" TextWrapping="Wrap">
+            </TextBlock>
+        </Label>
+        
+        <Label Grid.Column="2" Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Hasło:</Label>
+        <PasswordBox Name="passwordTextBox" Grid.Column="3" Grid.Row="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Margin="0,0,5,0" PasswordChanged="passwordValidation">
+        </PasswordBox>
+        
+        <Button Name="changeToRegisterButton" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" FontSize="16" BorderBrush="White" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="registerButtonClicked">Nie masz konta? Zarejestruj się</Button>
+        <Button Name="loginButton" Grid.Row="4" Grid.Column="3" FontSize="16" Padding="5" VerticalAlignment="Top" Margin="7" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}" Click="OnLoginButton_Click">Zaloguj się</Button>
+
+        <Label FontSize="20" Grid.Row="3" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Nazwa:</Label>
+        <TextBox Name="nameTextBox" Grid.Row="3" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="NameInput" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <Label Grid.Column="2" Grid.Row="3" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">E-mail:</Label>
+        <TextBox Name="emailTextBox" Grid.Row="3" Grid.Column="3" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="EmailInput" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
     </Grid>
 </Window>
