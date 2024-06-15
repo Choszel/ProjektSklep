@@ -668,7 +668,7 @@ namespace ProjektSklep
                 //printDataGrid.Width = 13000;
 
                 IDocumentPaginatorSource idpSource = printFlowDocument;
-                printDialog.PrintDocument(idpSource.DocumentPaginator, "Printing " + (printFileName.Text ?? "WPF_Store_print"));
+                printDialog.PrintDocument(idpSource.DocumentPaginator, "Printing " + "WPF_Store_print");
             }
             catch (Exception ex)
             {
