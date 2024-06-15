@@ -185,6 +185,45 @@
                     </Grid>
                 </GroupBox>
             </TabItem>
+
+            <TabItem Name="printTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Drukowanie" Padding="20 10 0 10">
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Opcje drukowania" FontSize="16" Padding="5">
+                    <Grid Name="printGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <Label>Nazwa:</Label>
+                            <TextBox Margin="5" Name="printFileName"></TextBox>
+                            <ComboBox Margin="5" Name="selectTablePrint" SelectionChanged="selectTablePrint_SelectionChanged"></ComboBox>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Height="250">
+                                <StackPanel Name="printOptions">
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                        <Button Grid.Column="0" Grid.Row="1" Padding="5" Name="buttonPrintFile" Click="createPrintFile">Stwórz dokument</Button>
+                        <Grid Name="printPreview" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                            <FlowDocumentScrollViewer Name="printFlowDocumentScrollViewer" Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                <FlowDocument Name="printFlowDocument" PageWidth="1000">
+                                    <BlockUIContainer Name="printUIContainer">
+                                        <StackPanel Name="printedItems">
+                                            <DataGrid Name="printDataGrid"></DataGrid>
+                                        </StackPanel>
+                                    </BlockUIContainer>
+                                </FlowDocument>
+                            </FlowDocumentScrollViewer>
+                        </Grid>
+
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+
+
         </TabControl>
 
         <Button Grid.Row="1" Grid.Column="2" Name="ShowBasketButton" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="5" VerticalContentAlignment="Center" Content="&lt;" FontSize="30" Click="MoveBasketPanel" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}">

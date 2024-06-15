@@ -15,6 +15,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ProjektSklep.Model;
+using System.Printing;
+using System.Windows.Xps.Packaging;
+using System.Linq;
+using System.Collections;
+using System.Reflection;
 
 namespace ProjektSklep
 {
@@ -126,6 +131,8 @@ namespace ProjektSklep
                         warehouseTab.IsEnabled = true;
                         chartTab.Visibility = Visibility.Visible;
                         chartTab.IsEnabled = true;
+                        printTab.Visibility = Visibility.Visible;
+                        printTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
                         wheelButton.IsEnabled = false;
                         if (!isSliderHidden) MoveBasketPanel(this, e);
@@ -148,6 +155,8 @@ namespace ProjektSklep
                 warehouseTab.IsEnabled = false;
                 chartTab.Visibility = Visibility.Hidden;
                 chartTab.IsEnabled = false;
+                printTab.Visibility = Visibility.Hidden;
+                printTab.IsEnabled = false;
                 wheelButton.Visibility = Visibility.Visible;
                 wheelButton.IsEnabled = true;
                 ShowBasketButton.Content = "<";
@@ -532,7 +541,7 @@ namespace ProjektSklep
                     ShowBasketButton.IsEnabled = false;
                     chart.Margin = new System.Windows.Thickness(0, 10, 0, 0);                                  
 
-                    if ((chartFirstValue.Items.Count-1 != products.Count && chartFirstValue.Items.Count - 2 != products.Count))
+                    if (chartFirstValue.Items.Count-1 != products.Count)
                     {
                         chartGrid.Children.Add(chart);
                         Grid.SetRow(chart, 1);
@@ -545,6 +554,16 @@ namespace ProjektSklep
 
                     }
                     Debug.WriteLine("chartTab");                
+                }
+                else if(tabItem != null && tabItem.Name == "printTab")
+                {
+                    chartGrid.Children.Remove(chart);
+                    products = new List<Product>();
+                    orders = new List<Order>();
+                    warehouse_list = new List<Warehouse>();
+
+                    List<System.Reflection.PropertyInfo> tables = db.PrintAllTables();
+                    if(selectTablePrint.Items.Count != tables.Count())foreach(var table in tables)selectTablePrint.Items.Add(table.Name);                  
                 }
             }
             finally
@@ -585,6 +604,199 @@ namespace ProjektSklep
                 }
             }
             
+        }
+
+        private void createPrintFile(object sender, RoutedEventArgs e)
+        {
+            bool hidePrintDialog = false;
+            PrintDialog printDialog = new PrintDialog();
+
+            if (!hidePrintDialog)
+            {
+                // Display the dialog. This returns true if the user presses the Print button.
+                bool? isPrinted = printDialog.ShowDialog();
+                if (isPrinted != true)
+                    return;
+            }
+
+            // Prepare the document for printing
+            try
+            {
+                FlowDocument printFlowDocument = new FlowDocument();
+                foreach (var item in printedItems.Children)
+                {
+                    if (item is DataGrid dataGrid)
+                    {
+                        // Convert DataGrid to Table and add to FlowDocument
+                        Table table = ConvertDataGridToTable(dataGrid);
+                        printFlowDocument.Blocks.Add(table);
+                    }
+                    else if (item is UIElement uiElement)
+                    {
+                        // Wrap UIElement in BlockUIContainer and add to FlowDocument
+                        BlockUIContainer blockUIContainer = new BlockUIContainer(uiElement);
+                        printFlowDocument.Blocks.Add(blockUIContainer);
+                    }
+                }
+
+                IDocumentPaginatorSource idpSource = printFlowDocument;
+                printDialog.PrintDocument(idpSource.DocumentPaginator, "Printing " + (printFileName.Text ?? "WPF_Store_print"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private Table ConvertDataGridToTable(DataGrid dataGrid)
+        {
+            Table table = new Table();
+            int numberOfColumns = dataGrid.Columns.Count;
+
+            // Create columns
+            for (int i = 0; i < numberOfColumns; i++)
+            {
+                table.Columns.Add(new TableColumn());
+            }
+
+            // Add header row
+            TableRow headerRow = new TableRow();
+            foreach (DataGridColumn column in dataGrid.Columns)
+            {
+                TableCell cell = new TableCell(new Paragraph(new Run(column.Header.ToString())));
+                headerRow.Cells.Add(cell);
+            }
+            TableRowGroup headerRowGroup = new TableRowGroup();
+            headerRowGroup.Rows.Add(headerRow);
+            table.RowGroups.Add(headerRowGroup);
+
+            // Add data rows
+            foreach (var item in dataGrid.Items)
+            {
+                TableRow dataRow = new TableRow();
+                foreach (DataGridColumn column in dataGrid.Columns)
+                {
+                    if (column is DataGridBoundColumn boundColumn)
+                    {
+                        Binding binding = (Binding)boundColumn.Binding;
+                        string path = binding.Path.Path;
+                        PropertyInfo property = item.GetType().GetProperty(path);
+                        string cellValue = property?.GetValue(item)?.ToString() ?? string.Empty;
+                        TableCell cell = new TableCell(new Paragraph(new Run(cellValue)));
+                        dataRow.Cells.Add(cell);
+                    }
+                }
+                TableRowGroup dataRowGroup = new TableRowGroup();
+                dataRowGroup.Rows.Add(dataRow);
+                table.RowGroups.Add(dataRowGroup);
+            }
+
+            return table;
+        }
+
+
+        private void selectTablePrint_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            printOptions.Children.Clear();
+            printedItems.Children.Remove(chart);
+            List<System.Reflection.PropertyInfo> tables = db.PrintAllTables();
+            var entityType = tables.ElementAt(selectTablePrint.SelectedIndex).PropertyType.GetGenericArguments()[0];
+            List<System.Reflection.PropertyInfo> attributes = db.printTableAttributes(entityType);
+
+            foreach (System.Reflection.PropertyInfo obj in attributes)
+            {
+                CheckBox checkBox = new CheckBox
+                {
+                    Name = obj.Name,
+                    Margin = new System.Windows.Thickness(5),
+                    IsChecked = true,
+                    Content = obj.Name,
+                    FontSize = 12,
+                };
+
+                checkBox.Checked += printCheckBox_Checked;
+                checkBox.Unchecked += printCheckBox_Unchecked;
+
+                printOptions.Children.Add(checkBox);
+            }
+
+            string selectedTableName = selectTablePrint.SelectedItem.ToString();
+            var tableData = GetTableData(selectedTableName);
+            printDataGrid.ItemsSource = tableData;
+
+            if (selectedTableName == "Orders")
+            {
+                CheckBox checkBox = new CheckBox
+                {
+                    Name = "chart",
+                    Margin = new System.Windows.Thickness(5),
+                    IsChecked = true,
+                    Content = "Wykres",
+                    FontSize = 12,
+                };
+
+                checkBox.Checked += printCheckBox_Checked;
+                checkBox.Unchecked += printCheckBox_Unchecked;
+
+                printOptions.Children.Add(checkBox);
+                DateTime monthAgo = DateTime.Now.AddDays(-30);
+                List<ProductOrder> productOrder = db.ProductOrders
+                    .Where(p => p.order.orderDate >= monthAgo)
+                    .Include(d => d.order)
+                    .Include(e => e.product)
+                    .ToList();
+                chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                printedItems.Children.Add(chart);
+            }
+            printedItems.Width = ActualWidth; printedItems.Height = ActualHeight;
+            printFlowDocument.PageWidth = printedItems.ActualWidth;
+            printFlowDocument.PageHeight = printedItems.ActualHeight;
+        }
+
+        private IEnumerable GetTableData(string tableName)
+        {
+            var property = db.GetType().GetProperty(tableName);
+            if (property != null)
+            {
+                var dbSet = property.GetValue(db) as IEnumerable;
+                if (dbSet != null)
+                {
+                    var list = dbSet.Cast<object>().ToList();
+                    return list;
+                }
+            }
+            return null;
+        }
+
+
+        private List<DataGridColumn> removedColumns = new List<DataGridColumn>();
+
+        private void printCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            string columnName = checkBox.Name;
+            Debug.WriteLine($"{columnName} checked.");
+
+            var column = removedColumns.FirstOrDefault(c => c.Header.ToString() == columnName);
+            if (column != null)
+            {
+                printDataGrid.Columns.Add(column);
+                removedColumns.Remove(column);
+            }          
+        }
+
+        private void printCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            string columnName = checkBox.Name;
+            Debug.WriteLine($"{columnName} unchecked.");
+
+            var column = printDataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == columnName);
+            if (column != null)
+            {
+                printDataGrid.Columns.Remove(column);
+                removedColumns.Add(column);
+            }
         }
     }
 }
