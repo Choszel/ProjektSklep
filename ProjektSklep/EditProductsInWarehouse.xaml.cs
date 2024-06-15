@@ -21,7 +21,31 @@ namespace ProjektSklep
     /// </summary>
     public partial class EditProductsInWarehouse : Window
     {
-        Warehouse warehouse;
+        Warehouse warehouse = new Warehouse();
+
+        public int InputActualState
+        {
+            get
+            {
+                return warehouse.actualState;
+            }
+            set
+            {
+                warehouse.actualState = value;
+            }
+        }
+
+        public int InputStockLevel
+        {
+            get
+            {
+                return warehouse.stockLevel;
+            }
+            set
+            {
+                warehouse.stockLevel = value;
+            }
+        }
 
         public EditProductsInWarehouse(Warehouse warehouse)
         {
@@ -34,6 +58,8 @@ namespace ProjektSklep
 
             ActualStateTextBox.Text = warehouse.actualState.ToString();
             StockLevelTextBox.Text  = warehouse.stockLevel.ToString();
+
+            NameTextBox.Content = warehouse.product.name;
         }
 
         private void CloseEditInWaregouseWindow(object sender, RoutedEventArgs e)
@@ -43,6 +69,11 @@ namespace ProjektSklep
 
         private void EditProduct_Click(object sender, RoutedEventArgs e)
         {
+            if (!isDataValid())
+            {
+                return;
+            }
+
             warehouse.actualState = int.Parse(ActualStateTextBox.Text);
             warehouse.stockLevel = int.Parse(StockLevelTextBox.Text);
             MyDbContext db = new MyDbContext();
@@ -52,6 +83,53 @@ namespace ProjektSklep
             db.SaveChanges();
 
             this.DialogResult = true;
+        }
+
+        private bool isDataValid()
+        {
+            string errorMessage = "";
+
+            if (ActualStateTextBox.Text == "")
+            {
+                errorMessage += "Nie podano stanu aktualnego.\n";
+            }
+            else
+            if (!int.TryParse(ActualStateTextBox.Text, out int actualState))
+            {
+                errorMessage += "Stan aktualny musi być liczbą.\n";
+            }
+            else
+            {
+                if (actualState < 0)
+                {
+                    errorMessage += "Podano ujemny stan aktualny.\n";
+                }
+            }
+
+            if (StockLevelTextBox.Text == "")
+            {
+                errorMessage += "Nie podano stanu magazynowego.\n";
+            }
+            else
+                if (!int.TryParse(StockLevelTextBox.Text, out int stockLevel))
+            {
+                errorMessage += "Stan magazynowy musi być liczbą.\n";
+            }
+            else
+            {
+                if (stockLevel < 0)
+                {
+                    errorMessage += "Podano ujemny stan magazynowy.\n";
+                }
+            }
+
+            if (errorMessage != "")
+            {
+                MessageBox.Show(errorMessage, "Błąd podczas edycji", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else
+                return true;
         }
     }
 }

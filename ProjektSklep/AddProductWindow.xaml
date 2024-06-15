@@ -8,13 +8,21 @@
         Title="New Product Window"
         Height="450" Width="800"
         WindowStyle="None"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <!--zablokowanie możliwości zmiany wielkości okna-->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <ControlTemplate x:Key="validationTemplate">
+                <DockPanel>
+                    <TextBlock Foreground="{StaticResource ErrorBrush}" FontSize="10" DockPanel.Dock="Top" Text="{Binding ElementName=ErrorAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"></TextBlock>
+                    <AdornedElementPlaceholder x:Name="ErrorAdorner"/>
+                </DockPanel>
+            </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundBrush}">
@@ -36,22 +44,63 @@
         <Button Content="Dodaj produkt" Grid.Row="7" Margin="10,0,0,0" Click="AddProduct_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Height="27" Width="81" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <Label Content="Nazwa:" Grid.Row="1" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox x:Name="NameTextBox" Grid.Row="1" Margin="355,10,245,10"/>
+        <TextBox x:Name="NameTextBox" Grid.Row="1" Margin="355,10,245,10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <Label Content="Cena:" Grid.Row="2" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox x:Name="PriceTextBox" Grid.Row="2" Margin="355,10,245,10"/>
+        <TextBox x:Name="PriceTextBox" Grid.Row="2" Margin="355,10,245,10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputPrice" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:PriceValidator></local:PriceValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <Label Content="Opis:" Grid.Row="3" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox x:Name="DescriptionTextBox" Grid.Row="3" Margin="355,10,245,10"/>
+        <TextBox x:Name="DescriptionTextBox" Grid.Row="3" Margin="355,10,245,10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:NotEmptyValidator></local:NotEmptyValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <Label Content="Kategoria:" Grid.Row="4" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
         <ComboBox x:Name="CategoryComboBox" Grid.Row="4" Margin="355,10,245,10"/>
 
         <!-- Dodatkowy rząd dla stanu magazynowego i faktycznego -->
         <Label Content="Stan magazynowy:" Grid.Row="5" Margin="10,10,668,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox x:Name="StockTextBox" Grid.Row="5" Margin="151,10,549,10"/>
+        <TextBox x:Name="StockTextBox" Grid.Row="5" Margin="151,10,549,10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputStockLevel" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:WarehouseValidator></local:WarehouseValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
         <Label Content="Stan faktyczny:" Grid.Row="5" Margin="387,10,310,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <TextBox x:Name="ActualStockTextBox" Grid.Row="5" Margin="520,10,180,10"/>
+        <TextBox x:Name="ActualStockTextBox" Grid.Row="5" Margin="520,10,180,10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+            <TextBox.Text>
+                <Binding Path="InputActualState" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <local:WarehouseValidator></local:WarehouseValidator>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
         <!-- Przycisk do wyboru zdjęcia -->
         <Button Content="Wybierz zdjęcie" Grid.Row="6" Margin="106,38,525,48" Click="SelectImage_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>

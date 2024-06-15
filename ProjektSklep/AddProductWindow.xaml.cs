@@ -13,9 +13,70 @@ namespace ProjektSklep
 {
     public partial class AddProductWindow : Window
     {
+        Product product = new Product();
+        Warehouse warehouse = new Warehouse();
         List<Category> categories = new List<Category>();
         BitmapImage bitmapImage = null;
 
+        public string InputName
+        {
+            get
+            {
+                return product.name;
+            }
+            set
+            {
+                product.name = value;
+            }
+        }
+
+        public float InputPrice
+        {
+            get
+            {
+                return product.price;
+            }
+            set
+            {
+                product.price = value;
+            }
+        }
+
+        public string InputDescription
+        {
+            get
+            {
+                return product.description;
+            }
+            set
+            {
+                product.description = value;
+            }
+        }
+
+        public int InputActualState 
+        { 
+            get
+            {
+                return warehouse.actualState;
+            }
+            set
+            {
+                warehouse.actualState = value;
+            }
+        }
+
+        public int InputStockLevel
+        {
+            get
+            {
+                return warehouse.stockLevel;
+            }
+            set
+            {
+                warehouse.stockLevel = value;
+            }
+        }
         public AddProductWindow()
         {
             InitializeComponent();
@@ -55,69 +116,145 @@ namespace ProjektSklep
 
         private void AddProduct_Click(object sender, RoutedEventArgs e)
         {
+            if (!isDataValid())
+            {
+                return;
+            }
+
             string name = NameTextBox.Text;
             string priceText = PriceTextBox.Text;
             string desc = DescriptionTextBox.Text;
-            int categoryId = (int)CategoryComboBox.SelectedValue;
+            int categoryId = 0;
+            if (CategoryComboBox.SelectedValue != null)
+            {
+                categoryId = (int)CategoryComboBox.SelectedValue;
+            }
             int stockLevel = int.Parse(StockTextBox.Text);
             int actualState = int.Parse(ActualStockTextBox.Text);
 
-            try
+            float price = float.Parse(priceText);
+            using (var context = new MyDbContext())
             {
-                float price = float.Parse(priceText);
-                using (var context = new MyDbContext())
+                var product = new Product
                 {
-                    var product = new Product
+                    name = name,
+                    price = price,
+                    description = desc,
+                    categoryId = categoryId,
+                };
+
+                if (bitmapImage != null)
+                {
+                    byte[] data;
+                    JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+
+                    using (MemoryStream ms = new MemoryStream())
                     {
-                        name = name,
-                        price = price,
-                        description = desc,
-                        categoryId = categoryId,
-                    };
-
-                    if (bitmapImage != null)
-                    {
-                        byte[] data;
-                        JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-                        encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            encoder.Save(ms);
-                            data = ms.ToArray();
-                        }
-
-                        Images image = new Images { image = data };
-                        context.Images.Add(image);
-                        context.SaveChanges();
-
-                        product.imageId = image.imageId;
+                        encoder.Save(ms);
+                        data = ms.ToArray();
                     }
 
-                    context.Products.Add(product);
+                    Images image = new Images { image = data };
+                    context.Images.Add(image);
                     context.SaveChanges();
 
-                    var warehouse = new Warehouse
-                    {
-                        productId = product.productId,
-                        stockLevel = stockLevel,
-                        actualState = actualState
-                    };
-
-                    context.Warehouse.Add(warehouse);
-                    context.SaveChanges();
+                    product.imageId = image.imageId;
                 }
 
-                MessageBox.Show("Produkt został dodany pomyślnie.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                context.Products.Add(product);
+                context.SaveChanges();
+
+                var warehouse = new Warehouse
+                {
+                    productId = product.productId,
+                    stockLevel = stockLevel,
+                    actualState = actualState
+                };
+
+                context.Warehouse.Add(warehouse);
+                context.SaveChanges();
             }
-            catch (FormatException)
+
+            MessageBox.Show("Produkt został dodany pomyślnie.", "Dodano produkt", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private bool isDataValid()
+        {
+            string errorMessage = "";
+
+            if (NameTextBox.Text == "")
             {
-                MessageBox.Show("Cena musi być wartością liczbową.", "Nieprawidłowa wartość ceny.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                errorMessage += "Nie podano nazwy.\n";
             }
-            catch (Exception ex)
+
+            if (PriceTextBox.Text == "")
             {
-                MessageBox.Show($"Wystąpił błąd: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                errorMessage += "Nie podano ceny.\n";
             }
+            else
+            if (!float.TryParse(PriceTextBox.Text, out float price))
+            {
+                errorMessage += "Cena musi być liczbą.\n";
+            }
+            else
+            {
+                if (price < 0)
+                {
+                    errorMessage += "Podano ujemną cenę.\n";
+                }
+            }
+            if (DescriptionTextBox.Text == "")
+            {
+                errorMessage += "Nie podano opisu.\n";
+            }
+
+            if (ActualStockTextBox.Text == "")
+            {
+                errorMessage += "Nie podano stanu aktualnego.\n";
+            }
+            else
+            if (!int.TryParse(ActualStockTextBox.Text, out int actualState))
+            {
+                errorMessage += "Stan aktualny musi być liczbą.\n";
+            }
+            else
+            {
+                if (actualState < 0)
+                {
+                    errorMessage += "Podano ujemny stan aktualny.\n";
+                }
+            }
+
+            if (StockTextBox.Text == "")
+            {
+                errorMessage += "Nie podano stanu magazynowego.\n";
+            }
+            else
+                if (!int.TryParse(StockTextBox.Text, out int stockLevel))
+            {
+                errorMessage += "Stan magazynowy musi być liczbą.\n";
+            }
+            else
+            {
+                if (stockLevel < 0)
+                {
+                    errorMessage += "Podano ujemny stan magazynowy.\n";
+                }
+            }
+
+            if(ImagePreview.Source == null)
+            {
+                errorMessage += "Nie podano zdjęcia produktu.\n";
+            }
+
+            if (errorMessage != "")
+            {
+                MessageBox.Show(errorMessage, "Błąd podczas edycji", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else
+                return true;
         }
     }
 }
