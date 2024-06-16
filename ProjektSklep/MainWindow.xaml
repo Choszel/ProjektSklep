@@ -8,7 +8,8 @@
         MinWidth="900" 
         MinHeight="600"
         Title="WPF Store" Height="450" Width="800"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -157,7 +158,6 @@
                                             <TextBlock Name="warehouseActualState" Grid.Row="1" Text="{Binding actualState, StringFormat='Stan faktyczny: \{0\}'}"></TextBlock>
                                             <TextBlock Name="warehouseStockLevel" Grid.Row="2" Text="{Binding stockLevel, StringFormat='Stan magazynowy: \{0\}'}"></TextBlock>
                                             <Button Name="editInWarehouse" Grid.Row="3" Grid.Column="1" Click="editInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Edytuj" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
-                                            <Button Name="deleteInWarehouse" Grid.Row="3" Grid.Column="2" Click="deleteInWarehouse_Click" Padding="5" Margin="5" Tag="{Binding warehouseProductId}" Content="Usuń" Background="{StaticResource SecondaryDarkBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
                                         </Grid>
                                     </GroupBox>
                                 </DataTemplate>
