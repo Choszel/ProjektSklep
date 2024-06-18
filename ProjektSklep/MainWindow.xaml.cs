@@ -472,11 +472,8 @@ namespace ProjektSklep
             if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int orderID))
             {
                 Order order = db.Orders.Find(orderID);
-                foreach (var ord in orders)
-                {
-
-                }
-                //order.state = cb.SelectedItem.ToString();
+                EditOrderState editOrderState = new EditOrderState(order);
+                editOrderState.ShowDialog();
             }
         }
 
