@@ -46,7 +46,6 @@ namespace ProjektSklep
             InitializeComponent();
 
             InitializeDBData();
-            productListBox.ItemsSource = db.Products.ToList();
 
             List<Order> orders = db.Orders.ToList();
 
@@ -106,6 +105,7 @@ namespace ProjektSklep
 
                 product.bitmapImage = bitmapImage;
             }
+            productListBox.ItemsSource = db.Products.ToList();
         }
 
         private void InitializeCategories()
@@ -368,8 +368,11 @@ namespace ProjektSklep
                         {
                             if (((DateTime.Now - (currentUser.lastSpin ?? DateTime.Now))).Hours < 24)
                             {
-                                var discount = currentUser.currDiscount.Split("|");
-                                if (product.categoryId == int.Parse(discount[2])) productPrice -= (productPrice * int.Parse(discount[0]))/100;
+                                if (currentUser.currDiscount != null)
+                                {
+                                    var discount = currentUser.currDiscount.Split("|");
+                                    if (product.categoryId == int.Parse(discount[2])) productPrice -= (productPrice * int.Parse(discount[0])) / 100;
+                                }
                             }
                         }
                         CartProduct cartProduct = new CartProduct(productId, product.name, 1, productPrice);
@@ -461,6 +464,8 @@ namespace ProjektSklep
                     try
                     {
                         dbContext.Products.Remove(product);
+                        dbContext.SaveChanges();
+                        InitializeProducts();
                     }
                     catch (Exception error)
                     {
@@ -559,13 +564,11 @@ namespace ProjektSklep
                 {
                     orders = new List<Order>();
                     warehouse_list = new List<Warehouse>();
-                    InitializeProducts();
                     ShowBasketButton.IsEnabled = true;
                     Debug.WriteLine("productsTab");
                 }
                 else if (tabItem != null && tabItem.Name == "ordersTab")
                 {
-                    products = new List<Product>();
                     warehouse_list = new List<Warehouse>();
                     orderListBox.ItemsSource = db.Orders.ToList();
                     ShowBasketButton.IsEnabled = false;
@@ -573,7 +576,6 @@ namespace ProjektSklep
                 }
                 else if (tabItem != null && tabItem.Name == "warehouseTab")
                 {
-                    products = new List<Product>();
                     orders = new List<Order>();
                     warehouseListBox.ItemsSource = db.Warehouse.ToList();
                     ShowBasketButton.IsEnabled = false;
@@ -582,7 +584,6 @@ namespace ProjektSklep
                 else if (tabItem != null && tabItem.Name == "chartTab")
                 {
                     printedItems.Children.Remove(chart);
-                    InitializeProducts();
                     orders = new List<Order>();
                     warehouse_list = new List<Warehouse>();
                     ShowBasketButton.IsEnabled = false;
@@ -606,7 +607,6 @@ namespace ProjektSklep
                 {
                     chartGrid.Children.Remove(chart);
                     chartFirstValue.Items.Clear();
-                    products = new List<Product>();
                     orders = new List<Order>();
                     warehouse_list = new List<Warehouse>();
 
@@ -619,6 +619,7 @@ namespace ProjektSklep
                 _isHandlingSelectionChanged = false;
             }
         }
+
 
 
         private void orderListSelectionChanged(object sender, SelectionChangedEventArgs e)
