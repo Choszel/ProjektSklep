@@ -182,7 +182,7 @@ namespace ProjektSklep
                         printTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
                         //wheelButton.IsEnabled = false;
-                        if (!isSliderHidden) MoveBasketPanel(this, e);
+                        if (!isSliderHidden) SpecialMoveBasketPanel(this, e);
                         ShowBasketButton.Content = "+";
 
                        
@@ -198,6 +198,7 @@ namespace ProjektSklep
             }
             else
             {
+                if (!isSliderHidden) SpecialMoveBasketPanel(this, e);
                 UserType.Instance.numericType = -1;
                 UserType.Instance.loggedId = -1;
 
@@ -611,11 +612,27 @@ namespace ProjektSklep
 
         private void MoveBasketPanel(object sender, RoutedEventArgs e)
         {
+            MoveBasketPanel(sender, e, false);
+        }
+
+        private void SpecialMoveBasketPanel(object sender, RoutedEventArgs e)
+        {
+            cart.Clear();
+            basketListBox.Items.Clear();
+            //countSum();
+            MoveBasketPanel(sender, e, true);
+        }
+
+        private void MoveBasketPanel(object sender, RoutedEventArgs e, bool special)
+        {
             if (ShowBasketButton.Content.Equals(">") || ShowBasketButton.Content.Equals("<"))
             {
                 double targetX = isSliderHidden ? -167 : 0;
-                DoubleAnimation animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
-                sliderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+                DoubleAnimation animation;
+                if (special)
+                    animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0));
+                else
+                    animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
                 buttonTransform.BeginAnimation(TranslateTransform.XProperty, animation);
 
                 // Zmiana kierunku strzałki w zależności od sliderHidden
@@ -653,7 +670,12 @@ namespace ProjektSklep
                 this.Opacity = 1;
             };
 
-            shippingDetailsWindow.ShowDialog();
+            if (shippingDetailsWindow.ShowDialog() == true)
+            {
+                cart.Clear();
+                basketListBox.Items.Clear();
+                //countSum();
+            }
         }
 
         private bool _isHandlingSelectionChanged = false;

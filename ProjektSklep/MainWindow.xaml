@@ -77,23 +77,28 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <GroupBox>
-                                        <Grid Width="Auto">
+                                        <Grid Width="Auto" Height="160">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="0.7*"></ColumnDefinition>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition></RowDefinition>
-                                                <RowDefinition></RowDefinition>
-                                                <RowDefinition></RowDefinition>
-                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="1.5*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
                                             </Grid.RowDefinitions>
                                             <Image Source="{Binding bitmapImage}" Height="80" Width="80" Margin="10" Name="productImage" Tag="{Binding productId}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4"></Image>
                                             <Label Name="productName" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Content="{Binding name}"></Label>
                                             <Label Name="productPrice" Grid.Row="3" Grid.Column="1" Content="{Binding price, StringFormat=\{0\} PLN}"></Label>
                                             <Label Name="productCategory" Grid.Row="1" Grid.Column="1" Content="{Binding category.name}"></Label>
-                                            <Label Name="productDesc" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2" Content="{Binding description}"></Label>
+
+                                            <Label Name="productDesc" Grid.Row="2" Grid.Column="1" Visibility="Hidden" Grid.RowSpan="2" MaxWidth="300">
+                                                <Label.Content>
+                                                    <AccessText TextWrapping="Wrap" Text="{Binding description}"/>
+                                                </Label.Content>
+                                            </Label>
                                             <Button Name="addProductButton" Grid.Row="3" Grid.Column="2" Click="addToCart" Padding="5" Tag="{Binding productId}" Content="Dodaj do koszyka" Style="{StaticResource SecondaryButton}"></Button>
                                             <Button Name="editProductButton" Grid.Row="2" Grid.Column="2" Click="editProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Edytuj" Style="{StaticResource SecondaryButton}"/>
                                             <Button Name="deleteProductButton" Grid.Row="3" Grid.Column="2" Click="deleteProduct" Visibility="Hidden" IsEnabled="False" Padding="5" Margin="5" Tag="{Binding productId}" Content="Usuń" Style="{StaticResource SecondaryButton}"/>

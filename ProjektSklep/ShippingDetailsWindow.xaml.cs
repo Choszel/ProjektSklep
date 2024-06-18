@@ -147,7 +147,7 @@ namespace ProjektSklep
 
             db.SaveChanges();
 
-            this.Close();
+            this.DialogResult = true;
         }
 
         private void CloseShippingWindow_Click(object sender, RoutedEventArgs e)
