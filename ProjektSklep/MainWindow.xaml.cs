@@ -670,9 +670,9 @@ namespace ProjektSklep
                 }
                 else if (tabItem != null && tabItem.Name == "warehouseTab")
                 {
-                    MyDbContext db2 = new MyDbContext();
+                    db = new MyDbContext();
                     orders = new List<Order>();
-                    warehouseListBox.ItemsSource = db2.Warehouse.ToList();
+                    warehouseListBox.ItemsSource = db.Warehouse.ToList();
                     ShowBasketButton.IsEnabled = false;
                     Debug.WriteLine("warehouseTab");
                 }
