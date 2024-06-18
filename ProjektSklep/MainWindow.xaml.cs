@@ -24,6 +24,7 @@ using System.Windows.Threading;
 using System.Xml.Linq;
 using System.DirectoryServices;
 using Notification.Wpf;
+using System;
 
 namespace ProjektSklep
 {
@@ -61,13 +62,6 @@ namespace ProjektSklep
             }
 
             orderListBox.ItemsSource = db.Orders.ToList();
-            categoriesComboBox.Items.Add("Wszystko");
-
-            //Pętla inicjulizująca kategorie w comboboxie
-            foreach (Category category in categories)
-            {
-                categoriesComboBox.Items.Add(category.name);
-            }
         }
 
         private void InitializeDBData()
@@ -78,6 +72,7 @@ namespace ProjektSklep
 
         private void InitializeProducts()
         {
+            db = new MyDbContext();
             products = db.Products.ToList();
 
             foreach (Product product in products)
@@ -122,7 +117,20 @@ namespace ProjektSklep
 
         private void InitializeCategories()
         {
+            db = new MyDbContext();
             categories = db.Categories.ToList();
+            categoriesComboBox.SelectionChanged -= categoriesComboBox_SelectionChanged;
+            categories = db.Categories.ToList();
+
+            Category wszystkie = categories.Find(category => category.name == "Wszystko");
+            int wszystkieIndex= categories.IndexOf(wszystkie);
+
+            categories[wszystkieIndex] = categories[0];
+            categories[0] = wszystkie;
+
+            categoriesComboBox.ItemsSource = categories;
+            categoriesComboBox.SelectedItem = db.Categories.Find(4);
+            categoriesComboBox.SelectionChanged += categoriesComboBox_SelectionChanged;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -246,7 +254,8 @@ namespace ProjektSklep
 
             if (categoriesComboBox != null)
             {
-                chosenCategory = categoriesComboBox.SelectedItem.ToString();
+                Category category = categoriesComboBox.SelectedItem as Category;
+                chosenCategory = category.name;
             }
 
             foreach (Category category in categories)
@@ -667,6 +676,7 @@ namespace ProjektSklep
                 }
                 else if (tabItem != null && tabItem.Name == "categoriesTab") 
                 {
+                    db = new MyDbContext();
                     orders = new List<Order>();
                     warehouse_list = new List<Warehouse>();
                     categoriesListBox.ItemsSource = db.Categories.ToList();
@@ -969,14 +979,40 @@ namespace ProjektSklep
         {
             Button editButton = sender as Button;
 
-            EditCategory editCategory = new EditCategory(editButton.Tag);
+            int categoryId = int.Parse(editButton.Tag.ToString());
+            Category category = db.Categories.First(c => c.categoryId == categoryId);
 
+            if(category.name =="Wszystko")
+            {
+                MessageBox.Show("Nie możesz edytować tej kategorii");
+                return;
+            }
+
+            EditCategory editCategory = new EditCategory(categoryId);
+            if(editCategory.ShowDialog() == true)
+            {
+                db = new MyDbContext();
+                InitializeCategories();
+                InitializeProducts();
+            }
 
         }
 
         private void deleteCategory(object sender, RoutedEventArgs e)
         {
+            Button editButton = sender as Button;
 
+            int categoryId = int.Parse(editButton.Tag.ToString());
+            Category category = db.Categories.First(c => c.categoryId == categoryId);
+
+            if (category.name == "Wszystko")
+            {
+                MessageBox.Show("Nie możesz usunąć tej kategorii");
+                return;
+            }
+
+            InitializeCategories();
+            InitializeProducts();
         }
     }
 }
