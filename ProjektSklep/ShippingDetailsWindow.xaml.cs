@@ -1,6 +1,7 @@
 ﻿using ProjektSklep.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,7 +113,31 @@ namespace ProjektSklep
                 productOrder.productId = product.id;
                 productOrder.orderId = order.orderId;
                 productOrder.count = product.count;
+
+                Warehouse warehouse = db.Warehouse.First(warehouse => warehouse.productId == product.id);
+                if(warehouse.actualState < productOrder.count)
+                {
+                    MessageBox.Show("Nie posiadamy już produktu: " + product.name + " na stanie.");
+                    return;
+                }
+
                 db.ProductOrders.Add(productOrder);
+            }
+
+            foreach (CartProduct product in cart)
+            {
+                ProductOrder productOrder = new ProductOrder();
+                productOrder.productId = product.id;
+                productOrder.orderId = order.orderId;
+                productOrder.count = product.count;
+
+                Warehouse warehouse = db.Warehouse.First(warehouse => warehouse.productId == product.id);
+                warehouse.actualState -= productOrder.count;
+
+                db.Warehouse.AddOrUpdate(warehouse);
+                db.ProductOrders.Add(productOrder);
+
+                db.SaveChanges();
             }
 
             if (currentUser != null)

@@ -427,10 +427,31 @@ namespace ProjektSklep
                 // Pobierz identyfikator produktu z taga przycisku
                 if (button.Tag != null && int.TryParse(button.Tag.ToString(), out int productId))
                 {
+                    Warehouse warehouse = db.Warehouse.First(warehouse => warehouse.productId == productId);
+                    CartProduct cartProduct = null;
+
+                    if (cart.FirstOrDefault(cp => cp.id == productId) != null)
+                    {
+                        cartProduct = cart.FirstOrDefault(cp => cp.id == productId);
+                        if (warehouse.actualState < cartProduct.count + 1)
+                        {
+                            MessageBox.Show("Niestety nie posiadamy już tego produktu na stanie");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (warehouse.actualState < 1)
+                        {
+                            MessageBox.Show("Niestety nie posiadamy już tego produktu na stanie");
+                            return;
+                        }
+                    }
+
                     // Dodaj produkt do koszyka lub zwiększ jego liczbę w koszyku
                     if (cart.Find(item => item.id == productId) != null)
                     {
-                        CartProduct cartProduct = cart.Find(item => item.id == productId);
+                        cartProduct = cart.Find(item => item.id == productId);
                         cartProduct.count++;
                     }
                     else
@@ -449,10 +470,11 @@ namespace ProjektSklep
                                 }
                             }
                         }
-                        CartProduct cartProduct = new CartProduct(productId, product.name, 1, productPrice);
-                        cart.Add(cartProduct);
-                        basketListBox.Items.Add(cartProduct);
+                        CartProduct addedCartProduct = new CartProduct(productId, product.name, 1, productPrice);
+                        cart.Add(addedCartProduct);
+                        basketListBox.Items.Add(addedCartProduct);
                     }
+
 
                     float wholePriceSum = 0;
                     foreach (var item in cart)
@@ -660,6 +682,7 @@ namespace ProjektSklep
                 }
                 else if (tabItem != null && tabItem.Name == "warehouseTab")
                 {
+                    db = new MyDbContext();
                     orders = new List<Order>();
                     warehouseListBox.ItemsSource = db.Warehouse.ToList();
                     ShowBasketButton.IsEnabled = false;
