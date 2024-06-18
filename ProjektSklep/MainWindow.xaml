@@ -47,9 +47,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Name="searchTextBox" TextWrapping="Wrap" FontSize="16" VerticalContentAlignment="Center" Padding="10" HorizontalAlignment="Stretch" TextChanged="searchBoxChanged"/>
-            <ComboBox Grid.Column="1" Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="categoriesComboBox_SelectionChanged"/>
-            <ComboBox Grid.Column="2" Name="SortComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="SortComboBox_SelectionChanged">
+            <TextBox Grid.Column="0" Name="searchTextBox" TextWrapping="Wrap" FontSize="16" VerticalContentAlignment="Center" Padding="10" TextChanged="searchBoxChanged" Margin="0,0,129,0"/>
+            <ComboBox Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="categoriesComboBox_SelectionChanged" Grid.ColumnSpan="2" Margin="209,0,53,0"/>
+            <ComboBox Grid.Column="1" Name="SortComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="SortComboBox_SelectionChanged" Grid.ColumnSpan="2" Margin="42,0,0,0">
                 <ComboBoxItem Content="Od najstarszych" Tag="LatestToNewest"/>
                 <ComboBoxItem Content="Od najnowszych" Tag="NewestToLatest"/>
                 <ComboBoxItem Content="Od najtańszych" Tag="LeastExpensiveToMostExpensive"/>
