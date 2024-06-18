@@ -118,21 +118,11 @@ namespace ProjektSklep
         private void InitializeCategories()
         {
             db = new MyDbContext();
+            categories = db.Categories.ToList();
             categoriesComboBox.SelectionChanged -= categoriesComboBox_SelectionChanged;
             categories = db.Categories.ToList();
 
             Category wszystkie = categories.Find(category => category.name == "Wszystko");
-
-            if(wszystkie == null)
-            {
-                wszystkie.name = "Wszystko";
-                db.Categories.Add(wszystkie);
-                db.SaveChanges();
-
-                categories = db.Categories.ToList();
-                wszystkie = categories.Find(category => category.name == "Wszystko");
-            }
-
             int wszystkieIndex= categories.IndexOf(wszystkie);
 
             categories[wszystkieIndex] = categories[0];
