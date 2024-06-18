@@ -289,6 +289,8 @@
             </TextBlock>
         </Popup>
 
-        <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}">Koło Fortuny</Button>
+        <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}">
+            <TextBlock Name="wheelTimerText" HorizontalAlignment="Center" TextAlignment="Center">Koło Fortuny</TextBlock>
+        </Button>
     </Grid>
 </Window>

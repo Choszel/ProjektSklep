@@ -20,6 +20,8 @@ using System.Windows.Xps.Packaging;
 using System.Linq;
 using System.Collections;
 using System.Reflection;
+using System.Windows.Threading;
+using System.Xml.Linq;
 
 namespace ProjektSklep
 {
@@ -35,6 +37,7 @@ namespace ProjektSklep
         List<Warehouse> warehouse_list = new List<Warehouse>();
         List<CartProduct> cart = new List<CartProduct>();
         Chart chart = new Chart();
+        public static DispatcherTimer wheelTimer = new DispatcherTimer();
 
         private MyDbContext db = new MyDbContext();
 
@@ -63,7 +66,6 @@ namespace ProjektSklep
             {
                 categoriesComboBox.Items.Add(category.name);
             }
-
         }
 
         private void InitializeDBData()
@@ -111,6 +113,26 @@ namespace ProjektSklep
             categories = db.Categories.ToList();
         }
 
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (UserType.Instance.loggedId != -1)
+            {
+                var user = db.Users.FirstOrDefault(u => u.userId == UserType.Instance.loggedId);
+                if(user != null)
+                {
+                    TimeSpan timeLeft = TimeSpan.FromHours(24) + (user.lastSpin - DateTime.Now) ?? TimeSpan.FromSeconds(0);
+                    if (timeLeft > TimeSpan.FromSeconds(0))wheelTimerText.Text = "Koło fortuny\nDostępne za:\n" + timeLeft.ToString().Substring(0, 8);
+                    else
+                    {
+                        wheelTimerText.Text = "Koło fortuny\nJuż dostępne!";
+                        wheelButton.IsEnabled = true;
+                        wheelTimer.Stop();
+                    }
+                }
+            }
+           
+        }
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             if (loginButton.Content.ToString().CompareTo("Zaloguj Się") == 0)
@@ -122,6 +144,7 @@ namespace ProjektSklep
                 if (loginWindow.ShowDialog() == true)
                 {
                     loginButton.Content = "Wyloguj Się";
+                    wheelButton.IsEnabled = false;
                     if (UserType.Instance.numericType == 0)
                     {
                         productsTab.Visibility = Visibility.Visible;
@@ -135,12 +158,18 @@ namespace ProjektSklep
                         printTab.Visibility = Visibility.Visible;
                         printTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
-                        wheelButton.IsEnabled = false;
+                        //wheelButton.IsEnabled = false;
                         if (!isSliderHidden) MoveBasketPanel(this, e);
                         ShowBasketButton.Content = "+";
 
-
+                       
                         mainTabs.BorderBrush = new SolidColorBrush(Colors.Black);
+                    }
+                    else
+                    {
+                        wheelTimer.Interval = TimeSpan.FromSeconds(1);
+                        wheelTimer.Tick += Timer_Tick;
+                        wheelTimer.Start();
                     }
                 }
             }
@@ -164,10 +193,9 @@ namespace ProjektSklep
                 ShowBasketButton.Content = "<";
 
                 mainTabs.SelectedIndex = 0;
-
+                wheelTimer.Stop();
+                wheelTimerText.Text = "Koło fortuny";
                 loginButton.Content = "Zaloguj Się";
-                // UserType.Instance.numericType = -1;
-
             }
 
             SelectionChangedEventArgs args = new SelectionChangedEventArgs(
@@ -465,6 +493,7 @@ namespace ProjektSklep
             };
 
             if (wheelWindow.ShowDialog() == true) ;
+            wheelButton.IsEnabled = !wheelTimer.IsEnabled;
         }
 
         private bool isSliderHidden = true;
