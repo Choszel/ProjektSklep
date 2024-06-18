@@ -123,6 +123,7 @@ namespace ProjektSklep
 
             Category wszystkie = categories.Find(category => category.name == "Wszystko");
 
+
             if(wszystkie == null)
             {
                 wszystkie = new Category();
