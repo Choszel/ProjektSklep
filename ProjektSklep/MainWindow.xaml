@@ -45,9 +45,18 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3.5*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" Name="searchTextBox" TextWrapping="Wrap" FontSize="16" VerticalContentAlignment="Center" Padding="10" HorizontalAlignment="Stretch" TextChanged="searchBoxChanged"/>
             <ComboBox Grid.Column="1" Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="categoriesComboBox_SelectionChanged"/>
+            <ComboBox Grid.Column="2" Name="SortComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="SortComboBox_SelectionChanged">
+                <ComboBoxItem Content="Od najstarszych" Tag="LatestToNewest"/>
+                <ComboBoxItem Content="Od najnowszych" Tag="NewestToLatest"/>
+                <ComboBoxItem Content="Od najtańszych" Tag="LeastExpensiveToMostExpensive"/>
+                <ComboBoxItem Content="Od najdroższych" Tag="MostExpensiveToLeastExpensive"/>
+                <ComboBoxItem Content="Alfabetycznie \/" Tag="AlphabeticallyFirstToLast"/>
+                <ComboBoxItem Content="Alfabetycznie /\" Tag="AlphabeticallyLastToFirst"/>
+            </ComboBox>
         </Grid>
 
         <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click" Style="{StaticResource PrimaryButton}"/>
@@ -121,11 +130,7 @@
                                             <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
                                             <Label Name="orderDiscount" Grid.Row="3" Grid.Column="1" Content="{Binding discount}"/>
                                             <Label Name="orderState" Grid.Row="2" Grid.Column="2" Content="{Binding state}"/>
-                                            <ComboBox Name="orderStateComboBox" Grid.Row="3" Grid.Column="2">
-                                                <ComboBoxItem>W trakcie realizacji</ComboBoxItem>
-                                                <ComboBoxItem>Zrobione</ComboBoxItem>
-                                            </ComboBox>
-                                            <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Edytuj stan" Style="{StaticResource SecondaryButton}"/>
+                                            <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Zobacz Szegóły/Edytuj Stan" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}"/>
                                         </Grid>
                                     </GroupBox>
                                 </DataTemplate>

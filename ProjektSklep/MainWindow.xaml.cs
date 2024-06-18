@@ -22,6 +22,7 @@ using System.Collections;
 using System.Reflection;
 using System.Windows.Threading;
 using System.Xml.Linq;
+using System.DirectoryServices;
 using Notification.Wpf;
 
 namespace ProjektSklep
@@ -129,10 +130,10 @@ namespace ProjektSklep
             if (UserType.Instance.loggedId != -1)
             {
                 var user = db.Users.FirstOrDefault(u => u.userId == UserType.Instance.loggedId);
-                if(user != null)
+                if (user != null)
                 {
                     TimeSpan timeLeft = TimeSpan.FromHours(24) + (user.lastSpin - DateTime.Now) ?? TimeSpan.FromSeconds(0);
-                    if (timeLeft > TimeSpan.FromSeconds(0))wheelTimerText.Text = "Koło fortuny\nDostępne za:\n" + timeLeft.ToString().Substring(0, 8);
+                    if (timeLeft > TimeSpan.FromSeconds(0)) wheelTimerText.Text = "Koło fortuny\nDostępne za:\n" + timeLeft.ToString().Substring(0, 8);
                     else
                     {
                         wheelTimerText.Text = "Koło fortuny\nJuż dostępne!";
@@ -142,7 +143,7 @@ namespace ProjektSklep
                     }
                 }
             }
-           
+
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -290,6 +291,54 @@ namespace ProjektSklep
             }
         }
 
+        private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            var selectedOption = comboBox.SelectedItem as ComboBoxItem;
+            var sortOption = (SortOptions)Enum.Parse(typeof(SortOptions), selectedOption.Tag.ToString());
+            SortProducts(sortOption);
+        }
+
+        private void SortProducts(SortOptions option)
+        {
+            switch (option)
+            {
+                case SortOptions.NewestToLatest:
+                    products = products.OrderByDescending(p => p.productId).ToList();
+                    break;
+                case SortOptions.LatestToNewest:
+                    products = products.OrderBy(p => p.productId).ToList();
+                    break;
+                case SortOptions.LeastExpensiveToMostExpensive:
+                    products = products.OrderBy(p => p.price).ToList();
+                    break;
+                case SortOptions.MostExpensiveToLeastExpensive:
+                    products = products.OrderByDescending(p => p.price).ToList();
+                    break;
+                case SortOptions.AlphabeticallyFirstToLast:
+                    products = products.OrderBy(p => p.name).ToList();
+                    break;
+                case SortOptions.AlphabeticallyLastToFirst:
+                    products = products.OrderByDescending(p => p.name).ToList();
+                    break;
+            }
+
+            if (productListBox is not null)
+            {
+                productListBox.ItemsSource = null;
+                productListBox.ItemsSource = products;
+            }
+        }
+        public enum SortOptions
+        {
+            NewestToLatest,
+            LatestToNewest,
+            LeastExpensiveToMostExpensive,
+            MostExpensiveToLeastExpensive,
+            AlphabeticallyFirstToLast,
+            AlphabeticallyLastToFirst
+        }
+
         private void productListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ListBox listBox)
@@ -385,7 +434,7 @@ namespace ProjektSklep
                         Product product = products.FindLast(item => item.productId == productId);
                         float productPrice = product.price;
                         User currentUser = db.Users.FirstOrDefault(u => u.userId == UserType.Instance.loggedId);
-                        if(currentUser != null)
+                        if (currentUser != null)
                         {
                             if (((DateTime.Now - (currentUser.lastSpin ?? DateTime.Now))).Hours < 24)
                             {
@@ -443,24 +492,21 @@ namespace ProjektSklep
 
         private void editOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            Button deleteButton = sender as Button;
+            Button editButton = sender as Button;
 
-            if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int orderID))
+            if (editButton.Tag != null && int.TryParse(editButton.Tag.ToString(), out int orderID))
             {
                 Order order = db.Orders.Find(orderID);
-                foreach (var ord in orders)
-                {
-
-                }
-                //order.state = cb.SelectedItem.ToString();
+                EditOrderState editOrderState = new EditOrderState(order);
+                editOrderState.ShowDialog();
             }
         }
 
         private void editInWarehouse_Click(object sender, RoutedEventArgs e)
         {
-            Button deleteButton = sender as Button;
+            Button editButton = sender as Button;
 
-            if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int warehouseProductId))
+            if (editButton.Tag != null && int.TryParse(editButton.Tag.ToString(), out int warehouseProductId))
             {
                 Warehouse wh = db.Warehouse.Find(warehouseProductId);
                 EditProductsInWarehouse editProductsInWarehouse = new EditProductsInWarehouse(wh);
@@ -638,7 +684,7 @@ namespace ProjektSklep
 
                     List<System.Reflection.PropertyInfo> tables = db.PrintAllTables();
                     if (selectTablePrint.Items.Count != tables.Count()) foreach (var table in tables) selectTablePrint.Items.Add(table.Name);
-            }
+                }
             }
             finally
             {
@@ -829,7 +875,7 @@ namespace ProjektSklep
                     .Include(d => d.order)
                     .Include(e => e.product)
                     .ToList();
-            chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
                 printedItems.Children.Add(chart);
             }
             printedItems.Height = ActualHeight + 100;
