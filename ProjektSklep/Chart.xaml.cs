@@ -120,8 +120,8 @@ namespace ProjektSklep
 
             foreach (ProductOrder productOrder in productOrders)
             {
-                if (!productsBoughtTime.ContainsKey(productOrder.order.orderDate)) { productsBoughtTime[productOrder.order.orderDate] = productOrder.count; }
-                else productsBoughtTime[productOrder.order.orderDate] += productOrder.count;
+                if (!productsBoughtTime.ContainsKey(productOrder.order.orderDate.Date)) { productsBoughtTime[productOrder.order.orderDate.Date] = productOrder.count; }
+                else productsBoughtTime[productOrder.order.orderDate.Date] += productOrder.count;
             }
             int iterator = 1;
 
