@@ -645,6 +645,7 @@ namespace ProjektSklep
                 else
                     animation = new DoubleAnimation(targetX, TimeSpan.FromSeconds(0.5));
                 buttonTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+                sliderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
 
                 // Zmiana kierunku strzałki w zależności od sliderHidden
                 ShowBasketButton.Content = isSliderHidden ? ">" : "<";
