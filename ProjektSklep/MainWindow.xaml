@@ -98,10 +98,41 @@
                 </GroupBox>
             </TabItem>
 
+            <TabItem Name="categoriesTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Kategorie" Width="170" Padding="20 10 0 10">
+                <GroupBox Grid.Row="1" Grid.Column="1" Header="Kategorie" FontSize="16" Padding="5" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
+                        <ListBox Name="categoriesListBox" Margin="5" Width="Auto" BorderBrush="White" HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox>
+                                        <Grid Width="Auto">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                                <RowDefinition></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Label Name="categoryId" Grid.Row="0" Grid.Column="0" FontWeight="Bold" Content="{Binding categoryId}"></Label>
+                                            <Label Name="categoryName" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding name}"></Label>
+                                            <Button Name="editCategoryButton" Grid.Row="1" Grid.Column="2" Click="editCategory" Padding="5" Margin="5" Tag="{Binding categoryId}" Content="Edytuj" Style="{StaticResource SecondaryButton}"/>
+                                            <Button Name="deleteCategoryButton" Grid.Row="2" Grid.Column="2" Click="deleteCategory" Padding="5" Margin="5" Tag="{Binding categoryId}" Content="Usuń" Style="{StaticResource SecondaryButton}"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+
             <TabItem Name="ordersTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Zamówienia" Padding="20 10 0 10">
                 <GroupBox Grid.Row="1" Grid.Column="1" Header="Zamówienia" FontSize="16" Padding="5">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
-                        <ListBox Name="orderListBox" Margin="5" SelectionChanged="orderListSelectionChanged" Width="Auto" BorderBrush="White" HorizontalContentAlignment="Stretch">
+                        <ListBox Name="orderListBox" Margin="5" Width="Auto" BorderBrush="White" HorizontalContentAlignment="Stretch">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <GroupBox>
@@ -143,7 +174,7 @@
             <TabItem Name="warehouseTab" Visibility="Hidden" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Inwentaryzacja" Padding="20 10 0 10">
                 <GroupBox Grid.Row="1" Grid.Column="1" Header="Inwentaryzacja" FontSize="16" Padding="5">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollChanged="productScroll" Width="Auto">
-                        <ListBox Name="warehouseListBox" Margin="5" SelectionChanged="warehouseListSelectionChanged" Width="Auto" BorderBrush="White" HorizontalContentAlignment="Stretch">
+                        <ListBox Name="warehouseListBox" Margin="5" Width="Auto" BorderBrush="White" HorizontalContentAlignment="Stretch">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <GroupBox>

@@ -162,6 +162,8 @@ namespace ProjektSklep
                     {
                         productsTab.Visibility = Visibility.Visible;
                         productsTab.IsEnabled = true;
+                        categoriesTab.Visibility = Visibility.Visible;
+                        categoriesTab.IsEnabled = true;
                         ordersTab.Visibility = Visibility.Visible;
                         ordersTab.IsEnabled = true;
                         warehouseTab.Visibility = Visibility.Visible;
@@ -193,6 +195,8 @@ namespace ProjektSklep
 
                 productsTab.Visibility = Visibility.Hidden;
                 productsTab.IsEnabled = false;
+                categoriesTab.Visibility = Visibility.Hidden;
+                categoriesTab.IsEnabled = false;
                 ordersTab.Visibility = Visibility.Hidden;
                 ordersTab.IsEnabled = false;
                 warehouseTab.Visibility = Visibility.Hidden;
@@ -639,6 +643,14 @@ namespace ProjektSklep
                     ShowBasketButton.IsEnabled = true;
                     Debug.WriteLine("productsTab");
                 }
+                else if (tabItem != null && tabItem.Name == "categoriesTab") 
+                {
+                    orders = new List<Order>();
+                    warehouse_list = new List<Warehouse>();
+                    categoriesListBox.ItemsSource = db.Categories.ToList();
+                    ShowBasketButton.IsEnabled = true;
+                    Debug.WriteLine("categoriesTab");
+                }
                 else if (tabItem != null && tabItem.Name == "ordersTab")
                 {
                     warehouse_list = new List<Warehouse>();
@@ -690,18 +702,6 @@ namespace ProjektSklep
             {
                 _isHandlingSelectionChanged = false;
             }
-        }
-
-
-
-        private void orderListSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void warehouseListSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void categoriesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -939,6 +939,16 @@ namespace ProjektSklep
                     removedColumns.Add(column);
                 }
             }
+
+        }
+
+        private void editCategory(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void deleteCategory(object sender, RoutedEventArgs e)
+        {
 
         }
     }

@@ -120,8 +120,8 @@ namespace ProjektSklep
 
             foreach (ProductOrder productOrder in productOrders)
             {
-                if (!productsBoughtTime.ContainsKey(productOrder.order.orderDate)) { productsBoughtTime[productOrder.order.orderDate] = productOrder.count; }
-                else productsBoughtTime[productOrder.order.orderDate] += productOrder.count;
+                if (!productsBoughtTime.ContainsKey(productOrder.order.orderDate.Date)) { productsBoughtTime[productOrder.order.orderDate.Date] = productOrder.count; }
+                else productsBoughtTime[productOrder.order.orderDate.Date] += productOrder.count;
             }
             int iterator = 1;
 
@@ -175,13 +175,15 @@ namespace ProjektSklep
 
             if (productsBoughtTime.Count < 2)
             {               
-                Line line = new Line();
-                line.Stroke = new SolidColorBrush(Colors.Black); line.StrokeThickness = 2;
-                line.X1 = startX + iterator * actualOneItemScaleWidth;
-                line.Y1 = startY + boughtInOneDay[0] * actualOnePointScaleHeight;
-                line.X2 = 1 + startX + iterator * actualOneItemScaleWidth;
-                line.Y2 = 1 + startY + boughtInOneDay[0] * actualOnePointScaleHeight;
-                chartCanvas.Children.Add(line);
+                Rectangle rectangle = new Rectangle();
+                rectangle.RadiusX = 10;
+                rectangle.RadiusY = 10;
+                rectangle.Stroke = new SolidColorBrush(Colors.Black);
+                rectangle.StrokeThickness = 4;
+                rectangle.Stretch = Stretch.Fill;
+                chartCanvas.Children.Add(rectangle);
+                Canvas.SetLeft(rectangle, -2 + startX + iterator * actualOneItemScaleWidth);
+                Canvas.SetTop(rectangle, -2 + endY - actualOnePointScaleHeight * productsBoughtTime.Max().Value);
             }
             else
             {
