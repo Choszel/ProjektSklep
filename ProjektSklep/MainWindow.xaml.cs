@@ -22,6 +22,7 @@ using System.Collections;
 using System.Reflection;
 using System.Windows.Threading;
 using System.Xml.Linq;
+using Notification.Wpf;
 
 namespace ProjektSklep
 {
@@ -38,6 +39,7 @@ namespace ProjektSklep
         List<CartProduct> cart = new List<CartProduct>();
         Chart chart = new Chart();
         public static DispatcherTimer wheelTimer = new DispatcherTimer();
+        NotificationManager notificationManager = new NotificationManager();
 
         private MyDbContext db = new MyDbContext();
 
@@ -108,6 +110,15 @@ namespace ProjektSklep
             productListBox.ItemsSource = db.Products.ToList();
         }
 
+        private async Task ShowToast(string title, string message, NotificationType type)
+        {
+            await Task.Run(() =>
+            {
+                //Thread.Sleep(1_000);
+                notificationManager.Show(title, message, type, onClick: () => MoveBasketPanel(this, new RoutedEventArgs()));
+            });
+        }
+
         private void InitializeCategories()
         {
             categories = db.Categories.ToList();
@@ -127,6 +138,7 @@ namespace ProjektSklep
                         wheelTimerText.Text = "Koło fortuny\nJuż dostępne!";
                         wheelButton.IsEnabled = true;
                         wheelTimer.Stop();
+                        AskAboutWheel();
                     }
                 }
             }
@@ -205,6 +217,15 @@ namespace ProjektSklep
             );
             productListSelectionChanged(productListBox, args);
 
+        }
+
+        private async Task AskAboutWheel()
+        {
+            await Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+                MessageBox.Show("Pamiętaj o co 24 godzinnym kręceniu kołem fortuny!");
+            });
         }
 
         //Wyszukiwanie produktów po nazwie i kategorii
@@ -392,8 +413,12 @@ namespace ProjektSklep
                     {
                         Debug.WriteLine($"Produkt ID: {item.id}, Ilość: {item.count}");
                     }
+                    ShowToast("Koszyk", "Pomyślnie dodano produkt do koszyka!", NotificationType.Success);
                 }
+                else ShowToast("Koszyk", "Wystąpił nieoczekiwany błąd", NotificationType.Error);
             }
+            else ShowToast("Koszyk", "Wystąpił nieoczekiwany błąd", NotificationType.Error);
+
         }
 
         private void editProduct(object sender, RoutedEventArgs e)
@@ -502,6 +527,7 @@ namespace ProjektSklep
         }
 
         private bool isSliderHidden = true;
+
         private void MoveBasketPanel(object sender, RoutedEventArgs e)
         {
             if (ShowBasketButton.Content.Equals(">") || ShowBasketButton.Content.Equals("<"))
