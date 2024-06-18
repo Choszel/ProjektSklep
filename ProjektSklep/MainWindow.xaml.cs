@@ -967,6 +967,10 @@ namespace ProjektSklep
 
         private void editCategory(object sender, RoutedEventArgs e)
         {
+            Button editButton = sender as Button;
+
+            EditCategory editCategory = new EditCategory(editButton.Tag);
+
 
         }
 
