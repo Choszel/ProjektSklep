@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ProjektSklep"
         mc:Ignorable="d"
         Title="Edit Product Window"
-        Height="350" Width="800"
+        Height="Auto" Width="800"
         WindowStyle="None"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
@@ -29,6 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" MinHeight="133"/>
         </Grid.RowDefinitions>
 
@@ -36,21 +37,31 @@
         <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseEditInWaregouseWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <!-- Przycisk do edytowania produktu -->
-        <Button Content="Zmień stan zamówienia" Grid.Row="4" Margin="0,36,0,37" Click="EditProduct_Click" HorizontalAlignment="Center" Width="160" Height ="60" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Zmień stan zamówienia" Grid.Row="5" Margin="0,36,0,37" Click="EditProduct_Click" HorizontalAlignment="Center" Width="160" Height ="60" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <Label Content="Nazwa Produktu" Grid.Row="1" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
         <Label x:Name="NameTextBox" Content="Nazwa Produktu" Grid.Row="1" Margin="355,10,245,10" Foreground="{StaticResource PrimaryContentBrush}"/>
 
+        <ListBox Name="orderProductsListBox" Grid.Row="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding product.name}" Grid.Column="0"></Label>
+                        <Label Content="{Binding count}" Grid.Column="1"></Label>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label Content="Stan aktualny:" Grid.Row="3" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Label Name="orderStateLabel" Content="stan który powinien tu być" Grid.Row="3" Margin="355,10,245,10" Foreground="{StaticResource PrimaryContentBrush}"/>
 
-        <Label Content="Stan aktualny:" Grid.Row="2" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <Label Name="orderStateLabel" Content="stan który powinien tu być" Grid.Row="2" Margin="355,10,245,10" Foreground="{StaticResource PrimaryContentBrush}"/>
 
-
-        <Label Content="Stan zamówienia" Grid.Row="3" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <ComboBox Name="orderStateComboBox" Grid.Row="3" Grid.Column="2" Margin="355,10,245,10" SelectedIndex="1">
+        <Label Content="Stan zamówienia" Grid.Row="4" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <ComboBox Name="orderStateComboBox" Grid.Row="4" Grid.Column="2" Margin="355,10,245,10" SelectedIndex="1">
         </ComboBox>
-
-
-
     </Grid>
 </Window>

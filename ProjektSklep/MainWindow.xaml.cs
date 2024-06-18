@@ -467,9 +467,9 @@ namespace ProjektSklep
 
         private void editOrderButton_Click(object sender, RoutedEventArgs e)
         {
-            Button deleteButton = sender as Button;
+            Button editButton = sender as Button;
 
-            if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int orderID))
+            if (editButton.Tag != null && int.TryParse(editButton.Tag.ToString(), out int orderID))
             {
                 Order order = db.Orders.Find(orderID);
                 EditOrderState editOrderState = new EditOrderState(order);
@@ -479,18 +479,14 @@ namespace ProjektSklep
 
         private void editInWarehouse_Click(object sender, RoutedEventArgs e)
         {
-            Button deleteButton = sender as Button;
+            Button editButton = sender as Button;
 
-            if (deleteButton.Tag != null && int.TryParse(deleteButton.Tag.ToString(), out int warehouseProductId))
+            if (editButton.Tag != null && int.TryParse(editButton.Tag.ToString(), out int warehouseProductId))
             {
                 Warehouse wh = db.Warehouse.Find(warehouseProductId);
                 EditProductsInWarehouse editProductsInWarehouse = new EditProductsInWarehouse(wh);
                 editProductsInWarehouse.ShowDialog();
             }
-        }
-        private void deleteInWarehouse_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void deleteProduct(object sender, RoutedEventArgs e)

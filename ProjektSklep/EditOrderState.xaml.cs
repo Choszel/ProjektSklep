@@ -53,6 +53,8 @@ namespace ProjektSklep
 
             this.order = order;
 
+            orderProductsListBox.ItemsSource = order.ProductOrder;
+
             orderStateLabel.Content = order.state;
         }
 
