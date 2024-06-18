@@ -45,9 +45,18 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3.5*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" Name="searchTextBox" TextWrapping="Wrap" FontSize="16" VerticalContentAlignment="Center" Padding="10" HorizontalAlignment="Stretch" TextChanged="searchBoxChanged"/>
             <ComboBox Grid.Column="1" Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="categoriesComboBox_SelectionChanged"/>
+            <ComboBox Grid.Column="2" Name="SortComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="SortComboBox_SelectionChanged">
+                <ComboBoxItem Content="Od najstarszych" Tag="LatestToNewest"/>
+                <ComboBoxItem Content="Od najnowszych" Tag="NewestToLatest"/>
+                <ComboBoxItem Content="Od najtańszych" Tag="LeastExpensiveToMostExpensive"/>
+                <ComboBoxItem Content="Od najdroższych" Tag="MostExpensiveToLeastExpensive"/>
+                <ComboBoxItem Content="Alfabetycznie \/" Tag="AlphabeticallyFirstToLast"/>
+                <ComboBoxItem Content="Alfabetycznie /\" Tag="AlphabeticallyLastToFirst"/>
+            </ComboBox>
         </Grid>
 
         <Button Grid.Column="2" Name="loginButton" Content="Zaloguj Się" Margin="20" Padding="10" FontSize="15" VerticalAlignment="Center" Click="LoginButton_Click" Background="{StaticResource PrimaryDarkBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
@@ -289,6 +298,8 @@
             </TextBlock>
         </Popup>
 
-        <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}">Koło Fortuny</Button>
+        <Button Name="wheelButton" Grid.Row="1" Margin="10" Click="wheelButton_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}">
+            <TextBlock Name="wheelTimerText" HorizontalAlignment="Center" TextAlignment="Center">Koło Fortuny</TextBlock>
+        </Button>
     </Grid>
 </Window>

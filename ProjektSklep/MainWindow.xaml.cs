@@ -20,6 +20,9 @@ using System.Windows.Xps.Packaging;
 using System.Linq;
 using System.Collections;
 using System.Reflection;
+using System.Windows.Threading;
+using System.Xml.Linq;
+using System.DirectoryServices;
 
 namespace ProjektSklep
 {
@@ -35,6 +38,7 @@ namespace ProjektSklep
         List<Warehouse> warehouse_list = new List<Warehouse>();
         List<CartProduct> cart = new List<CartProduct>();
         Chart chart = new Chart();
+        public static DispatcherTimer wheelTimer = new DispatcherTimer();
 
         private MyDbContext db = new MyDbContext();
 
@@ -62,7 +66,6 @@ namespace ProjektSklep
             {
                 categoriesComboBox.Items.Add(category.name);
             }
-
         }
 
         private void InitializeDBData()
@@ -111,6 +114,26 @@ namespace ProjektSklep
             categories = db.Categories.ToList();
         }
 
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (UserType.Instance.loggedId != -1)
+            {
+                var user = db.Users.FirstOrDefault(u => u.userId == UserType.Instance.loggedId);
+                if (user != null)
+                {
+                    TimeSpan timeLeft = TimeSpan.FromHours(24) + (user.lastSpin - DateTime.Now) ?? TimeSpan.FromSeconds(0);
+                    if (timeLeft > TimeSpan.FromSeconds(0)) wheelTimerText.Text = "Koło fortuny\nDostępne za:\n" + timeLeft.ToString().Substring(0, 8);
+                    else
+                    {
+                        wheelTimerText.Text = "Koło fortuny\nJuż dostępne!";
+                        wheelButton.IsEnabled = true;
+                        wheelTimer.Stop();
+                    }
+                }
+            }
+
+        }
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             if (loginButton.Content.ToString().CompareTo("Zaloguj Się") == 0)
@@ -122,6 +145,7 @@ namespace ProjektSklep
                 if (loginWindow.ShowDialog() == true)
                 {
                     loginButton.Content = "Wyloguj Się";
+                    wheelButton.IsEnabled = false;
                     if (UserType.Instance.numericType == 0)
                     {
                         productsTab.Visibility = Visibility.Visible;
@@ -135,12 +159,18 @@ namespace ProjektSklep
                         printTab.Visibility = Visibility.Visible;
                         printTab.IsEnabled = true;
                         wheelButton.Visibility = Visibility.Hidden;
-                        wheelButton.IsEnabled = false;
+                        //wheelButton.IsEnabled = false;
                         if (!isSliderHidden) MoveBasketPanel(this, e);
                         ShowBasketButton.Content = "+";
 
 
                         mainTabs.BorderBrush = new SolidColorBrush(Colors.Black);
+                    }
+                    else
+                    {
+                        wheelTimer.Interval = TimeSpan.FromSeconds(1);
+                        wheelTimer.Tick += Timer_Tick;
+                        wheelTimer.Start();
                     }
                 }
             }
@@ -164,10 +194,9 @@ namespace ProjektSklep
                 ShowBasketButton.Content = "<";
 
                 mainTabs.SelectedIndex = 0;
-
+                wheelTimer.Stop();
+                wheelTimerText.Text = "Koło fortuny";
                 loginButton.Content = "Zaloguj Się";
-                // UserType.Instance.numericType = -1;
-
             }
 
             SelectionChangedEventArgs args = new SelectionChangedEventArgs(
@@ -239,6 +268,54 @@ namespace ProjektSklep
             {
                 Console.WriteLine("Przewijanie w górę");
             }
+        }
+
+        private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            var selectedOption = comboBox.SelectedItem as ComboBoxItem;
+            var sortOption = (SortOptions)Enum.Parse(typeof(SortOptions), selectedOption.Tag.ToString());
+            SortProducts(sortOption);
+        }
+
+        private void SortProducts(SortOptions option)
+        {
+            switch (option)
+            {
+                case SortOptions.NewestToLatest:
+                    products = products.OrderByDescending(p => p.productId).ToList();
+                    break;
+                case SortOptions.LatestToNewest:
+                    products = products.OrderBy(p => p.productId).ToList();
+                    break;
+                case SortOptions.LeastExpensiveToMostExpensive:
+                    products = products.OrderBy(p => p.price).ToList();
+                    break;
+                case SortOptions.MostExpensiveToLeastExpensive:
+                    products = products.OrderByDescending(p => p.price).ToList();
+                    break;
+                case SortOptions.AlphabeticallyFirstToLast:
+                    products = products.OrderBy(p => p.name).ToList();
+                    break;
+                case SortOptions.AlphabeticallyLastToFirst:
+                    products = products.OrderByDescending(p => p.name).ToList();
+                    break;
+            }
+
+            if (productListBox is not null)
+            {
+                productListBox.ItemsSource = null;
+                productListBox.ItemsSource = products;
+            }
+        }
+        public enum SortOptions
+        {
+            NewestToLatest,
+            LatestToNewest,
+            LeastExpensiveToMostExpensive,
+            MostExpensiveToLeastExpensive,
+            AlphabeticallyFirstToLast,
+            AlphabeticallyLastToFirst
         }
 
         private void productListSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -336,7 +413,7 @@ namespace ProjektSklep
                         Product product = products.FindLast(item => item.productId == productId);
                         float productPrice = product.price;
                         User currentUser = db.Users.FirstOrDefault(u => u.userId == UserType.Instance.loggedId);
-                        if(currentUser != null)
+                        if (currentUser != null)
                         {
                             if (((DateTime.Now - (currentUser.lastSpin ?? DateTime.Now))).Hours < 24)
                             {
@@ -470,6 +547,7 @@ namespace ProjektSklep
             };
 
             if (wheelWindow.ShowDialog() == true) ;
+            wheelButton.IsEnabled = !wheelTimer.IsEnabled;
         }
 
         private bool isSliderHidden = true;
@@ -583,7 +661,7 @@ namespace ProjektSklep
 
                     List<System.Reflection.PropertyInfo> tables = db.PrintAllTables();
                     if (selectTablePrint.Items.Count != tables.Count()) foreach (var table in tables) selectTablePrint.Items.Add(table.Name);
-            }
+                }
             }
             finally
             {
@@ -774,7 +852,7 @@ namespace ProjektSklep
                     .Include(d => d.order)
                     .Include(e => e.product)
                     .ToList();
-            chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
+                chart.generateFirstChart(productOrder, "Data zakupu", "Ilość");
                 printedItems.Children.Add(chart);
             }
             printedItems.Height = ActualHeight + 100;
