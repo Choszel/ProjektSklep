@@ -163,7 +163,7 @@ namespace ProjektSklep
                         if (!isSliderHidden) MoveBasketPanel(this, e);
                         ShowBasketButton.Content = "+";
 
-
+                       
                         mainTabs.BorderBrush = new SolidColorBrush(Colors.Black);
                     }
                     else
