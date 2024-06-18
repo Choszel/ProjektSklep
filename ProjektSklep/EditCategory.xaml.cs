@@ -19,7 +19,7 @@ namespace ProjektSklep
     /// </summary>
     public partial class EditCategory : Window
     {
-        public EditCategory()
+        public EditCategory(int categoryId)
         {
             InitializeComponent();
         }
