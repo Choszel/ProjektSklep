@@ -125,6 +125,7 @@ namespace ProjektSklep
 
             if(wszystkie == null)
             {
+                wszystkie = new Category();
                 wszystkie.name = "Wszystko";
                 db.Categories.Add(wszystkie);
                 db.SaveChanges();
