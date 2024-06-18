@@ -20,7 +20,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Button Name="closeWheelButton" HorizontalAlignment="Right" Background="Transparent" Padding="1" Click="closeWheelButton_Click">
+        <Button Name="closeWheelButton" HorizontalAlignment="Right" Background="Transparent" Padding="1" Click="closeWheelButton_Click" BorderThickness="0">
             <Image  Source="./Resources/close_icon.png" Width="40" HorizontalAlignment="Right"/>
         </Button>
 

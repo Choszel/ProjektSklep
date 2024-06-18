@@ -358,7 +358,7 @@ namespace ProjektSklep
                     Button addButton = FindVisualChild<Button>(listBoxItem, "addProductButton");
                     Button editButton = FindVisualChild<Button>(listBoxItem, "editProductButton");
                     Button deleteButton = FindVisualChild<Button>(listBoxItem, "deleteProductButton");
-
+                    Grid grid = new Grid();
                     // Jeśli znaleziono productDesc, zmień jego widoczność
                     if (product == listBox.SelectedItem)
                     {
@@ -475,14 +475,7 @@ namespace ProjektSklep
                         basketListBox.Items.Add(addedCartProduct);
                     }
 
-
-                    float wholePriceSum = 0;
-                    foreach (var item in cart)
-                    {
-                        wholePriceSum += item.singlePrice * item.count;
-                    }
-
-                    wholePrice.Content = wholePriceSum + " PLN";
+                    countSum();
 
                     foreach (var item in cart)
                     {
@@ -494,6 +487,17 @@ namespace ProjektSklep
             }
             else ShowToast("Koszyk", "Wystąpił nieoczekiwany błąd", NotificationType.Error);
 
+        }
+
+        private void countSum()
+        {
+            float wholePriceSum = 0;
+            foreach (var item in cart)
+            {
+                wholePriceSum += item.singlePrice * item.count;
+            }
+
+            wholePrice.Content = wholePriceSum + " PLN";
         }
 
         private void editProduct(object sender, RoutedEventArgs e)
@@ -973,6 +977,40 @@ namespace ProjektSklep
         private void deleteCategory(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void addProductCount(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button senderButton)
+            {
+                cart.Find(p => p.id == int.Parse(senderButton.Tag.ToString())).count++;
+                countSum();
+            }
+            foreach (var item in cart)
+            {
+                Debug.WriteLine($"Produkt ID: {item.id}, Ilość: {item.count}");
+            }
+        }
+
+        private void subtractProductCount(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button senderButton)
+            {
+                var cartProduct = cart.Find(p => p.id == int.Parse(senderButton.Tag.ToString()));
+
+                if (cartProduct.count == 1)
+                {
+                    cart.Remove(cartProduct);
+                    basketListBox.Items.Remove(cartProduct);
+                }
+                else cartProduct.count--;
+                
+                countSum();
+            }
+            foreach (var item in cart)
+            {
+                Debug.WriteLine($"Produkt ID: {item.id}, Ilość: {item.count}");
+            }
         }
     }
 }
