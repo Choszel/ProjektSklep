@@ -123,6 +123,7 @@ namespace ProjektSklep
             categories = db.Categories.ToList();
 
             Category wszystkie = categories.Find(category => category.name == "Wszystko");
+
             int wszystkieIndex= categories.IndexOf(wszystkie);
 
             categories[wszystkieIndex] = categories[0];
