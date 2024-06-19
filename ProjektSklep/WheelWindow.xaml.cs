@@ -24,6 +24,7 @@ namespace ProjektSklep
         {
             InitializeComponent();
             categories = db.Categories.ToList();
+            categories.Remove(db.Categories.FirstOrDefault(cat => cat.name == "Wszystko"));
             Random rndCategory = new Random();
             Random rndPromotion = new Random();
             double x = 150, y = 1;
