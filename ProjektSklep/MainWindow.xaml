@@ -174,7 +174,7 @@
                                             <Label Name="orderPrice" Grid.Row="3" Grid.RowSpan="2" Content="{Binding totalPrice, StringFormat=\{0\} PLN}"></Label>
                                             <Label Name="orderDiscount" Grid.Row="3" Grid.Column="1" Content="{Binding discount}"/>
                                             <Label Name="orderState" Grid.Row="2" Grid.Column="2" Content="{Binding state}"/>
-                                            <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Zobacz Szegóły/Edytuj Stan" Style="{StaticResource SecondaryButton}"/>
+                                            <Button Name="editOrderButton" Grid.Row="4" Grid.Column="2" Click="editOrderButton_Click" Padding="5" Margin="5" Tag="{Binding orderId}" Content="Zobacz Szegóły/Edytuj Stan" Width="250" Height="25" Style="{StaticResource SecondaryButton}"/>
                                         </Grid>
                                     </GroupBox>
                                 </DataTemplate>

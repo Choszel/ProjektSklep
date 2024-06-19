@@ -25,7 +25,13 @@
             </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="{StaticResource BackgroundBrush}">
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="MediumSlateBlue" Offset="1"/>
+            <GradientStop Color="White" Offset="0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.9*"/>
             <RowDefinition Height="*"/>
