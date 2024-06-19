@@ -68,7 +68,7 @@
             Zakręć
         </Button>
 
-        <Label Name="cooldownLabel" Grid.Row="4" Foreground="Red" FontSize="12" HorizontalAlignment="Center" Visibility="Collapsed" Content="Zakręć kołem i wygraj zniżkę!"/>
+        <Label Name="cooldownLabel" Grid.Row="4" Foreground="Red" FontSize="16" HorizontalAlignment="Center" Visibility="Collapsed" Content="Zakręć kołem i wygraj zniżkę!"/>
 
     </Grid>
 </Window>

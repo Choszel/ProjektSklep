@@ -62,6 +62,17 @@ namespace ProjektSklep
             }
 
             orderListBox.ItemsSource = db.Orders.ToList();
+
+            LinearGradientBrush mainWindowBackgroundBrush = new LinearGradientBrush();
+            mainWindowBackgroundBrush.StartPoint = new Point(0, 0); // Punkt początkowy w lewym górnym rogu
+            mainWindowBackgroundBrush.EndPoint = new Point(1, 1); // Punkt końcowy w prawym dolnym rogu
+
+            mainWindowBackgroundBrush.GradientStops.Add(new GradientStop(Colors.MediumSlateBlue, 1.0));
+            mainWindowBackgroundBrush.GradientStops.Add(new GradientStop(Colors.White, 0.0));
+
+            this.Background = mainWindowBackgroundBrush;
+
+            slidingBasket.Background = mainWindowBackgroundBrush;
         }
 
         private void InitializeDBData()
@@ -669,7 +680,6 @@ namespace ProjektSklep
                 productWindow.Closed += (s, args) =>
                 {
                     this.Opacity = 1;
-                    InitializeProducts();
                 };
                 productWindow.Show();
             }
@@ -709,23 +719,21 @@ namespace ProjektSklep
 
                 if (tabItem != null && tabItem.Name == "productsTab")
                 {
-                    orders = new List<Order>();
-                    warehouse_list = new List<Warehouse>();
+                    clearDeclarations();
                     ShowBasketButton.IsEnabled = true;
                     Debug.WriteLine("productsTab");
                 }
                 else if (tabItem != null && tabItem.Name == "categoriesTab") 
                 {
                     db = new MyDbContext();
-                    orders = new List<Order>();
-                    warehouse_list = new List<Warehouse>();
+                    clearDeclarations();
                     categoriesListBox.ItemsSource = db.Categories.ToList();
                     ShowBasketButton.IsEnabled = true;
                     Debug.WriteLine("categoriesTab");
                 }
                 else if (tabItem != null && tabItem.Name == "ordersTab")
                 {
-                    warehouse_list = new List<Warehouse>();
+                    clearDeclarations();
                     orderListBox.ItemsSource = db.Orders.ToList();
                     ShowBasketButton.IsEnabled = false;
                     Debug.WriteLine("ordersTab");
@@ -733,7 +741,7 @@ namespace ProjektSklep
                 else if (tabItem != null && tabItem.Name == "warehouseTab")
                 {
                     db = new MyDbContext();
-                    orders = new List<Order>();
+                    clearDeclarations();                    
                     warehouseListBox.ItemsSource = db.Warehouse.ToList();
                     ShowBasketButton.IsEnabled = false;
                     Debug.WriteLine("warehouseTab");
@@ -764,8 +772,7 @@ namespace ProjektSklep
                 {
                     chartGrid.Children.Remove(chart);
                     chartFirstValue.Items.Clear();
-                    orders = new List<Order>();
-                    warehouse_list = new List<Warehouse>();
+                    clearDeclarations();
 
                     List<System.Reflection.PropertyInfo> tables = db.PrintAllTables();
                     if (selectTablePrint.Items.Count != tables.Count()) foreach (var table in tables) selectTablePrint.Items.Add(table.Name);
@@ -775,6 +782,14 @@ namespace ProjektSklep
             {
                 _isHandlingSelectionChanged = false;
             }
+        }
+
+        private void clearDeclarations()
+        {
+            chartFirstValue.Items.Clear();
+            orders = new List<Order>();
+            warehouse_list = new List<Warehouse>();
+            chartGrid.Children.Remove(chart);
         }
 
         private void categoriesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -1,4 +1,5 @@
-﻿using ProjektSklep.Model;
+﻿using Notification.Wpf;
+using ProjektSklep.Model;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -130,6 +131,16 @@ namespace ProjektSklep
         private void closeWheelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
+        }
+
+        private async Task noMoreSpins()
+        {
+            await Task.Run(() =>
+            {
+                Thread.Sleep(3_000);
+                spinWheel.IsEnabled = false;
+            });
+            spinWheel.IsEnabled = true;
         }
 
         private void spinWheel_Click(object sender, RoutedEventArgs e)

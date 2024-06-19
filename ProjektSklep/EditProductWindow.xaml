@@ -86,6 +86,6 @@
         <Label Content="Zdjęcie:" Grid.Row="6" Margin="20,43,719,58" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <!-- Podgląd wybranego zdjęcia -->
-        <Image x:Name="ImagePreview" Grid.Row="6" Margin="415,10,235,10" Stretch="Uniform"/>
+        <Image x:Name="ImagePreview" Grid.Row="6" Margin="415,10,235,10" Stretch="Uniform"  MaxHeight="113"/>
     </Grid>
 </Window>
