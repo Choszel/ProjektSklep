@@ -22,7 +22,6 @@ namespace ProjektSklep
     public partial class EditCategory : Window
     {
         Category category = new Category();
-
         public string InputCategory
         {
             get
@@ -40,9 +39,11 @@ namespace ProjektSklep
             InitializeComponent();
 
             MyDbContext db = new MyDbContext();
-            category = db.Categories.Find(categoryId);
-
-            categoryTextBox.Text = category.name;
+            if (categoryId != -1)
+            {
+                category = db.Categories.Find(categoryId);
+                categoryTextBox.Text = category.name;
+            }
         }
 
         private void CloseEditProductWindow(object sender, RoutedEventArgs e)
@@ -72,7 +73,7 @@ namespace ProjektSklep
 
             if (errorMessage != "")
             {
-                MessageBox.Show(errorMessage, "Błąd Rejestracji", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(errorMessage, "Błąd kategorii", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
             else

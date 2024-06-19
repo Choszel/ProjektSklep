@@ -151,10 +151,10 @@ namespace ProjektSklep
             categories[wszystkieIndex] = categories[0];
             categories[0] = wszystkie;
 
+            categoriesListBox.ItemsSource = categories;
             categoriesComboBox.ItemsSource = categories;
             categoriesComboBox.SelectedItem = db.Categories.Find(4);
             categoriesComboBox.SelectionChanged += categoriesComboBox_SelectionChanged;
-            categoriesListBox.ItemsSource = categories;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -545,7 +545,7 @@ namespace ProjektSklep
 
                 Product product = products.First(item => item.productId == productId);
 
-                EditProductWindow productEditWindow = new EditProductWindow(product, categories);
+                EditProductWindow productEditWindow = new EditProductWindow(productId, categories);
 
                 if (productEditWindow.ShowDialog() == true)
                 {
@@ -640,7 +640,13 @@ namespace ProjektSklep
 
         private void MoveBasketPanel(object sender, RoutedEventArgs e)
         {
-            MoveBasketPanel(sender, e, false);
+            TabItem tabItem = mainTabs.SelectedItem as TabItem;
+            if (tabItem.Name == "categoriesTab")
+            {
+                addCategory(sender, e);
+            }
+            else
+                MoveBasketPanel(sender, e, false);
         }
 
         private void SpecialMoveBasketPanel(object sender, RoutedEventArgs e)
@@ -1030,6 +1036,20 @@ namespace ProjektSklep
 
         }
 
+        private void addCategory(object sender, RoutedEventArgs e)
+        {
+            int categoryId = -1;
+
+            EditCategory editCategory = new EditCategory(categoryId);
+            if (editCategory.ShowDialog() == true)
+            {
+                db = new MyDbContext();
+                InitializeCategories();
+                InitializeProducts();
+            }
+
+        }
+
         private void editCategory(object sender, RoutedEventArgs e)
         {
             Button editButton = sender as Button;
@@ -1065,8 +1085,13 @@ namespace ProjektSklep
                 MessageBox.Show("Nie możesz usunąć tej kategorii");
                 return;
             }
-            if(category!=null)db.Categories.Remove(category);
-            db.SaveChanges();
+            if (category != null)
+            {
+                if(MessageBox.Show("Właśnie usuwasz kategorię " + category.name +". Czy chcesz kontynuować?","Potwierdzenie usunięcia",MessageBoxButton.YesNo,MessageBoxImage.Warning)==MessageBoxResult.Yes)
+                    db.Categories.Remove(category);
+            }
+
+                db.SaveChanges();
             InitializeCategories();
             InitializeProducts();
         }
