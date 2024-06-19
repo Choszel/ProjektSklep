@@ -155,6 +155,7 @@ namespace ProjektSklep
             categoriesComboBox.ItemsSource = categories;
             categoriesComboBox.SelectedItem = db.Categories.Find(4);
             categoriesComboBox.SelectionChanged += categoriesComboBox_SelectionChanged;
+            categoriesComboBox.SelectedIndex = 0;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
