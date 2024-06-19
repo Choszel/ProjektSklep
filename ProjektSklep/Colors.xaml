@@ -138,7 +138,6 @@
         <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ErrorContentBrush}"/>
         <Setter Property="FontSize" Value="14"/>
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">

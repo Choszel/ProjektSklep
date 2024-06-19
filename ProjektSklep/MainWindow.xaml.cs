@@ -143,6 +143,7 @@ namespace ProjektSklep
             categoriesComboBox.ItemsSource = categories;
             categoriesComboBox.SelectedItem = db.Categories.Find(4);
             categoriesComboBox.SelectionChanged += categoriesComboBox_SelectionChanged;
+            categoriesListBox.ItemsSource = categories;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -1049,7 +1050,8 @@ namespace ProjektSklep
                 MessageBox.Show("Nie możesz usunąć tej kategorii");
                 return;
             }
-
+            if(category!=null)db.Categories.Remove(category);
+            db.SaveChanges();
             InitializeCategories();
             InitializeProducts();
         }
