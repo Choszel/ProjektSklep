@@ -1,5 +1,6 @@
 ﻿using Notification.Wpf;
 using ProjektSklep.Model;
+using System.Data.Entity.Migrations;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -227,6 +228,7 @@ namespace ProjektSklep
                 currentUser.lastSpin = DateTime.Now;
                 currentUser.currDiscount = $"{promo}|{categoryName}|{catID}";
 
+                db.Users.AddOrUpdate(currentUser);
                 db.SaveChanges();
             }
             else

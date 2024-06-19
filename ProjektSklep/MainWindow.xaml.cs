@@ -449,6 +449,8 @@ namespace ProjektSklep
 
         private void addToCart(object sender, RoutedEventArgs e)
         {
+            db = new MyDbContext();
+
             if (UserType.Instance.numericType == -1)
             {
                 loginButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
@@ -502,7 +504,11 @@ namespace ProjektSklep
                                 if (currentUser.currDiscount != null)
                                 {
                                     var discount = currentUser.currDiscount.Split("|");
-                                    if (product.categoryId == int.Parse(discount[2])) productPrice -= (productPrice * int.Parse(discount[0])) / 100;
+                                    if (product.categoryId == int.Parse(discount[2]))
+                                    {
+                                        productPrice -= (productPrice * float.Parse(discount[0])) / 100;
+                                        //MessageBox.Show((productPrice * float.Parse(discount[0]) / 100).ToString())
+                                    }
                                 }
                             }
                         }
