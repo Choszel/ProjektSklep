@@ -86,8 +86,8 @@
         </DockPanel>
 
        
-        <Button Content="Zamów" Grid.Row="5" Click="PlaceOrderButton_Click" Margin="10" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Zamów" Grid.Row="5" Click="PlaceOrderButton_Click" Margin="10" Style="{StaticResource PrimaryButton}"/>
 
-        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10" Click="CloseShippingWindow_Click" Width="22" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10" Click="CloseShippingWindow_Click" Width="22" Style="{StaticResource PrimaryButton}"/>
     </Grid>
 </Window>

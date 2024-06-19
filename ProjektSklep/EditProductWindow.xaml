@@ -44,10 +44,10 @@
         </Grid.ColumnDefinitions>
 
         <!-- Przycisk do zamykania okna -->
-        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="3" Click="CloseEditProductWindow" Width="23" Height="20" Margin="10" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="3" Click="CloseEditProductWindow" Width="23" Height="20" Margin="10" Style="{StaticResource PrimaryButton}"/>
 
         <!-- Przycisk do dodawania produktu -->
-        <Button Content="Edytuj produkt" Grid.Row="7" Margin="10,0,0,0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Click="EditProduct_Click" VerticalAlignment="Center" Padding="10 5" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Edytuj produkt" Grid.Row="7" Margin="10,0,0,0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Click="EditProduct_Click" VerticalAlignment="Center" Padding="10 5" Width="120" Height="30" Style="{StaticResource PrimaryButton}"/>
 
         <Label Content="Nazwa:" Grid.Row="1" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
         <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="1" Margin="0 10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
@@ -109,7 +109,7 @@
         </TextBox>
 
         <!-- Przycisk do wyboru zdjęcia -->
-        <Button Content="Wybierz zdjęcie" Grid.Row="6" Grid.Column="0"  Margin="10 50" Click="SelectImage_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Wybierz zdjęcie" Grid.Row="6" Grid.Column="0"  Margin="10 50" Click="SelectImage_Click" Style="{StaticResource PrimaryButton}"/>
         <!-- Label dla przycisku wyboru zdjęcia -->
         <Label Content="Zdjęcie:" Grid.Row="6" Grid.Column="1"  VerticalAlignment="Center" Foreground="{StaticResource PrimaryContentBrush}"/>
 

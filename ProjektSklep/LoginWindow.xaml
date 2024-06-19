@@ -38,7 +38,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="3" Click="CloseLoginWindow" Width="23" Height="20" Margin="10" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="3" Click="CloseLoginWindow" Width="23" Height="20" Margin="10" Style="{StaticResource PrimaryButton}"/>
         <Label Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Login:</Label>
         <TextBox Name="loginTextBox" Grid.Column="1" Grid.Row="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
             <TextBox.Text>
