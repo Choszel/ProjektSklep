@@ -35,7 +35,7 @@
         <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" Margin="10" Click="CloseEditProductWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <Label VerticalAlignment="Center" Grid.Row="1">Nazwa:</Label>
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="categoryTextBox" Validation.ErrorTemplate="{StaticResource validationTemplate}">
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="categoryTextBox" Validation.ErrorTemplate="{StaticResource validationTemplate}" VerticalContentAlignment="Center">
             <TextBox.Text>
                 <Binding Path="InputCategory" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
                     <Binding.ValidationRules>
@@ -44,6 +44,6 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Padding="10 0" Margin="10 5" Style="{StaticResource PrimaryButton}" Click="Button_Click">Zatwierdź</Button>
+        <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Padding="10 0" Margin="10 5" Style="{StaticResource PrimaryButton}" Click="Button_Click">Zatwierdź</Button>
     </Grid>
 </Window>

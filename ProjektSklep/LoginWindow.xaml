@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="LoginWindow" Height="250" Width="550"
         ResizeMode="NoResize"
+        WindowStyle="None"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <ResourceDictionary>
@@ -25,7 +26,7 @@
     </Window.Resources>
     <Grid Name="loginGrid" Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.8*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Name="secondRowInLogin" Height="0.01*"></RowDefinition>
@@ -37,6 +38,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="3" Click="CloseLoginWindow" Width="23" Height="20" Margin="10" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
         <Label Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Login:</Label>
         <TextBox Name="loginTextBox" Grid.Column="1" Grid.Row="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
             <TextBox.Text>

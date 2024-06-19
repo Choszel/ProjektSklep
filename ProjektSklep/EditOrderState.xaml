@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:ProjektSklep"
         mc:Ignorable="d"
         Title="Edit Product Window"
-        Height="Auto" Width="800"
+        Height="Auto" Width="400"
+        MinHeight="200"
         WindowStyle="None"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
@@ -23,26 +24,29 @@
             </ControlTemplate>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="{StaticResource BackgroundBrush}">
+    <Grid Background="{StaticResource BackgroundBrush}" Height="Auto" Name="editOrderStateGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition Height="Auto" MaxHeight="40"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" MinHeight="133"/>
+            <RowDefinition Height="Auto" MinHeight="50"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
         <!-- Przycisk do zamykania okna -->
-        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseEditInWaregouseWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="10" Click="CloseEditInWaregouseWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
         <!-- Przycisk do edytowania produktu -->
-        <Button Content="Zmień stan zamówienia" Grid.Row="5" Margin="0,36,0,37" Click="EditProduct_Click" HorizontalAlignment="Center" Width="160" Height ="60" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Zmień stan zamówienia" Grid.Row="5" Grid.ColumnSpan="2" VerticalAlignment="Center" Padding="10 5" HorizontalAlignment="Center" Click="EditProduct_Click" Margin="10" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
 
-        <Label Content="Nazwa Produktu" Grid.Row="1" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <Label x:Name="NameTextBox" Content="Nazwa Produktu" Grid.Row="1" Margin="355,10,245,10" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Label Content="Nazwa Produktu i ilosć" Grid.Row="1" Margin="10" Foreground="{StaticResource PrimaryContentBrush}"/>
 
-        <ListBox Name="orderProductsListBox" Grid.Row="2">
+        <ListBox Name="orderProductsListBox" Grid.Row="2" Grid.ColumnSpan="2">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -56,12 +60,12 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Label Content="Stan aktualny:" Grid.Row="3" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <Label Name="orderStateLabel" Content="stan który powinien tu być" Grid.Row="3" Margin="355,10,245,10" Foreground="{StaticResource PrimaryContentBrush}"/>
 
+        <Label Grid.Row="3">Aktualny stan zamówienia:</Label>
+        <Label Name="orderStateLabel" Grid.Row="3" Grid.Column="1" Margin="5 0">Stan zamówienia</Label>
 
-        <Label Content="Stan zamówienia" Grid.Row="4" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        <ComboBox Name="orderStateComboBox" Grid.Row="4" Grid.Column="2" Margin="355,10,245,10" SelectedIndex="1">
+        <Label Content="Stan zamówienia" Grid.Row="4" Margin="10" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <ComboBox Name="orderStateComboBox"  Grid.Row="4" Grid.Column="1" Margin="10" SelectedIndex="1">
         </ComboBox>
     </Grid>
 </Window>

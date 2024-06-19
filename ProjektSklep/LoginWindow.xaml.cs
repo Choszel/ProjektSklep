@@ -220,5 +220,10 @@ namespace ProjektSklep
                 passwordErrorLabel.Visibility= Visibility.Hidden;
             }
         }
+
+        private void CloseLoginWindow(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
