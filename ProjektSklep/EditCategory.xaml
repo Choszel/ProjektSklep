@@ -8,7 +8,7 @@
         WindowStyle="None"
         Title="Edycja Kategorii" Height="130" Width="300"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
-   
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,7 +32,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" Margin="10" Click="CloseEditProductWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" Margin="10" Click="CloseEditProductWindow" Width="23" Height="20" Style="{StaticResource PrimaryButton}"/>
 
         <Label VerticalAlignment="Center" Grid.Row="1">Nazwa:</Label>
         <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="categoryTextBox" Validation.ErrorTemplate="{StaticResource validationTemplate}" VerticalContentAlignment="Center">

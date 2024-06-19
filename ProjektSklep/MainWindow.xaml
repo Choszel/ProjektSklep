@@ -50,7 +50,7 @@
 
             <TextBox Grid.Column="0" Name="searchTextBox" TextWrapping="Wrap" FontSize="16" VerticalContentAlignment="Center" Padding="10" TextChanged="searchBoxChanged" Margin="0,0,129,0"/>
             <ComboBox Name="categoriesComboBox" SelectedIndex="0" FontSize="15" Padding="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="categoriesComboBox_SelectionChanged" Grid.ColumnSpan="2" Margin="209,0,53,0">
-                    <ComboBox.ItemTemplate >
+                <ComboBox.ItemTemplate >
                     <DataTemplate >
                         <Label Tag="{Binding categoryId}" Content="{Binding name}"></Label>
                     </DataTemplate>
@@ -304,14 +304,14 @@
                 <ListBox Grid.Row="1" Name="basketListBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid Width="145">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="2.5*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Row="0" Text="{Binding name, Mode=TwoWay}" FontWeight="Bold"/>
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -319,8 +319,8 @@
                                     <TextBlock Name="count" Text="{Binding Path=count}" Margin="5,0"/>
                                     <TextBlock Text="{Binding singlePrice, StringFormat=\{0\} PLN}" Margin="20,0"/>
                                 </StackPanel>
-                                <Button Name="incrementButton" Tag="{Binding id}" Grid.Column="1" Padding="0 5"  Style="{StaticResource IncrementButton}" Click="addProductCount">+</Button>
-                                <Button Name="decrementButton" Tag="{Binding id}" Grid.Row="1" Grid.Column="1" Padding="0 5"  Style="{StaticResource DecrementButton}" Click="subtractProductCount">-</Button>
+                                <Button Name="incrementButton" Tag="{Binding id}" Grid.Column="1" Padding="0 5"  Style="{StaticResource IncrementButton}" Click="addProductCount" HorizontalAlignment="Right">+</Button>
+                                <Button Name="decrementButton" Tag="{Binding id}" Grid.Row="1" Grid.Column="1" Padding="0 5"  Style="{StaticResource DecrementButton}" Click="subtractProductCount" HorizontalAlignment="Right">-</Button>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

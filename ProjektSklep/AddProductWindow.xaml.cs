@@ -177,6 +177,7 @@ namespace ProjektSklep
             }
 
             MessageBox.Show("Produkt został dodany pomyślnie.", "Dodano produkt", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.DialogResult = true;
         }
 
         private bool isDataValid()
