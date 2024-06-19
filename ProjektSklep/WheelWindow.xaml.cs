@@ -1,5 +1,6 @@
 ﻿using Notification.Wpf;
 using ProjektSklep.Model;
+using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -134,19 +135,18 @@ namespace ProjektSklep
             this.DialogResult = true;
         }
 
-        //private async Task noMoreSpins()
-        //{
-        //    await Task.Run(() =>
-        //    {
-        //        Thread.Sleep(3_000);
-        //        spinWheel.IsEnabled = false;
-        //    });
-        //    spinWheel.IsEnabled = true;
-        //}
+        private async Task noMoreSpins()
+        {
+            await Task.Run(() =>
+            {
+                Thread.Sleep(3_000);
+                spinWheel.IsEnabled = false;
+            });
+            spinWheel.IsEnabled = true;
+        }
 
         private void spinWheel_Click(object sender, RoutedEventArgs e)
         {
-            //noMoreSpins();
             spinWheel.Visibility = Visibility.Hidden;
             cooldownLabel.Visibility = Visibility.Hidden;
 
@@ -185,7 +185,7 @@ namespace ProjektSklep
                 {
                     // Update the currently logged user data
                     UpdateUserDiscount(promo, categories[catID-1].name, catID);
-                    
+
                     MessageBox.Show($"Uzyskano {promo}% zniżki na\nprodukty z kategorii {categories[catID-1].name}.", "Gratulacje!");
 
                     MainWindow.wheelTimer.Start();                   
@@ -228,8 +228,9 @@ namespace ProjektSklep
             {
                 currentUser.lastSpin = DateTime.Now;
                 currentUser.currDiscount = $"{promo}|{categoryName}|{catID}";
+
+                db.Users.AddOrUpdate(currentUser);
                 db.SaveChanges();
-                Debug.WriteLine(currentUser.lastSpin);
             }
             else
             {
