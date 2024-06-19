@@ -64,10 +64,11 @@ namespace ProjektSklep
             }
         }
 
-        public EditProductWindow(Product product, List<Category> categories)
+        public EditProductWindow(int productId, List<Category> categories)
         {
+            MyDbContext myDbContext = new MyDbContext();
+            product = myDbContext.Products.Find(productId);
             this.categories = categories;
-            this.product = product;
             InitializeComponent();
             PriceTextBox.Text = product.price.ToString();
             DescriptionTextBox.Text = product.description.ToString();

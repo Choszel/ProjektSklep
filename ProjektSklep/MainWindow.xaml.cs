@@ -534,7 +534,7 @@ namespace ProjektSklep
 
                 Product product = products.First(item => item.productId == productId);
 
-                EditProductWindow productEditWindow = new EditProductWindow(product, categories);
+                EditProductWindow productEditWindow = new EditProductWindow(productId, categories);
 
                 if (productEditWindow.ShowDialog() == true)
                 {
