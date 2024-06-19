@@ -208,8 +208,9 @@ namespace ProjektSklep
                         //wheelButton.IsEnabled = false;
                         if (!isSliderHidden) SpecialMoveBasketPanel(this, e);
                         ShowBasketButton.Content = "+";
+                        ShowBasketButton.ToolTip = "Dodaj produkt";
 
-                       
+
                         mainTabs.BorderBrush = new SolidColorBrush(Colors.Black);
                     }
                     else
@@ -241,6 +242,7 @@ namespace ProjektSklep
                 wheelButton.Visibility = Visibility.Visible;
                 wheelButton.IsEnabled = true;
                 ShowBasketButton.Content = "<";
+                ShowBasketButton.ToolTip = "Wysuń koszyk";
 
                 mainTabs.SelectedIndex = 0;
                 wheelTimer.Stop();
@@ -673,12 +675,18 @@ namespace ProjektSklep
                 // Zmiana kierunku strzałki w zależności od sliderHidden
                 ShowBasketButton.Content = isSliderHidden ? ">" : "<";
 
+                if(ShowBasketButton.Content.Equals("<"))
+                {
+                    ShowBasketButton.ToolTip = "Wysuń koszyk";
+                }
+                else
+                    ShowBasketButton.ToolTip = "Schowaj koszyk";
+
                 isSliderHidden = !isSliderHidden;
             }
             else
             {
                 AddProductWindow productWindow = new AddProductWindow();
-                productWindow.Owner = this;
                 productWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
                 this.Opacity = 0.4;
@@ -687,7 +695,21 @@ namespace ProjektSklep
                 {
                     this.Opacity = 1;
                 };
-                productWindow.Show();
+                if(productWindow.ShowDialog() == true)
+                {
+                    InitializeProducts();
+
+                    /*
+                    SelectionChangedEventArgs args = new SelectionChangedEventArgs(
+                        Selector.SelectionChangedEvent,
+                        removedItems: new List<Product>(),
+                        addedItems: new List<Product>()
+                    );
+                    productListSelectionChanged(productListBox, args);
+                    */
+                }
+
+
             }
         }
 
@@ -727,6 +749,12 @@ namespace ProjektSklep
                 {
                     clearDeclarations();
                     ShowBasketButton.IsEnabled = true;
+                    if (UserType.Instance.numericType == 0)
+                    {
+                        ShowBasketButton.ToolTip = "Dodaj produkt";
+                    }
+                    else
+                        ShowBasketButton.ToolTip = "Wysuń koszyk";
                     Debug.WriteLine("productsTab");
                 }
                 else if (tabItem != null && tabItem.Name == "categoriesTab") 
@@ -734,6 +762,7 @@ namespace ProjektSklep
                     db = new MyDbContext();
                     clearDeclarations();
                     categoriesListBox.ItemsSource = db.Categories.ToList();
+                    ShowBasketButton.ToolTip = "Dodaj kategorię";
                     ShowBasketButton.IsEnabled = true;
                     Debug.WriteLine("categoriesTab");
                 }
