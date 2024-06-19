@@ -33,15 +33,15 @@
         </Grid.RowDefinitions>
 
         <!-- Przycisk do zamykania okna -->
-        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseEditInWaregouseWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseEditInWaregouseWindow" Width="23" Height="20" Style="{StaticResource PrimaryButton}"/>
 
         <!-- Przycisk do edytowania produktu -->
-        <Button Content="Edytuj produkt" Grid.Row="7" Margin="10,10,0,10" Click="EditProduct_Click" HorizontalAlignment="Left" Width="81" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Edytuj produkt" Grid.Row="7" Margin="10,10,0,10" Click="EditProduct_Click" HorizontalAlignment="Left" Width="120" Height="50" Style="{StaticResource PrimaryButton}"/>
 
         <Label Content="Nazwa Produktu" Grid.Row="1" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
         <Label x:Name="NameTextBox" Content="Nazwa Produktu" Grid.Row="1" Margin="355,10,245,10" Foreground="{StaticResource PrimaryContentBrush}"/>
-        
-        
+
+
         <Label Content="Stan aktualny:" Grid.Row="2" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
         <TextBox x:Name="ActualStateTextBox" Grid.Row="2" Margin="355,10,245,10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
             <TextBox.Text>

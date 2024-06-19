@@ -80,8 +80,8 @@
             </TextBox.Text>
         </TextBox>
 
-        <Button Content="Zamów" Grid.Row="8" Click="PlaceOrderButton_Click" Margin="5,30,5,-20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Zamów" Grid.Row="8" Click="PlaceOrderButton_Click" Margin="5,30,5,-20" Style="{StaticResource PrimaryButton}"/>
 
-        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="352,0,0,0" Click="CloseShippingWindow_Click" Width="22" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="352,0,0,0" Click="CloseShippingWindow_Click" Width="22" Style="{StaticResource PrimaryButton}"/>
     </Grid>
 </Window>

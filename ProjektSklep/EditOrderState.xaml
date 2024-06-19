@@ -34,10 +34,10 @@
         </Grid.RowDefinitions>
 
         <!-- Przycisk do zamykania okna -->
-        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseEditInWaregouseWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseEditInWaregouseWindow" Width="23" Height="20" Style="{StaticResource PrimaryButton}"/>
 
         <!-- Przycisk do edytowania produktu -->
-        <Button Content="Zmień stan zamówienia" Grid.Row="5" Margin="0,36,0,37" Click="EditProduct_Click" HorizontalAlignment="Center" Width="160" Height ="60" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Zmień stan zamówienia" Grid.Row="5" Margin="0,36,0,37" Click="EditProduct_Click" HorizontalAlignment="Center" Width="170" Height ="50" Style="{StaticResource PrimaryButton}"/>
 
         <Label Content="Nazwa Produktu" Grid.Row="1" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
         <Label x:Name="NameTextBox" Content="Nazwa Produktu" Grid.Row="1" Margin="355,10,245,10" Foreground="{StaticResource PrimaryContentBrush}"/>

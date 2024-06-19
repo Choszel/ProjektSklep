@@ -38,10 +38,10 @@
         </Grid.RowDefinitions>
 
         <!-- Przycisk do zamykania okna -->
-        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseAddProductWindow" Width="23" Height="20" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="X" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="767,0,0,0" Click="CloseAddProductWindow" Width="23" Height="20" Style="{StaticResource PrimaryButton}"/>
 
         <!-- Przycisk do dodawania produktu -->
-        <Button Content="Dodaj produkt" Grid.Row="7" Margin="10,0,0,0" Click="AddProduct_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Height="27" Width="81" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Dodaj produkt" Grid.Row="7" Margin="10,0,0,0" Click="AddProduct_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Height="27" Width="110" Style="{StaticResource PrimaryButton}"/>
 
         <Label Content="Nazwa:" Grid.Row="1" Margin="10,10,10,10" Foreground="{StaticResource PrimaryContentBrush}"/>
         <TextBox x:Name="NameTextBox" Grid.Row="1" Margin="355,10,245,10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
@@ -103,7 +103,7 @@
         </TextBox>
 
         <!-- Przycisk do wyboru zdjęcia -->
-        <Button Content="Wybierz zdjęcie" Grid.Row="6" Margin="106,38,525,48" Click="SelectImage_Click" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}"/>
+        <Button Content="Wybierz zdjęcie" Grid.Row="6" Margin="106,38,525,48" Click="SelectImage_Click" Style="{StaticResource PrimaryButton}"/>
         <!-- Label dla przycisku wyboru zdjęcia -->
         <Label Content="Zdjęcie:" Grid.Row="6" Margin="20,43,719,58" Foreground="{StaticResource PrimaryContentBrush}"/>
 

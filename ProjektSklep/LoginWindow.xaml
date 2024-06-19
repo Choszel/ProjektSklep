@@ -20,7 +20,7 @@
                     <AdornedElementPlaceholder x:Name="ErrorAdorner"/>
                 </DockPanel>
             </ControlTemplate>
-            
+
         </ResourceDictionary>
     </Window.Resources>
     <Grid Name="loginGrid" Background="{StaticResource BackgroundBrush}">
@@ -53,13 +53,13 @@
             <TextBlock Name="passwordErrorTextBlock" TextWrapping="Wrap">
             </TextBlock>
         </Label>
-        
+
         <Label Grid.Column="2" Grid.Row="1" FontSize="20" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Hasło:</Label>
         <PasswordBox Name="passwordTextBox" Grid.Column="3" Grid.Row="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Margin="0,0,5,0" PasswordChanged="passwordValidation">
         </PasswordBox>
-        
-        <Button Name="changeToRegisterButton" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" FontSize="16" BorderBrush="White" Background="{StaticResource SecondaryBrush}" Foreground="{StaticResource SecondaryContentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="registerButtonClicked">Nie masz konta? Zarejestruj się</Button>
-        <Button Name="loginButton" Grid.Row="4" Grid.Column="3" FontSize="16" Padding="5" VerticalAlignment="Top" Margin="7" Background="{StaticResource PrimaryBrush}" Foreground="{StaticResource PrimaryContentBrush}" Click="OnLoginButton_Click">Zaloguj się</Button>
+
+        <Button Width="235" Name="changeToRegisterButton" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" FontSize="16" BorderBrush="White" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="registerButtonClicked" Height="25">Nie masz konta? Zarejestruj się</Button>
+        <Button Name="loginButton" Grid.Row="4" Grid.Column="3" FontSize="16" VerticalAlignment="Top" Margin="10,10,10,10" Style="{StaticResource PrimaryButton}" Click="OnLoginButton_Click" Height="25" Width="140">Zaloguj się</Button>
 
         <Label FontSize="20" Grid.Row="3" VerticalAlignment="Center" Margin="10" Foreground="{StaticResource PrimaryContentBrush}">Nazwa:</Label>
         <TextBox Name="nameTextBox" Grid.Row="3" Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="10" Validation.ErrorTemplate="{StaticResource validationTemplate}">
